@@ -40,13 +40,8 @@ jobs:
 
       - name: Configure Checkmarx CLI with API Key
         run: |
-          cx configure set --base-uri ${{ secrets.CX_BASE_URI }}
-          cx configure set --base-auth-uri ${{ secrets.CX_AUTH_URI }}
-          cx configure set --tenant ${{ secrets.CX_TENANT }}
-          cx configure set --api-key ${{ secrets.CX_API_KEY }}
-          echo "✅ Checkmarx AST CLI configured successfully!"
-        env:
-          CX_BASE_URI: https://eu.ast.checkmarx.net
-          CX_AUTH_URI: https://eu.iam.checkmarx.net
-          CX_TENANT: cx_seg
-          CX_API_KEY: ${{ secrets.CX_API_KEY }}
+          cx configure set \
+            --base-uri https://eu.ast.checkmarx.net \
+            --base-auth-uri https://eu.iam.checkmarx.net \
+            --tenant cx_seg \
+            --apikey ${{ secrets.CX_API_KEY }}
