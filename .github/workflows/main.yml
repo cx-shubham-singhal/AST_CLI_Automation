@@ -32,20 +32,22 @@ jobs:
         run: mvn clean install -DskipTests
 
       - name: Download Checkmarx One CLI 2.3.38
+        shell: bash
         run: |
           if [[ "${{ runner.os }}" == "Windows" ]]; then
-              echo "Windows runner detected"
-              curl -L -o ast-cli.zip https://github.com/Checkmarx/ast-cli/releases/download/2.3.38/ast-cli_2.3.38_windows_x64.zip
-              powershell -Command "Expand-Archive -Path ast-cli.zip -DestinationPath ."
-              move cx.exe C:\Windows\System32\
-              cx version
+            echo "Windows runner detected"
+            curl -L -o ast-cli.zip https://github.com/Checkmarx/ast-cli/releases/download/2.3.38/ast-cli_2.3.38_windows_x64.zip
+            powershell -Command "Expand-Archive -Path ast-cli.zip -DestinationPath ."
+            move cx.exe C:\Windows\System32\
+            cx version
           else
-              echo "Linux/Ubuntu runner detected"
-              curl -L -o ast-cli.tar.gz https://github.com/Checkmarx/ast-cli/releases/download/2.3.38/ast-cli_linux_x64.tar.gz
-              tar -xzf ast-cli.tar.gz
-              sudo mv cx /usr/local/bin/
-              cx version
+            echo "Linux/Ubuntu runner detected"
+            curl -L -o ast-cli.tar.gz https://github.com/Checkmarx/ast-cli/releases/download/2.3.38/ast-cli_linux_x64.tar.gz
+            tar -xzf ast-cli.tar.gz
+            sudo mv cx /usr/local/bin/
+            cx version
           fi
+
 
 
       - name: Configure Checkmarx CLI with API Key
