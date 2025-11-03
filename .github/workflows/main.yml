@@ -40,8 +40,7 @@ jobs:
 
       - name: Configure Checkmarx CLI with API Key
         run: |
-          cx configure set \
-            --base-uri https://eu.ast.checkmarx.net \
-            --base-auth-uri https://eu.iam.checkmarx.net \
-            --tenant cx_seg \
-            --apikey ${{ secrets.CX_API_KEY }}
+          cx configure set --prop-name cx_base_uri --prop-value https://eu.ast.checkmarx.net/ 
+          cx configure set --prop-name cx_base_auth_uri --prop-value https://eu.iam.checkmarx.net/ 
+          cx configure set --prop-name cx_tenant --prop-value cx_seg 
+          cx configure set --prop-name cx_apikey --prop-value ${{ secrets.CX_API_KEY }}
