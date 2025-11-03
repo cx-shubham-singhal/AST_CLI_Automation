@@ -45,5 +45,5 @@ jobs:
           cx configure set --prop-name cx_tenant --prop-value cx_seg 
           cx configure set --prop-name cx_apikey --prop-value ${{ secrets.CX_API_KEY }}
 
-      - name: Cx Scan list
-        run: cx scan list
+      - name: Run CheckmarxOne TestNG Suite
+        run: mvn clean test -DsuiteXmlFile=src/test/resources/CheckmarxOneSuite.xml
