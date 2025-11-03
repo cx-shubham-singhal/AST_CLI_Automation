@@ -44,3 +44,6 @@ jobs:
           cx configure set --prop-name cx_base_auth_uri --prop-value https://eu.iam.checkmarx.net/ 
           cx configure set --prop-name cx_tenant --prop-value cx_seg 
           cx configure set --prop-name cx_apikey --prop-value ${{ secrets.CX_API_KEY }}
+
+      - name: Cx Scan list
+        run: cx scan list
