@@ -46,4 +46,9 @@ jobs:
           cx configure set --prop-name cx_apikey --prop-value ${{ secrets.CX_API_KEY }}
 
       - name: Run CheckmarxOne TestNG Suite
+        env:
+          CX_BASE_URI: https://eu.ast.checkmarx.net/
+          CX_BASE_AUTH_URI: https://eu.iam.checkmarx.net/
+          CX_TENANT: cx_seg
+          CX_APIKEY: ${{ secrets.CX_API_KEY }}
         run: mvn clean test -DsuiteXmlFile=src/test/resources/CheckmarxOneSuite.xml
