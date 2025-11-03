@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     name: Build with Maven
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - name: Checkout repository
@@ -33,10 +33,20 @@ jobs:
 
       - name: Download Checkmarx One CLI 2.3.38
         run: |
-          curl -L -o ast-cli.tar.gz https://github.com/Checkmarx/ast-cli/releases/download/2.3.38/ast-cli_linux_x64.tar.gz
-          tar -xzf ast-cli.tar.gz
-          sudo mv cx /usr/local/bin/
-          cx version
+          if [[ "${{ runner.os }}" == "Windows" ]]; then
+              echo "Windows runner detected"
+              curl -L -o ast-cli.zip https://github.com/Checkmarx/ast-cli/releases/download/2.3.38/ast-cli_2.3.38_windows_x64.zip
+              powershell -Command "Expand-Archive -Path ast-cli.zip -DestinationPath ."
+              move cx.exe C:\Windows\System32\
+              cx version
+          else
+              echo "Linux/Ubuntu runner detected"
+              curl -L -o ast-cli.tar.gz https://github.com/Checkmarx/ast-cli/releases/download/2.3.38/ast-cli_linux_x64.tar.gz
+              tar -xzf ast-cli.tar.gz
+              sudo mv cx /usr/local/bin/
+              cx version
+          fi
+
 
       - name: Configure Checkmarx CLI with API Key
         run: |
