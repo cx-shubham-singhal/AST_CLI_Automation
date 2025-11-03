@@ -1,0 +1,10 @@
+com\myorg\cxone\tests\ConfigureTest.class
+utils\ReportManager.class
+utils\ScanUtils.class
+utils\Base.class
+utils\Utils.class
+com\myorg\cxone\tests\AuthTest.class
+com\myorg\cxone\tests\ScanTest.class
+utils\ExcelReportListener.class
+com\myorg\cxone\tests\HelpTest.class
+com\myorg\cxone\tests\ProjectTest.class

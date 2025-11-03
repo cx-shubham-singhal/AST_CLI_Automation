@@ -1,0 +1,539 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title></title>
+<link rel="apple-touch-icon" href="https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@b00a2d0486596e73dd7326beacf352c639623a0e/commons/img/logo.png">
+<link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@b00a2d0486596e73dd7326beacf352c639623a0e/commons/img/logo.png">
+<link href="https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@ce8b10435bcbae260c334c0d0c6b61d2c19b6168/spark/css/spark-style.css" rel="stylesheet" />
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@7cc78ce/spark/js/jsontree.js"></script>
+<style type="text/css"></style></head><body class="spa -report standard">
+  <div class="app">
+    <div class="layout">
+<div class="header navbar">
+<div class="vheader">
+<div class="nav-logo">
+<a href="#">
+<div class="logo" style="background-image: url('https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@b00a2d0486596e73dd7326beacf352c639623a0e/commons/img/logo.png')"></div>
+</a>
+</div>
+<ul class="nav-left">
+<li class="search-box">
+<a class="search-toggle" href="#">
+<i class="search-icon fa fa-search"></i>
+<i class="search-icon-close fa fa-close"></i>
+</a>
+</li>
+<li class="search-input"><input id="search-tests" class="form-control" type="text" placeholder="Search..."></li>
+</ul>
+<ul class="nav-right">
+<li class="m-r-10">
+<a href="#"><span class="badge badge-primary"></span></a>
+</li>
+<li class="m-r-10">
+<a href="#"><span class="badge badge-primary">Oct 1, 2025 05:29:47 pm</span></a>
+</li>
+</ul>
+</div>
+</div><div class="side-nav">
+<div class="side-nav-inner">
+<ul class="side-nav-menu">
+<li class="nav-item dropdown" onclick="toggleView('test-view')">
+<a id="nav-test" class="dropdown-toggle" href="#">
+<span class="ico"><i class="fa fa-list"></i></span>
+</a>
+</li>
+<li class="nav-item dropdown" onclick="toggleView('dashboard-view')">
+<a id="nav-dashboard" class="dropdown-toggle" href="#">
+<span class="ico"><i class="fa fa-bar-chart"></i></span>
+</a>
+</li>
+</ul>
+</div>
+</div>      <div class="vcontainer">
+        <div class="main-content">
+<div class="test-wrapper row view test-view">
+  <div class="test-list">
+    <div class="test-list-tools">
+<ul class="tools pull-left">
+<li><a href="#"><span class="font-size-14">Tests</span></a></li>
+</ul>
+<ul class="tools text-right">
+<li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-exclamation-circle"></i></a>
+<ul id="status-toggle" class="dropdown-menu dropdown-md p-v-0">
+<a class="dropdown-item" status="pass" href="#"><span>Pass</span><span class="status success"></span></a>
+<div class="dropdown-divider"></div>
+<a status="clear" class="dropdown-item" href="#"><span>Clear</span><span class="pull-right"><i class="fa fa-close"></i></span></a>
+</ul>
+</li>
+</ul>
+</div>    <div class="test-list-wrapper scrollable">
+      <ul class="test-list-item">
+        <li class="test-item"  status="pass" test-id="1"
+          author=""
+          tag=""
+          device="">
+          <div class="test-detail">
+            <p class="name">CLI Help output compare</p>
+            <p class="text-sm">
+              <span>5:29:48 pm</span> / <span>00:00:00:522</span>
+              <span class="badge pass-bg log float-right">Pass</span>
+            </p>
+          </div>
+          <div class="test-contents d-none">
+<div class="detail-head">
+<div class="p-v-10">
+<div class="info">
+<h5 class="test-status text-pass">CLI Help output compare</h5>
+<span class='badge badge-success'>10.01.2025 5:29:48 pm</span>
+<span class='badge badge-danger'>10.01.2025 5:29:48 pm</span>
+<span class='badge badge-default'>00:00:00:522</span>
+&middot; <span class='uri-anchor badge badge-default'>#test-id=1</span>
+<span title='Skip to the next failed step' class='badge badge-danger pointer float-right ne ml-1'><i class="fa fa-fast-forward"></i></span>
+<span title='Collapse all nodes' class='badge badge-default pointer float-right ct ml-1'><i class="fa fa-compress"></i></span>
+<span title='Expand all nodes' class='badge badge-default pointer float-right et'><i class="fa fa-expand"></i></span>
+</div>
+</div>
+</div><div class="detail-body mt-4">
+<table class="table table-sm">
+  <thead><tr><th class="status-col">Status</th><th class="timestamp-col">Timestamp</th><th class="details-col">Details</th></tr></thead>
+  <tbody>
+      <tr class="event-row">
+        <td><span class="badge log info-bg">Info</span></td>
+        <td>5:29:48 pm</td>
+        <td>
+          Running CLI command: cx --help
+        </td>
+      </tr>
+      <tr class="event-row">
+        <td><span class="badge log info-bg">Info</span></td>
+        <td>5:29:48 pm</td>
+        <td>
+          CLI Output:
+The Checkmarx One CLI is a fully functional Command Line Interface (CLI) that interacts with the Checkmarx One server.
+
+[1mUSAGE[0m
+  cx <command> <subcommand> [flags]
+
+[1mCOMMANDS[0m
+  auth:       Validate authentication and create OAuth2 credentials
+  completion: Generate the autocompletion script for the specified shell
+  configure:  Configure authentication and global properties
+  help:       Help about any command
+  hooks:      Manage Git hooks
+  project:    Manage projects
+  results:    Retrieve results
+  scan:       Manage scans
+  triage:     Manage results
+  utils:      Utility functions
+  version:    Prints the version number
+
+[1mFLAGS[0m
+      --agent string               Scan origin name (default "ASTCLI")
+      --apikey string              The API Key to login to Checkmarx One
+      --base-auth-uri string       The base system IAM URI
+      --base-uri string            The base system URI
+      --client-id string           The OAuth2 client ID
+      --client-secret string       The OAuth2 client secret
+      --debug                      Debug mode with detailed logs
+  -h, --help                       help for cx
+      --ignore-proxy               Ignore proxy configuration
+      --insecure                   Ignore TLS certificate validations
+      --proxy string               Proxy server to send communication through
+      --proxy-auth-type string     Proxy authentication type, (basic or ntlm)
+      --proxy-ntlm-domain string   Window domain when using NTLM proxy
+      --retry uint                 Retry requests to Checkmarx One on connection failure (default 3)
+      --retry-delay uint           Time between retries in seconds, use with --retry (default 20)
+      --tenant string              Checkmarx tenant
+      --timeout string             Timeout for network activity, (default 5 seconds)
+
+[1mEXAMPLES[0m
+  $ cx configure
+  $ cx scan create -s . --project-name my_project_name
+  $ cx scan list
+
+[1mDOCUMENTATION[0m
+  https://checkmarx.com/resource/documents/en/34965-68620-checkmarx-one-cli-tool.html
+
+[1mQUICK START GUIDE[0m
+  https://checkmarx.com/resource/documents/en/34965-68621-checkmarx-one-cli-quick-start-guide.html
+
+[1mLEARN MORE[0m
+  Use 'cx <command> <subcommand> --help' for more information about a command.
+  Read the manual at https://checkmarx.com/resource/documents/en/34965-68620-checkmarx-one-cli-tool.html
+
+
+        </td>
+      </tr>
+      <tr class="event-row">
+        <td><span class="badge log pass-bg">Pass</span></td>
+        <td>5:29:48 pm</td>
+        <td>
+          --help data is correct and matching the data from help.txt file
+        </td>
+      </tr>
+  </tbody>
+</table>
+</div>
+          </div>
+        </li>
+        <li class="test-item"  status="pass" test-id="2"
+          author=""
+          tag=""
+          device="">
+          <div class="test-detail">
+            <p class="name">Scan List Test</p>
+            <p class="text-sm">
+              <span>5:29:48 pm</span> / <span>00:00:04:006</span>
+              <span class="badge pass-bg log float-right">Pass</span>
+            </p>
+          </div>
+          <div class="test-contents d-none">
+<div class="detail-head">
+<div class="p-v-10">
+<div class="info">
+<h5 class="test-status text-pass">Scan List Test</h5>
+<span class='badge badge-success'>10.01.2025 5:29:48 pm</span>
+<span class='badge badge-danger'>10.01.2025 5:29:52 pm</span>
+<span class='badge badge-default'>00:00:04:006</span>
+&middot; <span class='uri-anchor badge badge-default'>#test-id=2</span>
+<span title='Skip to the next failed step' class='badge badge-danger pointer float-right ne ml-1'><i class="fa fa-fast-forward"></i></span>
+<span title='Collapse all nodes' class='badge badge-default pointer float-right ct ml-1'><i class="fa fa-compress"></i></span>
+<span title='Expand all nodes' class='badge badge-default pointer float-right et'><i class="fa fa-expand"></i></span>
+</div>
+</div>
+</div><div class="detail-body mt-4">
+<table class="table table-sm">
+  <thead><tr><th class="status-col">Status</th><th class="timestamp-col">Timestamp</th><th class="details-col">Details</th></tr></thead>
+  <tbody>
+      <tr class="event-row">
+        <td><span class="badge log info-bg">Info</span></td>
+        <td>5:29:52 pm</td>
+        <td>
+          Running CLI command: cx scan list
+        </td>
+      </tr>
+      <tr class="event-row">
+        <td><span class="badge log info-bg">Info</span></td>
+        <td>5:29:52 pm</td>
+        <td>
+          CLI Output:
+
+Scan ID                              Project ID                           Project Name                 Status    Created at Branch                       Tags                            Type Timeout Initiator               Origin                      Engines                               
+-------                              ----------                           ------------                 ------    ---------- ------                       ----                            ---- ------- ---------               ------                      -------                               
+0b7af8b5-ae35-4dc8-afc8-b6f0662787f7 836545a4-7c87-4adf-b7d8-07f5c2733b03 bruna_wcg_clinical           Completed 10-01-25   .unknown                     []                              Full NONE    bruna.almeida           Edge 140.0.0.0              [sast]                                
+4b101d07-907d-4d25-8037-2cc48fd6b7e2 836545a4-7c87-4adf-b7d8-07f5c2733b03 bruna_wcg_clinical           Canceled  10-01-25   .unknown                     []                              Full NONE    bruna.almeida           Edge 140.0.0.0              [sast]                                
+680f7b3a-5043-44ba-9431-e4155cd2173b cb77d228-79f5-4439-abc2-8566c2dee2b3 quiteria00255814             Completed 10-01-25   .unknown                     []                              Full NONE    quiteriap               Edge 140.0.0.0              [sca]                                 
+a016cb42-57c3-419f-b7b7-29a0c6e74808 cb77d228-79f5-4439-abc2-8566c2dee2b3 quiteria00255814             Completed 10-01-25   .unknown                     []                              Full NONE    quiteriap               Edge 140.0.0.0              [sca]                                 
+202e5732-7686-4716-abc4-faddf70ea861 657a78c8-c374-48dd-9044-f17180ced951 new_test_project8            Completed 10-01-25   main                         []                              Full NONE    shubham.yadav           VS                          [sast kics sca containers]            
+02c727ab-9a86-4b13-8ab5-5546ec0da5e2 5ff8bb4d-9186-4066-9b34-4fa65b535b19 kerberos-test-project_12     Completed 10-01-25   main                         []                              Full NONE    shubham.yadav           ASTCLI 2.3.35-mit-kerberos1 [sast kics sca apisec containers scs] 
+26bc1676-830a-4bf2-bfdf-1503a561f770 5ff8bb4d-9186-4066-9b34-4fa65b535b19 kerberos-test-project_12     Completed 10-01-25   main                         []                              Full NONE    shubham.yadav           ASTCLI 2.3.35-mit-kerberos1 [sast kics sca apisec containers scs] 
+00b6efae-6bb8-4b56-8d18-d9137a564470 6ff8c6cb-428b-4a91-a30b-e8bba47d2db9 OOMTest                      Completed 09-30-25   master                       [priority:high version:initial] Full NONE    harshjeet.patil         NA                          [sast kics sca]                       
+a320a522-dc73-4ed1-b7fd-e08541bff566 cb77d228-79f5-4439-abc2-8566c2dee2b3 quiteria00255814             Failed    09-30-25   .unknown                     []                              Full NONE    quiteriap               Edge 140.0.0.0              [sca]                                 
+0ad6f755-7620-40f2-9bde-d788882bf507 cb77d228-79f5-4439-abc2-8566c2dee2b3 quiteria00255814             Failed    09-30-25   .unknown                     []                              Full NONE    quiteriap               Edge 140.0.0.0              [sca]                                 
+64897700-7a79-40c1-b6d0-e37718c6daa3 845bef0e-387c-42c4-89b2-aa8b10bcf1a2 checkmarx-ltd/Bamboo-Plugin  Completed 09-30-25   master                       []                              Full NONE    amol.mane@checkmarx.com grpc-java-netty 1.63.0      [sast kics apisec containers sca scs] 
+29d443f9-ede9-41a6-81d8-ecb62fbd5e62 2c4b6a5a-a83c-4843-b25e-1fa2e07067a4 Jota_2ms                     Completed 09-30-25   .unknown                     []                              Full NONE    josepf                  Chrome 140.0.0.0            [scs]                                 
+4f6a465d-4535-4c70-b7bb-c68d24948920 f411ba07-0e45-4947-9a4f-3948573f5de9 kerberosTestVMWin            Completed 09-30-25   main                         []                              Full NONE    shubham.yadav           ASTCLI 2.3.36-spn-log-fix   [sast kics sca apisec containers scs] 
+febf2466-3b74-4823-a827-b3fafb8fd078 f411ba07-0e45-4947-9a4f-3948573f5de9 kerberosTestVMWin            Completed 09-30-25   main                         []                              Full NONE    shubham.yadav           ASTCLI 2.3.36-spn-log-fix   [sast kics sca apisec containers scs] 
+7ca494ba-3870-487d-b7ac-e8a8dd8dd279 e02aa631-5548-4f21-b73b-236b16091a6e nxTestHarsh                  Completed 09-30-25   master                       []                              Full NONE    harshjeet.patil         Chrome 140.0.0.0            [sast sca containers kics apisec scs] 
+dd57a998-c37d-4ad2-94c6-3a5151f443b0 5ff8bb4d-9186-4066-9b34-4fa65b535b19 kerberos-test-project_12     Completed 09-30-25   main                         []                              Full NONE    shubham.yadav           ASTCLI 2.3.35-mit-kerberos1 [sast kics sca apisec containers scs] 
+fcc4938c-e5e9-4b02-889b-4de683cf74cd 5ff8bb4d-9186-4066-9b34-4fa65b535b19 kerberos-test-project_12     Completed 09-30-25   main                         []                              Full NONE    shubham.yadav           ASTCLI 2.3.35-mit-kerberos1 [sast kics sca apisec containers scs] 
+6f26c62d-42a2-4d4b-929e-09e3972530a2 5ff8bb4d-9186-4066-9b34-4fa65b535b19 kerberos-test-project_12     Completed 09-30-25   main                         []                              Full NONE    shubham.yadav           ASTCLI 2.3.35-mit-kerberos1 [sast kics sca apisec containers scs] 
+098f7d54-5279-4512-b63b-1b439c21dcdc c9c84dab-0f9f-4fac-8153-7854b724b74e checkmarx-ltd/Eclipse-Plugin Completed 09-30-25   PLUGINS-299_update_jxbrowser []                              Full NONE    rakesh.kadu             grpc-java-netty 1.63.0      [sast sca]                            
+cfe10834-4e09-42b2-805e-8a70b43aaa66 6ff8c6cb-428b-4a91-a30b-e8bba47d2db9 OOMTest                      Completed 09-29-25   master                       [priority:high version:initial] Full NONE    harshjeet.patil         NA                          [sast kics sca]                       
+
+
+        </td>
+      </tr>
+      <tr class="event-row">
+        <td><span class="badge log info-bg">Info</span></td>
+        <td>5:29:52 pm</td>
+        <td>
+          Scan List Output:
+scan list
+        </td>
+      </tr>
+      <tr class="event-row">
+        <td><span class="badge log pass-bg">Pass</span></td>
+        <td>5:29:52 pm</td>
+        <td>
+          Scan list executed successfully
+        </td>
+      </tr>
+      <tr class="event-row">
+        <td><span class="badge log pass-bg">Pass</span></td>
+        <td>5:29:52 pm</td>
+        <td>
+          Scan list fetched successfully
+        </td>
+      </tr>
+  </tbody>
+</table>
+</div>
+          </div>
+        </li>
+        <li class="test-item"  status="pass" test-id="3"
+          author=""
+          tag=""
+          device="">
+          <div class="test-detail">
+            <p class="name">Verify Scan Count</p>
+            <p class="text-sm">
+              <span>5:29:52 pm</span> / <span>00:00:04:101</span>
+              <span class="badge pass-bg log float-right">Pass</span>
+            </p>
+          </div>
+          <div class="test-contents d-none">
+<div class="detail-head">
+<div class="p-v-10">
+<div class="info">
+<h5 class="test-status text-pass">Verify Scan Count</h5>
+<span class='badge badge-success'>10.01.2025 5:29:52 pm</span>
+<span class='badge badge-danger'>10.01.2025 5:29:56 pm</span>
+<span class='badge badge-default'>00:00:04:101</span>
+&middot; <span class='uri-anchor badge badge-default'>#test-id=3</span>
+<span title='Skip to the next failed step' class='badge badge-danger pointer float-right ne ml-1'><i class="fa fa-fast-forward"></i></span>
+<span title='Collapse all nodes' class='badge badge-default pointer float-right ct ml-1'><i class="fa fa-compress"></i></span>
+<span title='Expand all nodes' class='badge badge-default pointer float-right et'><i class="fa fa-expand"></i></span>
+</div>
+</div>
+</div><div class="detail-body mt-4">
+<table class="table table-sm">
+  <thead><tr><th class="status-col">Status</th><th class="timestamp-col">Timestamp</th><th class="details-col">Details</th></tr></thead>
+  <tbody>
+      <tr class="event-row">
+        <td><span class="badge log info-bg">Info</span></td>
+        <td>5:29:56 pm</td>
+        <td>
+          Running CLI command: cx scan list
+        </td>
+      </tr>
+      <tr class="event-row">
+        <td><span class="badge log info-bg">Info</span></td>
+        <td>5:29:56 pm</td>
+        <td>
+          CLI Output:
+scan list
+        </td>
+      </tr>
+      <tr class="event-row">
+        <td><span class="badge log info-bg">Info</span></td>
+        <td>5:29:56 pm</td>
+        <td>
+          Total scans returned before project creation: 21
+        </td>
+      </tr>
+      <tr class="event-row">
+        <td><span class="badge log pass-bg">Pass</span></td>
+        <td>5:29:56 pm</td>
+        <td>
+          Scan count retrieved successfully
+        </td>
+      </tr>
+      <tr class="event-row">
+        <td><span class="badge log pass-bg">Pass</span></td>
+        <td>5:29:56 pm</td>
+        <td>
+          Scan list count fetched successfully
+        </td>
+      </tr>
+  </tbody>
+</table>
+</div>
+          </div>
+        </li>
+        <li class="test-item"  status="pass" test-id="4"
+          author=""
+          tag=""
+          device="">
+          <div class="test-detail">
+            <p class="name">Create Project Test</p>
+            <p class="text-sm">
+              <span>5:29:56 pm</span> / <span>00:00:04:893</span>
+              <span class="badge pass-bg log float-right">Pass</span>
+            </p>
+          </div>
+          <div class="test-contents d-none">
+<div class="detail-head">
+<div class="p-v-10">
+<div class="info">
+<h5 class="test-status text-pass">Create Project Test</h5>
+<span class='badge badge-success'>10.01.2025 5:29:56 pm</span>
+<span class='badge badge-danger'>10.01.2025 5:30:01 pm</span>
+<span class='badge badge-default'>00:00:04:893</span>
+&middot; <span class='uri-anchor badge badge-default'>#test-id=4</span>
+<span title='Skip to the next failed step' class='badge badge-danger pointer float-right ne ml-1'><i class="fa fa-fast-forward"></i></span>
+<span title='Collapse all nodes' class='badge badge-default pointer float-right ct ml-1'><i class="fa fa-compress"></i></span>
+<span title='Expand all nodes' class='badge badge-default pointer float-right et'><i class="fa fa-expand"></i></span>
+</div>
+</div>
+</div><div class="detail-body mt-4">
+<table class="table table-sm">
+  <thead><tr><th class="status-col">Status</th><th class="timestamp-col">Timestamp</th><th class="details-col">Details</th></tr></thead>
+  <tbody>
+      <tr class="event-row">
+        <td><span class="badge log info-bg">Info</span></td>
+        <td>5:29:56 pm</td>
+        <td>
+          Running CLI command: cx project create --project-name "TestProj_1759319996939"
+        </td>
+      </tr>
+      <tr class="event-row">
+        <td><span class="badge log info-bg">Info</span></td>
+        <td>5:30:01 pm</td>
+        <td>
+          CLI Output:
+
+Project ID                           Name                   Created at Tags Groups ApplicationIds 
+----------                           ----                   ---------- ---- ------ -------------- 
+4271b048-3475-48e0-845c-931dad29cd18 TestProj_1759319996939 10-01-25   []   []     []             
+
+
+        </td>
+      </tr>
+      <tr class="event-row">
+        <td><span class="badge log pass-bg">Pass</span></td>
+        <td>5:30:01 pm</td>
+        <td>
+          Project 'TestProj_1759319996939' created successfully.
+        </td>
+      </tr>
+  </tbody>
+</table>
+</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+<div class="test-content scrollable">
+<div class="test-content-tools">
+<ul><li><a class="back-to-test" href="#"><i class="fa fa-arrow-left"></i></a></li></ul>
+</div>
+<div class="test-content-detail"><div class="detail-body"></div></div>
+</div></div>
+<div class="container-fluid p-4 view dashboard-view">
+<div class="row">
+<div class="col-md-3">
+<div class="card"><div class="card-body">
+<p class="m-b-0">Started</p>
+<h3>Oct 1, 2025 05:29:47 pm</h3>
+</div></div>
+</div>
+<div class="col-md-3">
+<div class="card"><div class="card-body">
+<p class="m-b-0">Ended</p>
+<h3>Oct 1, 2025 05:30:01 pm</h3>
+</div></div>
+</div>
+<div class="col-md-3">
+<div class="card"><div class="card-body">
+<p class="m-b-0 text-pass">Tests Passed</p>
+<h3>4</h3>
+</div></div>
+</div>
+<div class="col-md-3">
+<div class="card"><div class="card-body">
+<p class="m-b-0 text-fail">Tests Failed</p>
+<h3>0</h3>
+</div></div>
+</div>
+</div>
+<div class="row">
+<div class="col-md-6">
+<div class="card">
+<div class="card-header">
+<h6 class="card-title">Tests</h6>
+</div>
+<div class="card-body">
+<div class="">
+<canvas id='parent-analysis' width='115' height='90'></canvas>
+</div>
+</div>
+<div class="card-footer">
+<div><small data-tooltip='100%'>
+<b>4</b> tests passed
+</small>
+</div>
+<div>
+<small data-tooltip='0%'><b>0</b> tests failed,
+<b>0</b> skipped, <b data-tooltip='0%'>0</b> others
+</small>
+</div>
+</div>
+</div>
+</div>
+<div class="col-md-6">
+<div class="card">
+<div class="card-header">
+<h6 class="card-title">Log events</h6>
+</div>
+<div class="card-body">
+<div class="">
+<canvas id='events-analysis' width='115' height='90'></canvas>
+</div>
+</div>
+<div class="card-footer">
+<div><small data-tooltip='37%'><b>6</b> events passed</small></div>
+<div>
+<small data-tooltip='0%'><b>0</b> events failed,
+<b data-tooltip='%'>10</b> others
+</small>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><div class="col-md-12">
+<div class="card"><div class="card-header"><p>Timeline</p></div>
+<div class="card-body pt-0"><div>
+<canvas id="timeline" height="120"></canvas>
+</div></div>
+</div>
+</div></div>
+<script>
+var timeline = {
+"CLI Help output compare":0.522,"Scan List Test":4.006,"Verify Scan Count":4.101,"Create Project Test":4.893
+};
+</script>
+<div class="row">
+</div>
+</div>
+<script>
+var statusGroup = {
+parentCount: 5,
+passParent: 4,
+failParent: 0,
+warningParent: 0,
+skipParent: 0,
+childCount: 5,
+passChild: 0,
+failChild: 0,
+warningChild: 0,
+skipChild: 0,
+infoChild: 0,
+grandChildCount: 5,
+passGrandChild: 0,
+failGrandChild: 0,
+warningGrandChild: 0,
+skipGrandChild: 0,
+infoGrandChild: 0,
+eventsCount: 5,
+passEvents: 6,
+failEvents: 0,
+warningEvents: 0,
+skipEvents: 0,
+infoEvents: 10
+};
+</script>        </div>
+      </div>
+    </div>
+  </div>
+<script src="https://cdn.jsdelivr.net/gh/extent-framework/extent-github-cdn@ce8b10435bcbae260c334c0d0c6b61d2c19b6168/spark/js/spark-script.js"></script>
+<script type="text/javascript"></script></body>
+</html>

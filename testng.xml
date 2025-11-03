@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="CheckmarxOneSuite">
+
+    <listeners>
+        <listener class-name="utils.ExcelReportListener"/>
+    </listeners>
+
+    <test name="CheckmarxOneTests">
+        <classes>
+            <class name="com.myorg.cxone.tests.HelpTest"/>
+            <class name="com.myorg.cxone.tests.ScanTest"/>
+            <class name="com.myorg.cxone.tests.ProjectTest"/>
+            <class name="com.myorg.cxone.tests.AuthTest"/>
+            <class name="com.myorg.cxone.tests.ConfigureTest"/>
+        </classes>
+    </test>
+
+</suite>
