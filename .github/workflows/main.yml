@@ -30,3 +30,24 @@ jobs:
 
       - name: Build with Maven (skip tests)
         run: mvn clean install -DskipTests
+
+      # --- DOWNLOAD AND CONFIGURE CHECKMARX CLI ---
+      - name: Download Checkmarx AST CLI
+        run: |
+          curl -L -o cx.tar.gz https://github.com/Checkmarx/ast-github-action/releases/download/2.3.27/cxcli-linux64.tar.gz
+          tar -xzf cx.tar.gz
+          sudo mv cx /usr/local/bin/
+          cx --version
+
+      - name: Configure Checkmarx CLI with API Key
+        run: |
+          cx configure set --base-uri ${{ secrets.CX_BASE_URI }}
+          cx configure set --base-auth-uri ${{ secrets.CX_AUTH_URI }}
+          cx configure set --tenant ${{ secrets.CX_TENANT }}
+          cx configure set --api-key ${{ secrets.CX_API_KEY }}
+          echo "✅ Checkmarx AST CLI configured successfully!"
+        env:
+          CX_BASE_URI: https://eu.ast.checkmarx.net
+          CX_AUTH_URI: https://eu.iam.checkmarx.net
+          CX_TENANT: cx_seg
+          CX_API_KEY: ${{ secrets.CX_API_KEY }}
