@@ -1,25 +1,32 @@
-name: Hello World
+name: Java Maven Build
 
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  workflow_dispatch: # allows manual trigger
+  workflow_dispatch:
 
 jobs:
-  say_hello:
+  build:
+    name: Build with Maven
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Say Hello
-        run: echo "👋 Hello, world! This is my first GitHub Action."
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'   # or 'zulu', 'corretto', etc.
+          java-version: '17'
 
-      - name: Display current date and time
-        run: date
+      - name: Cache Maven dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-m2-
 
-      - name: List files in repo
-        run: ls -la
+      - name: Build with Maven (skip tests)
+        run: mvn clean install -DskipTests
