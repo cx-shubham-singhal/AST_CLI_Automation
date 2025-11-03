@@ -31,13 +31,12 @@ jobs:
       - name: Build with Maven (skip tests)
         run: mvn clean install -DskipTests
 
-      # --- DOWNLOAD AND CONFIGURE CHECKMARX CLI ---
       - name: Download Checkmarx AST CLI
         run: |
-          curl -L -o cx.tar.gz https://github.com/Checkmarx/ast-github-action/releases/download/2.3.27/cxcli-linux64.tar.gz
+          curl -L -o cx.tar.gz https://github.com/Checkmarx/ast-cli/releases/download/2.3.27/cxcli-linux64.tar.gz
           tar -xzf cx.tar.gz
           sudo mv cx /usr/local/bin/
-          cx --version
+          cx version
 
       - name: Configure Checkmarx CLI with API Key
         run: |
