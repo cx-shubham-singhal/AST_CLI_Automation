@@ -7,7 +7,7 @@ public class TestConstants {
     public static final String MISSING_URI = "When using client-id and client-secret please provide base-uri or base-auth-uri";
     public static final String FAILED_AUTHENTICATION = "Failed to authenticate - please provide client-id, client-secret and base-uri or apikey";
     public static final String SETUP_GUIDE = "Setup guide: https://checkmarx.com/resource/documents/en/34965-68621-checkmarx-one-cli-quick-start-guide.html";
-    public static final String INVALID_STATE_ERROR = "Error: Failed to set property";
+    public static final String INVALID_STATE_ERROR = "Failed to set property: unknown property or bad value";
     public static final String OUTPUT_PATTERN = "Engines";
     public static final String PROJECT_PATH_ZIP = "src/main/resources/JavaVulnerableLabE-master.zip";
     public static final String PROJECT_PATH_FOLDER = "src/main/resources/JavaVulnerableLabE-master";

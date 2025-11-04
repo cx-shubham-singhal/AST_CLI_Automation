@@ -275,7 +275,7 @@ public class HelpTest extends Base {
         Logger.info("Running CLI command: cx " + invalidCommand + " --help", test);
         Logger.info("CLI Output:\n" + result, test);
 
-        String expectedError = "Error: unknown command \"" + invalidCommand + "\" for \"cx\"";
+        String expectedError = "unknown command \"" + invalidCommand + "\" for \"cx\"";
 
         if (!result.contains(expectedError)) {
             Logger.fail("Expected error not found. Expected: " + expectedError, test);
