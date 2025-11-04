@@ -64,28 +64,46 @@ jobs:
           CX_CLIENT_ID: ${{ secrets.CX_CLIENT_ID }}
           CX_INVALID_APIKEY: ${{ secrets.CX_INVALID_APIKEY }}
           CX_CLIENT_SECRET: ${{ secrets.CX_CLIENT_SECRET }}
+        shell: pwsh
         run: |
-          mvn clean test -DsuiteXmlFile=testng.xml || true
+          echo "🏗️ Running TestNG Suite..."
+          mvn -B clean test "-DsuiteXmlFile=src/test/resources/testng.xml" || true
 
           echo ""
           echo "📄 Parsing test results from surefire-reports..."
           echo ""
 
-          $reportDir="target/surefire-reports"
+          $reportDir = "target/surefire-reports"
+          if (!(Test-Path "$reportDir/testng-results.xml")) {
+            echo "⚠️ testng-results.xml not found! Tests might not have executed properly."
+            Get-ChildItem $reportDir -Recurse
+            exit 1
+          }
+
           $passed = Get-Content "$reportDir/testng-results.xml" | Select-String '<test-method.*status="PASS"'
           $failed = Get-Content "$reportDir/testng-results.xml" | Select-String '<test-method.*status="FAIL"'
 
           echo "✅ PASSED TESTS:"
-          $passed | ForEach-Object { $_.ToString() -match 'name="([^"]+)"' | Out-Null; Write-Host "  - $($matches[1])" }
+          if ($passed.Count -eq 0) {
+            echo "  (none)"
+          } else {
+            $passed | ForEach-Object { $_.ToString() -match 'name="([^"]+)"' | Out-Null; Write-Host "  - $($matches[1])" }
+          }
 
           echo ""
           echo "❌ FAILED TESTS:"
-          $failed | ForEach-Object { $_.ToString() -match 'name="([^"]+)"' | Out-Null; Write-Host "  - $($matches[1])" }
+          if ($failed.Count -eq 0) {
+            echo "  (none)"
+          } else {
+            $failed | ForEach-Object { $_.ToString() -match 'name="([^"]+)"' | Out-Null; Write-Host "  - $($matches[1])" }
+          }
 
           if ($failed.Count -gt 0) {
             echo ""
             echo "❗ There are failed tests."
             exit 1
+          } else {
+            echo ""
+            echo "🎉 All tests passed successfully!"
           }
-        shell: pwsh
-      
+
