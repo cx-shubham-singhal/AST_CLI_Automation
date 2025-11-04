@@ -64,4 +64,28 @@ jobs:
           CX_CLIENT_ID: ${{ secrets.CX_CLIENT_ID }}
           CX_INVALID_APIKEY: ${{ secrets.CX_INVALID_APIKEY }}
           CX_CLIENT_SECRET: ${{ secrets.CX_CLIENT_SECRET }}
-        run: mvn clean test
+        run: |
+          mvn clean test -DsuiteXmlFile=testng.xml || true
+
+          echo ""
+          echo "📄 Parsing test results from surefire-reports..."
+          echo ""
+
+          $reportDir="target/surefire-reports"
+          $passed = Get-Content "$reportDir/testng-results.xml" | Select-String '<test-method.*status="PASS"'
+          $failed = Get-Content "$reportDir/testng-results.xml" | Select-String '<test-method.*status="FAIL"'
+
+          echo "✅ PASSED TESTS:"
+          $passed | ForEach-Object { $_.ToString() -match 'name="([^"]+)"' | Out-Null; Write-Host "  - $($matches[1])" }
+
+          echo ""
+          echo "❌ FAILED TESTS:"
+          $failed | ForEach-Object { $_.ToString() -match 'name="([^"]+)"' | Out-Null; Write-Host "  - $($matches[1])" }
+
+          if ($failed.Count -gt 0) {
+            echo ""
+            echo "❗ There are failed tests."
+            exit 1
+          }
+        shell: pwsh
+      
