@@ -61,4 +61,7 @@ jobs:
           CX_BASE_AUTH_URI: https://eu.iam.checkmarx.net/
           CX_TENANT: cx_seg
           CX_APIKEY: ${{ secrets.CX_API_KEY }}
+          CX_CLIENT_ID: ${{ secrets.CX_CLIENT_ID }}
+          CX_INVALID_APIKEY: ${{ secrets.CX_INVALID_APIKEY }}
+          CX_CLIENT_SECRET: ${{ secrets.CX_CLIENT_SECRET }}
         run: mvn clean test
