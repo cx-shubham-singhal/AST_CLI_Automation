@@ -9,7 +9,7 @@
     <test name="CheckmarxOneTests">
         <classes>
             <class name="com.myorg.cxone.tests.HelpTest"/>
-            <class name="com.myorg.cxone.tests.ScanTest"/>
+            <class name="com.myorg.cxone.tests.scanTestDataDriven"/>
             <class name="com.myorg.cxone.tests.ProjectTest"/>
             <class name="com.myorg.cxone.tests.AuthTest"/>
             <class name="com.myorg.cxone.tests.ConfigureTest"/>
