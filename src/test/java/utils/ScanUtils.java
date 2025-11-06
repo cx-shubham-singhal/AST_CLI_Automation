@@ -1,6 +1,7 @@
 package utils;
 
 import PageObjects.ScanInfo;
+import com.myorg.cxone.helpers.TestConstants;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -51,6 +52,32 @@ public class ScanUtils {
 
         Matcher matcher = Pattern.compile(patternStr).matcher(cliOutput);
         return matcher.find() ? matcher.group(1).trim() : null;
+    }
+
+    public static String resolveAdditionalFlags(String additionalFlags) {
+        if (additionalFlags == null || additionalFlags.trim().isEmpty()) {
+            return "";
+        }
+
+        additionalFlags = additionalFlags.substring(1).trim();
+
+        if (additionalFlags.contains("%s")) {
+            if (additionalFlags.contains("--apikey")) {
+                additionalFlags = String.format(additionalFlags, TestConstants.CX_API_KEY);
+            } else if (additionalFlags.contains("--client-id") && additionalFlags.contains("--client-secret")) {
+                additionalFlags = String.format(
+                        additionalFlags,
+                        TestConstants.CX_CLIENT_ID,
+                        TestConstants.CX_CLIENT_SECRET
+                );
+            } else {
+                throw new RuntimeException(
+                        "Unrecognized credential placeholder pattern in AdditionalFlags: " + additionalFlags
+                );
+            }
+        }
+
+        return additionalFlags;
     }
 
 }

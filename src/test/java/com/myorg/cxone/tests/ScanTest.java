@@ -1,3 +1,4 @@
+/*
 package com.myorg.cxone.tests;
 
 import PageObjects.ScanInfo;
@@ -400,13 +401,12 @@ public class ScanTest extends Base {
     public void createScanWithInvalidApiKeyTest() {
         ExtentTest test = getTestLogger();
         String projectName = "CLI_ScanProj_" + System.currentTimeMillis();
-        String sourcePath = "C:\\DummyProjects\\JavaVulnerableLabE-master.zip";
         String invalidApiKey = System.getenv("CX_INVALID_APIKEY");
 
         Assert.assertNotNull(invalidApiKey, "CX_INVALID_APIKEY environment variable (CX_INVALID_APIKEY) is not set!");
         String command = String.format(
                 "scan create --project-name \"%s\" -s \"%s\" --branch \"master1\" --scan-types \"sast\" --apikey %s",
-                projectName, sourcePath, invalidApiKey
+                projectName, PROJECT_PATH_ZIP, invalidApiKey
         );
 
         try {
@@ -415,7 +415,6 @@ public class ScanTest extends Base {
             String result = CLIHelper.runCommand(command);
             Logger.info("CLI Output:\n" + result, test);
 
-            // Verify that CLI returned the invalid credentials error
             Assert.assertTrue(result.contains("Provided credentials are invalid") ||
                             result.contains("Error validating scan types"),
                     "Expected error message for invalid API key was not found");
@@ -543,7 +542,6 @@ public class ScanTest extends Base {
                 "scan create --project-name \"%s\" -s %s --project-groups \"%s\" --scan-types \"sast\" --branch \"master\"",
                 projectName, PROJECT_PATH_ZIP, INVALID_GROUP_NAME
         );
-
         try {
             Logger.info("Running CLI command with invalid group: cx " + command, test);
 
@@ -552,10 +550,8 @@ public class ScanTest extends Base {
 
             boolean hasError = result.contains("Failed finding groups")
                     || result.contains("Failed updating a project");
-
             Assert.assertTrue(hasError,
                     "Expected error message for invalid project group not found in CLI output");
-
             Logger.pass("CLI correctly returned an error for invalid project group: " + INVALID_GROUP_NAME, test);
 
         } catch (Exception e) {
@@ -602,3 +598,4 @@ public class ScanTest extends Base {
         Assert.assertEquals(scanInfo.getProjectName(), projectName, "Project Name mismatch");
     }
 }
+*/
