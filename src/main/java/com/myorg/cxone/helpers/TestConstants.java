@@ -11,12 +11,9 @@ public class TestConstants {
     public static final String OUTPUT_PATTERN = "Engines";
     public static final String PROJECT_PATH_ZIP = "src/main/resources/JavaVulnerableLabE-master.zip";
     public static final String PROJECT_PATH_FOLDER = "src/main/resources/JavaVulnerableLabE-master";
+    public static final String PROJECT_PATH_FOLDER_INVALID = "src/main/resources/JavaVulnerableLabE";
     public static final String GIT_REPO_URL = "https://github.com/vbarhate/JavaVulnerableLabE.git";
-    public static final String VALID_GROUP_NAME = "QA Team";
-    public static final String INVALID_GROUP_NAME = "Invalid_Group";
     public static final String RELATIVE_DATA_PATH = "src/main/resources/JavaVulnerableLabE-master/src/main/webapp";
-    public static final String VALID_APPLICATION_NAME = "ShubhamApplicationForAutomation";
-    public static final String INVALID_APPLICATION_NAME = "ApplicationForAutomation";
     public static final String CX_API_KEY = System.getenv("CX_APIKEY");
     public static final String CX_CLIENT_ID = System.getenv("CX_CLIENT_ID");
     public static final String CX_CLIENT_SECRET = System.getenv("CX_CLIENT_SECRET");
