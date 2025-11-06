@@ -34,12 +34,12 @@ public class scanTestDataDriven extends Base {
         String expectedBranch = data.get("ExpectedBranch");
         String expectedType = data.get("ExpectedType");
         String expectedEngine = data.get("ExpectedEngine");
+        String expectedError = data.get("ExpectedError");
 
         String logPrefix = "runASTCLICommandsFromExcel - " + scenarioDescription;
         Logger.info("--------Starting test case:------ " + logPrefix, test);
 
         String projectName = "CLI_ScanProj_" + System.currentTimeMillis();
-
         String command = String.format(
                 "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"%s\" %s",
                 projectName,
@@ -52,22 +52,18 @@ public class scanTestDataDriven extends Base {
             Logger.info("Running CLI command: cx " + command, test);
             String result = CLIHelper.runCommandUntilPattern(command, OUTPUT_PATTERN, test);
 
+            if (expectedError != null && !expectedError.isEmpty()) {
+                Logger.info("Validating expected error...", test);
+                Assert.assertTrue(
+                        result.toLowerCase().contains(expectedError.toLowerCase()),
+                        "Expected error not found. Actual output:\n" + result
+                );
+                Logger.pass("Expected error found: " + expectedError, test);
+                return; // ✅ stop here, don’t proceed to positive validations
+            }
+
             ScanInfo scanInfo = ScanUtils.extractScanInfo(result);
-
-            validateCommonScanInfo(scanInfo, projectName);
-
-            if (expectedBranch != null && !expectedBranch.isEmpty()) {
-                Assert.assertEquals(scanInfo.getBranch(), expectedBranch, "Scan branch mismatch");
-            }
-            if (expectedType != null && !expectedType.isEmpty()) {
-                Assert.assertEquals(scanInfo.getType(), expectedType, "Scan type mismatch");
-            }
-            if (expectedStatus != null && !expectedStatus.isEmpty()) {
-                Assert.assertEquals(scanInfo.getStatus(), expectedStatus, "Scan status mismatch");
-            }
-            if (expectedEngine != null && !expectedEngine.isEmpty()) {
-                Assert.assertEquals(scanInfo.getEngines(), expectedEngine, "Scan engine mismatch");
-            }
+            validateBulkScanInfo(scanInfo, projectName, expectedBranch, expectedType, expectedStatus, expectedEngine);
 
             Logger.pass("Test passed: " + scenarioDescription, test);
 
@@ -176,67 +172,6 @@ public class scanTestDataDriven extends Base {
         }
     }
 
-    @Test(description = "Verify Checkmarx SAST scan fails with invalid application name")
-    public void createSASTScanWithInvalidApplicationNameTest() {
-        ExtentTest test = getTestLogger();
-        String projectName = "CLI_ScanProj_" + System.currentTimeMillis();
-        String command = String.format(
-                "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"sast\"  --application-name \"%s\"",
-                projectName, PROJECT_PATH_ZIP, INVALID_APPLICATION_NAME
-        );
-
-        try {
-            Logger.info("Running CLI command with invalid application name: cx " + command, test);
-
-            String result = CLIHelper.runCommand(command);
-            Logger.info("CLI Output:\n" + result, test);
-
-            boolean hasExpectedError = result.contains("provided application does not exist") ||
-                    result.contains("no permission to the application") ||
-                    result.toLowerCase().contains("error");
-
-            Assert.assertTrue(
-                    hasExpectedError,
-                    "Expected error for invalid application name not found in CLI output"
-            );
-            Logger.pass("CLI correctly returned an error for invalid application name: " + INVALID_APPLICATION_NAME, test);
-
-        } catch (Exception e) {
-            Logger.fail("Scan creation test failed: " + e.getMessage(), test);
-            Assert.fail("CLI scan creation failed", e);
-        }
-    }
-
-    @Test(description = "Run scan with invalid scan type and verify error")
-    public void createScanWithInvalidScanTypeTest() {
-        ExtentTest test = getTestLogger();
-        String projectName = "CLI_ScanProj_" + System.currentTimeMillis();
-        String invalidScanType = "invalid_type";
-
-        String command = String.format(
-                "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"%s\"",
-                projectName, PROJECT_PATH_ZIP, invalidScanType
-        );
-
-        try {
-            Logger.info("Running CLI command: cx " + command, test);
-            String result = CLIHelper.runCommand(command); // normal runCommand is fine here
-
-            Logger.info("CLI Output:\n" + result, test);
-
-            // Assert that the CLI output contains the expected error message
-            String expectedError = "It looks like the \"" + invalidScanType + "\" scan type does not exist";
-            Assert.assertTrue(result.contains(expectedError),
-                    "Expected error message for invalid scan type not found. CLI Output:\n" + result);
-
-            Logger.pass("Proper error message displayed for invalid scan type: " + invalidScanType, test);
-
-        } catch (Exception e) {
-            Logger.fail("Scan test with invalid type failed: " + e.getMessage(), test);
-            Assert.fail("CLI scan creation with invalid type failed", e);
-        }
-    }
-
     @Test(description = "Run Checkmarx SAST scan with invalid API key and verify error")
     public void createScanWithInvalidApiKeyTest() {
         ExtentTest test = getTestLogger();
@@ -294,33 +229,6 @@ public class scanTestDataDriven extends Base {
         }
     }
 
-    @Test(description = "Verify Checkmarx SAST scan fails with invalid project group")
-    public void createSASTScanWithInvalidGroupTest() {
-        ExtentTest test = getTestLogger();
-        String projectName = "Proj_Group_Invalid_" + System.currentTimeMillis();
-
-        String command = String.format(
-                "scan create --project-name \"%s\" -s %s --project-groups \"%s\" --scan-types \"sast\" --branch \"master\"",
-                projectName, PROJECT_PATH_ZIP, INVALID_GROUP_NAME
-        );
-        try {
-            Logger.info("Running CLI command with invalid group: cx " + command, test);
-
-            String result = CLIHelper.runCommandUntilPattern(command, OUTPUT_PATTERN, test);
-            Logger.info("CLI command output:\n" + result, test);
-
-            boolean hasError = result.contains("Failed finding groups")
-                    || result.contains("Failed updating a project");
-            Assert.assertTrue(hasError,
-                    "Expected error message for invalid project group not found in CLI output");
-            Logger.pass("CLI correctly returned an error for invalid project group: " + INVALID_GROUP_NAME, test);
-
-        } catch (Exception e) {
-            Logger.pass("CLI command failed as expected for invalid project group: " + INVALID_GROUP_NAME, test);
-            Logger.info("Error details: " + e.getMessage(), test);
-        }
-    }
-
     @Test(description = "Verify CLI scan fails when project-name is missing")
     public void createSASTScanWithoutProjectNameFlagTest() {
         ExtentTest test = getTestLogger();
@@ -354,4 +262,33 @@ public class scanTestDataDriven extends Base {
         Assert.assertEquals(scanInfo.getStatus(), "Running", "Scan status mismatch");
         Assert.assertEquals(scanInfo.getProjectName(), projectName, "Project Name mismatch");
     }
+
+    public static void validateBulkScanInfo(
+            ScanInfo scanInfo,
+            String projectName,
+            String expectedBranch,
+            String expectedType,
+            String expectedStatus,
+            String expectedEngine
+    ) {
+        validateCommonScanInfo(scanInfo,projectName);
+        if (expectedBranch != null && !expectedBranch.isEmpty()) {
+            Assert.assertEquals(scanInfo.getBranch(), expectedBranch, "Scan branch mismatch");
+        }
+
+        if (expectedType != null && !expectedType.isEmpty()) {
+            Assert.assertEquals(scanInfo.getType(), expectedType, "Scan type mismatch");
+        }
+
+        if (expectedStatus != null && !expectedStatus.isEmpty()) {
+            Assert.assertEquals(scanInfo.getStatus(), expectedStatus, "Scan status mismatch");
+        } else {
+            Assert.assertEquals(scanInfo.getStatus(), "Running", "Scan status mismatch");
+        }
+
+        if (expectedEngine != null && !expectedEngine.isEmpty()) {
+            Assert.assertEquals(scanInfo.getEngines(), expectedEngine, "Scan engine mismatch");
+        }
+    }
+
 }
