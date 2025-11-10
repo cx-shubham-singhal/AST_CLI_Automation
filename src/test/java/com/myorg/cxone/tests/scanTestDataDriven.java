@@ -9,7 +9,7 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import utils.Base;
 import utils.CLIHelper;
-import utils.ExcelDataProvider;
+import com.myorg.cxone.helpers.ExcelDataProvider;
 import utils.ScanUtils;
 import java.util.Map;
 
