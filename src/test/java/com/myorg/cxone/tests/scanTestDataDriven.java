@@ -62,6 +62,7 @@ public class scanTestDataDriven extends Base {
                 return; // ✅ stop here, don’t proceed to positive validations
             }
 
+
             ScanInfo scanInfo = ScanUtils.extractScanInfo(result);
             validateBulkScanInfo(scanInfo, projectName, expectedBranch, expectedType, expectedStatus, expectedEngine);
 
