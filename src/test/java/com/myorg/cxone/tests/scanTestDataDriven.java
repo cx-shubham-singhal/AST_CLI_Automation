@@ -131,7 +131,6 @@ public class scanTestDataDriven extends Base {
                 projectName, RELATIVE_DATA_PATH
         );
 
-
         try {
             Logger.info("Running CLI command: cx " + command, test);
             String result = CLIHelper.runCommandUntilPattern(command, OUTPUT_PATTERN, test);

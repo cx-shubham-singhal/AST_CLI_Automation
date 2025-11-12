@@ -128,6 +128,124 @@ public class ScanTest extends Base {
         }
     }
 
+    @Test(description = "Verify scan threshold check fails when critical issues exceed the limit")
+    public void verifySASTScanCriticalThresholdTest() {
+        ExtentTest test = getTestLogger();
+        String projectName = "CLI_ScanFromGit_" + System.currentTimeMillis();
+
+        String command = String.format(
+                "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"sast\" --threshold \"sast-critical=1\"",
+                projectName, PROJECT_PATH_ZIP
+        );
+
+        try {
+            Logger.info("Running CLI command: cx " + command, test);
+            String result = CLIHelper.runCommand(command);
+            Logger.info("CLI Output:\n" + result, test);
+
+            ScanInfo scanInfo = ScanUtils.extractScanInfo(result);
+            validateCommonScanInfo(scanInfo, projectName);
+            Assert.assertTrue(
+                    result.contains("Threshold check finished with status Failed"),
+                    "Expected threshold failure message not found in CLI output.");
+            Assert.assertTrue(
+                    result.contains("sast-critical: Limit = 1"),
+                    "Expected 'sast-critical: Limit = 1' not found in CLI output.");
+            Logger.pass("Threshold check correctly failed as expected.", test);
+
+        } catch (Exception e) {
+            Logger.fail("Error verifying threshold failure: " + e.getMessage(), test);
+            Assert.fail("Unexpected CLI or assertion failure", e);
+        }
+    }
+    @Test(description = "Verify scan threshold check fails when high issues exceed the limit")
+    public void verifySASTScanHighThresholdTest() {
+        ExtentTest test = getTestLogger();
+        String projectName = "CLI_ScanFromGit_" + System.currentTimeMillis();
+
+        String command = String.format(
+                "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"sast\" --threshold \"sast-high=1\"",
+                projectName, PROJECT_PATH_ZIP
+        );
+
+        try {
+            Logger.info("Running CLI command: cx " + command, test);
+            String result = CLIHelper.runCommand(command);
+            Logger.info("CLI Output:\n" + result, test);
+
+            ScanInfo scanInfo = ScanUtils.extractScanInfo(result);
+            validateCommonScanInfo(scanInfo, projectName);
+            Assert.assertTrue(
+                    result.contains("Threshold check finished with status Failed"),
+                    "Expected threshold failure message not found in CLI output.");
+            Assert.assertTrue(
+                    result.contains("sast-high: Limit = 1"),
+                    "Expected 'sast-high: Limit = 1' not found in CLI output.");
+            Logger.pass("Threshold check correctly failed as expected.", test);
+
+        } catch (Exception e) {
+            Logger.fail("Error verifying threshold failure: " + e.getMessage(), test);
+            Assert.fail("Unexpected CLI or assertion failure", e);
+        }
+    }
+    @Test(description = "Verify scan threshold check fails when medium issues exceed the limit")
+    public void verifySASTScanMediumThresholdTest() {
+        ExtentTest test = getTestLogger();
+        String projectName = "CLI_ScanFromGit_" + System.currentTimeMillis();
+
+        String command = String.format(
+                "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"sast\" --threshold \"sast-medium=1\"",
+                projectName, PROJECT_PATH_ZIP
+        );
+
+        try {
+            Logger.info("Running CLI command: cx " + command, test);
+            String result = CLIHelper.runCommand(command);
+            Logger.info("CLI Output:\n" + result, test);
+
+            ScanInfo scanInfo = ScanUtils.extractScanInfo(result);
+            validateCommonScanInfo(scanInfo, projectName);
+            Assert.assertTrue(
+                    result.contains("Threshold check finished with status Failed"),
+                    "Expected threshold failure message not found in CLI output.");
+            Assert.assertTrue(
+                    result.contains("sast-medium: Limit = 1"),
+                    "Expected 'sast-medium: Limit = 1' not found in CLI output.");
+            Logger.pass("Threshold check correctly failed as expected.", test);
+
+        } catch (Exception e) {
+            Logger.fail("Error verifying threshold failure: " + e.getMessage(), test);
+            Assert.fail("Unexpected CLI or assertion failure", e);
+        }
+    }
+
+    @Test(description = "Verify scan threshold check fails when issues exceed the limit")
+    public void verifySASTScanThresholdTest() {
+        ExtentTest test = getTestLogger();
+        String projectName = "CLI_ScanFromGit_" + System.currentTimeMillis();
+
+        String command = String.format(
+                "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"sast\" --threshold \"sast-critical=1;sast-high=1;sast-low=1\"",
+                projectName, PROJECT_PATH_ZIP
+        );
+
+        try {
+            Logger.info("Running CLI command: cx " + command, test);
+            String result = CLIHelper.runCommand(command);
+            Logger.info("CLI Output:\n" + result, test);
+
+            ScanInfo scanInfo = ScanUtils.extractScanInfo(result);
+            validateCommonScanInfo(scanInfo, projectName);
+            Assert.assertTrue(
+                    result.contains("Threshold check finished with status Failed"),
+                    "Expected threshold failure message not found in CLI output.");
+            Logger.pass("Threshold check correctly failed as expected.", test);
+
+        } catch (Exception e) {
+            Logger.fail("Error verifying threshold failure: " + e.getMessage(), test);
+            Assert.fail("Unexpected CLI or assertion failure", e);
+        }
+    }
 
     public static void validateCommonScanInfo(ScanInfo scanInfo, String projectName) {
         Assert.assertNotNull(scanInfo.getScanId(), "Scan ID should not be null");
