@@ -29,7 +29,7 @@ public class ScanTest extends Base {
             String result = CLIHelper.runCommandUntilPattern(command, OUTPUT_PATTERN, test);
             ScanInfo scanInfo = ScanUtils.extractScanInfo(result);
 
-            validateCommonScanInfo(scanInfo,projectName);
+            ScanUtils.validateCommonScanInfo(scanInfo,projectName);
 
         } catch (Exception e) {
             Logger.fail("Scan creation test failed: " + e.getMessage(), test);
@@ -55,8 +55,6 @@ public class ScanTest extends Base {
             String result = CLIHelper.runCommand(command);
 
             Logger.info("CLI Output:\n" + result, test);
-
-            // ✅ Assert that expected error message appears
             Assert.assertTrue(
                     result.toLowerCase().contains("failed creating a scan") ||
                             result.toLowerCase().contains("bad format"),
@@ -79,7 +77,6 @@ public class ScanTest extends Base {
         Logger.info("Running CLI command: cx " + command, test);
 
         try {
-            // Run the command (expected to fail)
             String result = CLIHelper.runCommand(command);
             Logger.info("CLI Output:\n" + result, test);
 
@@ -88,7 +85,6 @@ public class ScanTest extends Base {
                             result.toLowerCase().contains("please provide a scan id"),
                     "Expected error message not found in CLI output"
             );
-
             Logger.pass("CLI correctly failed when scan show executed without scan ID", test);
 
         } catch (Exception e) {
@@ -144,7 +140,7 @@ public class ScanTest extends Base {
             Logger.info("CLI Output:\n" + result, test);
 
             ScanInfo scanInfo = ScanUtils.extractScanInfo(result);
-            validateCommonScanInfo(scanInfo, projectName);
+            ScanUtils.validateCommonScanInfo(scanInfo, projectName);
             Assert.assertTrue(
                     result.contains("Threshold check finished with status Failed"),
                     "Expected threshold failure message not found in CLI output.");
@@ -174,7 +170,7 @@ public class ScanTest extends Base {
             Logger.info("CLI Output:\n" + result, test);
 
             ScanInfo scanInfo = ScanUtils.extractScanInfo(result);
-            validateCommonScanInfo(scanInfo, projectName);
+            ScanUtils.validateCommonScanInfo(scanInfo, projectName);
             Assert.assertTrue(
                     result.contains("Threshold check finished with status Failed"),
                     "Expected threshold failure message not found in CLI output.");
@@ -204,7 +200,7 @@ public class ScanTest extends Base {
             Logger.info("CLI Output:\n" + result, test);
 
             ScanInfo scanInfo = ScanUtils.extractScanInfo(result);
-            validateCommonScanInfo(scanInfo, projectName);
+            ScanUtils.validateCommonScanInfo(scanInfo, projectName);
             Assert.assertTrue(
                     result.contains("Threshold check finished with status Failed"),
                     "Expected threshold failure message not found in CLI output.");
@@ -235,7 +231,7 @@ public class ScanTest extends Base {
             Logger.info("CLI Output:\n" + result, test);
 
             ScanInfo scanInfo = ScanUtils.extractScanInfo(result);
-            validateCommonScanInfo(scanInfo, projectName);
+            ScanUtils.validateCommonScanInfo(scanInfo, projectName);
             Assert.assertTrue(
                     result.contains("Threshold check finished with status Failed"),
                     "Expected threshold failure message not found in CLI output.");
@@ -247,11 +243,57 @@ public class ScanTest extends Base {
         }
     }
 
-    public static void validateCommonScanInfo(ScanInfo scanInfo, String projectName) {
-        Assert.assertNotNull(scanInfo.getScanId(), "Scan ID should not be null");
-        Assert.assertNotNull(scanInfo.getProjectId(), "Project ID should not be null");
+    @Test(description = "Run Checkmarx SAST scan with scan type in single quotes")
+    public void createScanWithScanTypeInSingleQuotesTest() {
+        ExtentTest test = getTestLogger();
+        String projectName = "CLI_ScanFromGit_" + System.currentTimeMillis();
 
-        Assert.assertEquals(scanInfo.getStatus(), "Running", "Scan status mismatch");
-        Assert.assertEquals(scanInfo.getProjectName(), projectName, "Project Name mismatch");
+        String command = String.format(
+                "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types 'sast'",
+                projectName, PROJECT_PATH_ZIP
+        );
+
+        try {
+            Logger.info("Running CLI command: cx " + command, test);
+
+            String result = CLIHelper.runCommand(command);
+            Logger.info("CLI Output:\n" + result, test);
+
+            ScanInfo scanInfo = ScanUtils.extractScanInfo(result);
+            ScanUtils.validateCommonScanInfo(scanInfo, projectName);
+
+            Logger.pass("Scan creation with scan type in single quotes executed successfully and initial scan info verified.", test);
+
+        } catch (Exception e) {
+            Logger.fail("Scan creation test with scan type in single quotes failed: " + e.getMessage(), test);
+            Assert.fail("CLI scan creation with scan type in single quotes failed", e);
+        }
+    }
+
+    @Test(description = "Run Checkmarx scan with multiple scan type in single quotes")
+    public void createScanWithScanTypeInSingleQuotesAndMultipleScanTypeTest() {
+        ExtentTest test = getTestLogger();
+        String projectName = "CLI_ScanFromGit_" + System.currentTimeMillis();
+
+        String command = String.format(
+                "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types 'sast,sca'",
+                projectName, PROJECT_PATH_ZIP
+        );
+
+        try {
+            Logger.info("Running CLI command: cx " + command, test);
+
+            String result = CLIHelper.runCommand(command);
+            Logger.info("CLI Output:\n" + result, test);
+
+            ScanInfo scanInfo = ScanUtils.extractScanInfo(result);
+            ScanUtils.validateCommonScanInfo(scanInfo, projectName);
+
+            Logger.pass("Scan creation with multiple scan type in single quotes executed successfully and initial scan info verified.", test);
+
+        } catch (Exception e) {
+            Logger.fail("Scan creation test with multiple scan type in single quotes failed: " + e.getMessage(), test);
+            Assert.fail("CLI scan creation with multiple scan type in single quotes failed", e);
+        }
     }
 }

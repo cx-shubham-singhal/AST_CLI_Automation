@@ -136,7 +136,7 @@ public class scanTestDataDriven extends Base {
             String result = CLIHelper.runCommandUntilPattern(command, OUTPUT_PATTERN, test);
             ScanInfo scanInfo = ScanUtils.extractScanInfo(result);
 
-            validateCommonScanInfo(scanInfo,projectName);
+            ScanUtils.validateCommonScanInfo(scanInfo, projectName);
             Assert.assertEquals(scanInfo.getBranch(), "master", "Scan branch mismatch");
             Assert.assertEquals(scanInfo.getEngines(), "sast", "Scan engine mismatch");
 
@@ -220,7 +220,7 @@ public class scanTestDataDriven extends Base {
             Logger.info("CLI Output:\n" + result, test);
 
             ScanInfo scanInfo = ScanUtils.extractScanInfo(result);
-            validateCommonScanInfo(scanInfo, projectName);
+            ScanUtils.validateCommonScanInfo(scanInfo, projectName);
 
             Logger.pass("Scan creation from Git repository executed successfully and initial scan info verified.", test);
 
@@ -257,12 +257,6 @@ public class scanTestDataDriven extends Base {
             Logger.fail("Scan creation without project name flag failed: " + e.getMessage(), test);
             Assert.fail("CLI scan creation without project name flag failed", e);}
     }
-    public static void validateCommonScanInfo(ScanInfo scanInfo, String projectName) {
-        Assert.assertNotNull(scanInfo.getScanId(), "Scan ID should not be null");
-        Assert.assertNotNull(scanInfo.getProjectId(), "Project ID should not be null");
-        Assert.assertEquals(scanInfo.getStatus(), "Running", "Scan status mismatch");
-        Assert.assertEquals(scanInfo.getProjectName(), projectName, "Project Name mismatch");
-    }
 
     public static void validateBulkScanInfo(
             ScanInfo scanInfo,
@@ -272,7 +266,7 @@ public class scanTestDataDriven extends Base {
             String expectedStatus,
             String expectedEngine
     ) {
-        validateCommonScanInfo(scanInfo,projectName);
+        ScanUtils.validateCommonScanInfo(scanInfo, projectName);
         if (expectedBranch != null && !expectedBranch.isEmpty()) {
             Assert.assertEquals(scanInfo.getBranch(), expectedBranch, "Scan branch mismatch");
         }

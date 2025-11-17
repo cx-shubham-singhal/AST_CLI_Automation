@@ -1,10 +1,16 @@
 package utils;
 
 import PageObjects.ScanInfo;
+import com.aventstack.extentreports.ExtentTest;
+import com.myorg.cxone.helpers.Logger;
 import com.myorg.cxone.helpers.TestConstants;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.myorg.cxone.helpers.TestConstants.GIT_REPO_URL;
 
 public class ScanUtils {
 
@@ -37,7 +43,6 @@ public class ScanUtils {
         return new ScanInfo(scanId, projectId, projectName, status, branch, type, engines);
     }
 
-    // Helper method to extract single-line values
     private static String extractValue(String cliOutput, String key) {
         return extractValue(cliOutput, key, false);
     }
@@ -80,4 +85,10 @@ public class ScanUtils {
         return additionalFlags;
     }
 
+    public static void validateCommonScanInfo(ScanInfo scanInfo, String projectName) {
+        Assert.assertNotNull(scanInfo.getScanId(), "Scan ID should not be null");
+        Assert.assertNotNull(scanInfo.getProjectId(), "Project ID should not be null");
+        Assert.assertEquals(scanInfo.getStatus(), "Running", "Scan status mismatch");
+        Assert.assertEquals(scanInfo.getProjectName(), projectName, "Project Name mismatch");
+    }
 }
