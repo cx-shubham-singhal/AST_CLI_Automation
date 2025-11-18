@@ -85,6 +85,11 @@ public class ScanUtils {
         return additionalFlags;
     }
 
+    private String extractProjectId(String cliOutput) {
+        Matcher matcher = Pattern.compile("[a-fA-F0-9\\-]{36}").matcher(cliOutput);
+        return matcher.find() ? matcher.group() : null;
+    }
+
     public static void validateCommonScanInfo(ScanInfo scanInfo, String projectName) {
         Assert.assertNotNull(scanInfo.getScanId(), "Scan ID should not be null");
         Assert.assertNotNull(scanInfo.getProjectId(), "Project ID should not be null");

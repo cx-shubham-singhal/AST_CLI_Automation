@@ -11,6 +11,8 @@ import utils.Base;
 import utils.CLIHelper;
 import com.myorg.cxone.helpers.ExcelDataProvider;
 import utils.ScanUtils;
+import utils.Utils;
+
 import java.util.Map;
 
 import static com.myorg.cxone.helpers.TestConstants.*;
@@ -47,6 +49,13 @@ public class scanTestDataDriven extends Base {
                 scanTypes,
                 (additionalFlags != null && !additionalFlags.isEmpty()) ? additionalFlags : ""
         );
+        String command1 = String.format(
+                "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types '%s' %s",
+                projectName,
+                PROJECT_PATH_ZIP,
+                scanTypes,
+                (additionalFlags != null && !additionalFlags.isEmpty()) ? additionalFlags : ""
+        );
 
         try {
             Logger.info("Running CLI command: cx " + command, test);
@@ -67,7 +76,7 @@ public class scanTestDataDriven extends Base {
             validateBulkScanInfo(scanInfo, projectName, expectedBranch, expectedType, expectedStatus, expectedEngine);
 
             Logger.pass("Test passed: " + scenarioDescription, test);
-
+            Utils.deleteProjectWithScan(scanInfo.getScanId(),scanInfo.getProjectId(),test);
         } catch (Exception e) {
             Logger.fail("Test failed: " + scenarioDescription + " - " + e.getMessage(), test);
             Assert.fail("CLI scan failed", e);
@@ -139,7 +148,7 @@ public class scanTestDataDriven extends Base {
             ScanUtils.validateCommonScanInfo(scanInfo, projectName);
             Assert.assertEquals(scanInfo.getBranch(), "master", "Scan branch mismatch");
             Assert.assertEquals(scanInfo.getEngines(), "sast", "Scan engine mismatch");
-
+            Utils.deleteProjectWithScan(scanInfo.getScanId(),scanInfo.getProjectId(),test);
         } catch (Exception e) {
             Logger.fail("Scan creation test failed: " + e.getMessage(), test);
             Assert.fail("CLI scan creation failed", e);
@@ -223,7 +232,7 @@ public class scanTestDataDriven extends Base {
             ScanUtils.validateCommonScanInfo(scanInfo, projectName);
 
             Logger.pass("Scan creation from Git repository executed successfully and initial scan info verified.", test);
-
+             Utils.deleteProjectById(scanInfo.getProjectId(),test);
         } catch (Exception e) {
             Logger.fail("Scan creation test from Git repository failed: " + e.getMessage(), test);
             Assert.fail("CLI scan creation from Git repository failed", e);
@@ -285,5 +294,4 @@ public class scanTestDataDriven extends Base {
             Assert.assertEquals(scanInfo.getEngines(), expectedEngine, "Scan engine mismatch");
         }
     }
-
 }

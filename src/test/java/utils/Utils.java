@@ -90,7 +90,6 @@ public class Utils extends Base{
             Assert.fail("CLI output is empty!");
         }
 
-        // ✅ 1. Validate first line (description)
         if (!lines[0].matches(firstLinePattern)) {
             String msg = "Description does not match expected pattern."
                     + "\nExpected: " + firstLinePattern
@@ -99,7 +98,6 @@ public class Utils extends Base{
             Assert.fail(msg);
         }
 
-        // ✅ 2. Extract EXAMPLES section
         List<String> actualExamples = new ArrayList<>();
         int examplesStart = -1;
 
@@ -120,7 +118,6 @@ public class Utils extends Base{
             }
         }
 
-        // ✅ 3. Compare expected vs actual examples
         Set<String> actualSet = new HashSet<>(actualExamples);
         Set<String> expectedSet = new HashSet<>(expectedExamples);
 
@@ -135,5 +132,42 @@ public class Utils extends Base{
         Logger.pass("Description and EXAMPLES validated successfully.", test);
     }
 
+    public static void cancelScanById(String scanId, ExtentTest test) throws Exception {
+        String cancelCommand = String.format("scan cancel --scan-id %s", scanId);
+        Logger.info("Running CLI command: cx " + cancelCommand, test);
+        CLIHelper.runCommand(cancelCommand);
+        Logger.info("Scan command executed successfully", test);
+    }
+
+    public static void deleteProjectById(String projectId, ExtentTest test) throws Exception {
+        String deleteCommand = String.format("project delete --project-id %s", projectId);
+
+        Logger.info("Running CLI command: cx " + deleteCommand, test);
+        CLIHelper.runCommand(deleteCommand);
+        Logger.info("Project delete command executed. Verifying deletion...", test);
+        boolean isDeleted = isProjectDeleted(projectId, test);
+        Assert.assertTrue(isDeleted,
+                "Project with ID " + projectId + " still appears after deletion!"
+        );
+        Logger.info("Project with ID " + projectId + " deleted successfully.", test);
+    }
+
+    public static boolean isProjectDeleted(String projectId, ExtentTest test) throws Exception {
+        String showCommand = String.format("project show --project-id %s", projectId);
+        Logger.info("Running CLI command: cx " + showCommand, test);
+        String result = CLIHelper.runCommand(showCommand);
+
+        boolean notFound = result.toLowerCase().contains("project not found")
+                || result.toLowerCase().contains("failed getting a project");
+
+        Logger.info("Verification after delete. CLI show flag Response:\n" + result, test);
+
+        return notFound;
+    }
+
+    public static void deleteProjectWithScan(String scanId,String projectId,  ExtentTest test) throws Exception {
+        cancelScanById(scanId,test);
+        deleteProjectById(projectId,test);
+    }
 
 }

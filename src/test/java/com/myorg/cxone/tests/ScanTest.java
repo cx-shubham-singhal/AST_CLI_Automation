@@ -9,6 +9,8 @@ import org.testng.annotations.Test;
 import utils.Base;
 import utils.CLIHelper;
 import utils.ScanUtils;
+import utils.Utils;
+
 import static com.myorg.cxone.helpers.TestConstants.*;
 
 
@@ -30,9 +32,12 @@ public class ScanTest extends Base {
             ScanInfo scanInfo = ScanUtils.extractScanInfo(result);
 
             ScanUtils.validateCommonScanInfo(scanInfo,projectName);
+            Logger.pass("SAST Scan creation passed for source as folder", test);
+
+            Utils.deleteProjectWithScan(scanInfo.getScanId(),scanInfo.getProjectId(),test);
 
         } catch (Exception e) {
-            Logger.fail("Scan creation test failed: " + e.getMessage(), test);
+            Logger.fail("SAST Scan creation test failed: " + e.getMessage(), test);
             Assert.fail("CLI scan creation failed", e);
         }
     }
@@ -41,8 +46,6 @@ public class ScanTest extends Base {
     public void createScanWithInvalidSourceFolderTest() {
         ExtentTest test = getTestLogger();
         String projectName = "CLI_InvalidSrcProj_" + System.currentTimeMillis();
-
-        String invalidSourcePath = "src/main/resources/JavaVulnerableLabE"; // no '-master.zip'
 
         String command = String.format(
                 "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"sast\"",
@@ -148,6 +151,7 @@ public class ScanTest extends Base {
                     result.contains("sast-critical: Limit = 1"),
                     "Expected 'sast-critical: Limit = 1' not found in CLI output.");
             Logger.pass("Threshold check correctly failed as expected.", test);
+            Utils.deleteProjectById(scanInfo.getProjectId(), test);
 
         } catch (Exception e) {
             Logger.fail("Error verifying threshold failure: " + e.getMessage(), test);
@@ -178,6 +182,7 @@ public class ScanTest extends Base {
                     result.contains("sast-high: Limit = 1"),
                     "Expected 'sast-high: Limit = 1' not found in CLI output.");
             Logger.pass("Threshold check correctly failed as expected.", test);
+            Utils.deleteProjectById(scanInfo.getProjectId(), test);
 
         } catch (Exception e) {
             Logger.fail("Error verifying threshold failure: " + e.getMessage(), test);
@@ -208,6 +213,7 @@ public class ScanTest extends Base {
                     result.contains("sast-medium: Limit = 1"),
                     "Expected 'sast-medium: Limit = 1' not found in CLI output.");
             Logger.pass("Threshold check correctly failed as expected.", test);
+            Utils.deleteProjectById(scanInfo.getProjectId(), test);
 
         } catch (Exception e) {
             Logger.fail("Error verifying threshold failure: " + e.getMessage(), test);
@@ -236,6 +242,7 @@ public class ScanTest extends Base {
                     result.contains("Threshold check finished with status Failed"),
                     "Expected threshold failure message not found in CLI output.");
             Logger.pass("Threshold check correctly failed as expected.", test);
+            Utils.deleteProjectById(scanInfo.getProjectId(), test);
 
         } catch (Exception e) {
             Logger.fail("Error verifying threshold failure: " + e.getMessage(), test);
@@ -263,7 +270,7 @@ public class ScanTest extends Base {
             ScanUtils.validateCommonScanInfo(scanInfo, projectName);
 
             Logger.pass("Scan creation with scan type in single quotes executed successfully and initial scan info verified.", test);
-
+            Utils.deleteProjectWithScan(scanInfo.getScanId(),scanInfo.getProjectId(),test);
         } catch (Exception e) {
             Logger.fail("Scan creation test with scan type in single quotes failed: " + e.getMessage(), test);
             Assert.fail("CLI scan creation with scan type in single quotes failed", e);
@@ -290,7 +297,7 @@ public class ScanTest extends Base {
             ScanUtils.validateCommonScanInfo(scanInfo, projectName);
 
             Logger.pass("Scan creation with multiple scan type in single quotes executed successfully and initial scan info verified.", test);
-
+            Utils.deleteProjectWithScan(scanInfo.getScanId(),scanInfo.getProjectId(),test);
         } catch (Exception e) {
             Logger.fail("Scan creation test with multiple scan type in single quotes failed: " + e.getMessage(), test);
             Assert.fail("CLI scan creation with multiple scan type in single quotes failed", e);

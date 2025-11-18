@@ -25,17 +25,13 @@ public class CLIHelper {
     public static String runCommand(String command) throws Exception {
         String cliPath = getCliCommand();
 
-        // Wrap path in quotes if it contains spaces
         if (cliPath.contains(" ")) {
             cliPath = "\"" + cliPath + "\"";
         }
-
         ITestResult result = Reporter.getCurrentTestResult();
         if (result != null) {
             result.setAttribute("cliCommand","cx " + command);
         }
-
-        // Split command into array to avoid quoting issues
         String[] cmd = {"cmd.exe", "/c", cliPath + " " + command};
 
         ProcessBuilder pb = new ProcessBuilder(cmd);
@@ -53,7 +49,6 @@ public class CLIHelper {
         if (exitCode != 0) {
             output.append("\nCommand exited with code: ").append(exitCode);
         }
-
         return output.toString();
     }
 
@@ -84,7 +79,6 @@ public class CLIHelper {
             Logger.info(line, test);
             output.append(line).append("\n");
 
-            // Stop when the desired pattern is reached
             if (pattern.matcher(line).find()) {
                 break;
             }

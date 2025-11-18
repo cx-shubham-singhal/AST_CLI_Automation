@@ -8,6 +8,7 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import utils.Base;
 import utils.ProjectUtils;
+import utils.Utils;
 
 import java.util.List;
 import java.util.Map;
@@ -46,7 +47,7 @@ public class ProjectTest extends Base {
             );
 
             Logger.info("Project '" + projectName + "' created successfully.", test);
-            ProjectUtils.deleteProjectById(projectId, test);
+            Utils.deleteProjectById(projectId, test);
 
         } catch (Exception e) {
             Logger.fail("Project creation test failed: " + e.getMessage(), test);
@@ -64,8 +65,7 @@ public class ProjectTest extends Base {
             Logger.info("Running CLI command: cx " + command, test);
             String result = CLIHelper.runCommand(command);
             Logger.info("CLI Output:\n" + result, test);
-
-            // ✅ Check expected error message
+            
             boolean containsError = result.toLowerCase().contains("project name is required");
 
             Assert.assertTrue(
@@ -107,7 +107,7 @@ public class ProjectTest extends Base {
                     "Application ID was not mapped correctly in show output!\nExpected ID: " + applicationId + "\nOutput:\n" + showOutput);
 
             Logger.pass("Project with valid application created successfully.", test);
-            ProjectUtils.deleteProjectById(projectId, test);
+            Utils.deleteProjectById(projectId, test);
         } catch (Exception e) {
             Logger.fail("Test failed while creating project with valid application: " + e.getMessage(), test);
             Assert.fail("CLI execution failed.", e);
@@ -161,7 +161,7 @@ public class ProjectTest extends Base {
             Assert.assertTrue(showOutput.contains("[]"), "ApplicationIds should be empty when no app is mapped!");
 
             Logger.pass("Project created successfully without application mapping.", test);
-            ProjectUtils.deleteProjectById(projectId, test);
+            Utils.deleteProjectById(projectId, test);
 
         } catch (Exception e) {
             Logger.fail("Test failed while creating project without application: " + e.getMessage(), test);
@@ -197,7 +197,7 @@ public class ProjectTest extends Base {
             Logger.pass("Duplicate project creation correctly rejected.", test);
 
             // Cleanup original project
-            ProjectUtils.deleteProjectById(projectId, test);
+            Utils.deleteProjectById(projectId, test);
 
         } catch (Exception e) {
             Logger.fail("Duplicate project test failed: " + e.getMessage(), test);
@@ -358,8 +358,7 @@ public class ProjectTest extends Base {
 
             Logger.pass("Project created successfully with correct tag: " + tagFull, test);
 
-            // 6️⃣ Cleanup (optional)
-            ProjectUtils.deleteProjectById(projectId, test);
+            Utils.deleteProjectById(projectId, test);
 
         } catch (Exception e) {
             Logger.fail("Create project with tags test failed: " + e.getMessage(), test);
@@ -441,7 +440,7 @@ public class ProjectTest extends Base {
             Assert.assertEquals(tableFormat, "table", "Expected TABLE format output.");
             Logger.pass("Verified TABLE format successfully.", test);
 
-            ProjectUtils.deleteProjectById(projectId, test);
+            Utils.deleteProjectById(projectId, test);
 
         } catch (Exception e) {
             Logger.fail("Test failed: " + e.getMessage(), test);
@@ -469,7 +468,7 @@ public class ProjectTest extends Base {
             Assert.assertEquals(jsonFormat, "json", "Expected JSON format output.");
             Logger.pass("Verified JSON format successfully.", test);
 
-            ProjectUtils.deleteProjectById(projectId, test);
+            Utils.deleteProjectById(projectId, test);
 
         } catch (Exception e) {
             Logger.fail("Test failed: " + e.getMessage(), test);
@@ -496,7 +495,7 @@ public class ProjectTest extends Base {
             Assert.assertEquals(listFormat, "list", "Expected LIST format output.");
             Logger.pass("Verified LIST format successfully.", test);
 
-            ProjectUtils.deleteProjectById(projectId, test);
+            Utils.deleteProjectById(projectId, test);
 
         } catch (Exception e) {
             Logger.fail("Test failed: " + e.getMessage(), test);
@@ -520,7 +519,7 @@ public class ProjectTest extends Base {
             Assert.assertNotNull(projectId, "Failed to extract Project ID from CLI output.");
             Logger.info("Extracted Project ID: " + projectId, test);
 
-            ProjectUtils.deleteProjectById(projectId, test);
+            Utils.deleteProjectById(projectId, test);
 
         } catch (Exception e) {
             Logger.fail("Project deletion test failed: " + e.getMessage(), test);
