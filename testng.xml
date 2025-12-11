@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
-<suite name="CheckmarxOneSuite">
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="CheckmarxOneSuite"
+       verbose="1"
+       parallel="false"
+       thread-count="1"
+       preserve-order="true">
 
     <listeners>
         <listener class-name="utils.ExcelReportListener"/>
     </listeners>
 
-    <test name="CheckmarxOneTests">
+    <test name="CheckmarxOneTests"
+          preserve-order="true"
+          parallel="false">
         <classes>
             <class name="com.myorg.cxone.tests.HelpTest"/>
             <class name="com.myorg.cxone.tests.scanTestDataDriven"/>

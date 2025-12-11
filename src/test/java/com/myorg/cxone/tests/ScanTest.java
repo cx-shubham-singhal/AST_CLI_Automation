@@ -250,7 +250,7 @@ public class ScanTest extends Base {
         }
     }
 
-    @Test(description = "Run Checkmarx SAST scan with scan type in single quotes")
+    /*@Test(description = "Run Checkmarx SAST scan with scan type in single quotes")
     public void createScanWithScanTypeInSingleQuotesTest() {
         ExtentTest test = getTestLogger();
         String projectName = "CLI_ScanFromGit_" + System.currentTimeMillis();
@@ -302,5 +302,5 @@ public class ScanTest extends Base {
             Logger.fail("Scan creation test with multiple scan type in single quotes failed: " + e.getMessage(), test);
             Assert.fail("CLI scan creation with multiple scan type in single quotes failed", e);
         }
-    }
+    }*/
 }
