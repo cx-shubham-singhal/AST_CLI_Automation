@@ -49,13 +49,6 @@ public class scanTestDataDriven extends Base {
                 scanTypes,
                 (additionalFlags != null && !additionalFlags.isEmpty()) ? additionalFlags : ""
         );
-        String command1 = String.format(
-                "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types '%s' %s",
-                projectName,
-                PROJECT_PATH_ZIP,
-                scanTypes,
-                (additionalFlags != null && !additionalFlags.isEmpty()) ? additionalFlags : ""
-        );
 
         try {
             Logger.info("Running CLI command: cx " + command, test);
@@ -80,6 +73,32 @@ public class scanTestDataDriven extends Base {
         } catch (Exception e) {
             Logger.fail("Test failed: " + scenarioDescription + " - " + e.getMessage(), test);
             Assert.fail("CLI scan failed", e);
+        }
+    }
+
+    @Test(description = "Verify All scan ")
+    public void verifySASTScanWithAllScanTypes() {
+        ExtentTest test = getTestLogger();
+        String projectName = "CLI_ScanProj_" + System.currentTimeMillis();
+
+        String command = String.format(
+                "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"\"",
+                projectName, PROJECT_PATH_ZIP
+        );
+
+        try {
+            Logger.info("Running CLI command: cx " + command, test);
+            String result = CLIHelper.runCommand(command);
+            Logger.info("CLI Output:\n" + result, test);
+
+            ScanInfo scanInfo = ScanUtils.extractScanInfo(result);
+            ScanUtils.validateCommonScanInfo(scanInfo, projectName);
+
+            Logger.pass("Scan creation with all scan types verified and initial scan info verified.", test);
+            Utils.deleteProjectById(scanInfo.getProjectId(),test);
+        } catch (Exception e) {
+            Logger.fail("All scan type Scan creation test failed: " + e.getMessage(), test);
+            Assert.fail("All scan type Scan creation test failed", e);
         }
     }
 
