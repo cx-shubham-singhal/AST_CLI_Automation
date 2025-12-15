@@ -28,16 +28,21 @@ public class Base {
 
     @BeforeMethod(alwaysRun = true)
     public void setupTest(Method method, ITestResult result) {
-        String testName = method.getName();
 
-        // Create node under class-level test
+        int retryCount = result.getAttribute("retryCount") == null
+                ? 0
+                : (int) result.getAttribute("retryCount");
+
+        String testName = method.getName()
+                + (retryCount > 0 ? " (Retry " + retryCount + ")" : "");
+
         ExtentTest test = classLevelTest.get().createNode(testName);
         testLevelTest.set(test);
 
-        // Log to console + Extent report
         System.out.println(">>> Starting Test: " + testName);
         test.info("Starting Test: " + testName);
     }
+
 
     @AfterSuite(alwaysRun = true)
     public void tearDownSuite() {

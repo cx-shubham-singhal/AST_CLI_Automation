@@ -17,7 +17,6 @@ import java.util.Map;
 
 import static com.myorg.cxone.helpers.TestConstants.*;
 
-@Listeners(utils.ExcelReportListener.class)
 public class scanTestDataDriven extends Base {
 
     @DataProvider(name = "scanData")

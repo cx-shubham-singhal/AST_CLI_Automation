@@ -14,7 +14,6 @@ import java.util.Optional;
 
 import static com.myorg.cxone.helpers.TestConstants.*;
 
-@Listeners(utils.ExcelReportListener.class)
 public class ConfigureTest extends Base {
 
     @Test(description = "Test cx configure displays setup guide on start")

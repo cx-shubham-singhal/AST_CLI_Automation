@@ -8,6 +8,7 @@
 
     <listeners>
         <listener class-name="utils.ExcelReportListener"/>
+        <listener class-name="utils.RetryListener"/>
     </listeners>
 
     <test name="CheckmarxOneTests"
