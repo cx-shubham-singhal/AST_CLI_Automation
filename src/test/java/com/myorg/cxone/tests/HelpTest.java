@@ -13,7 +13,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-@Listeners(utils.ExcelReportListener.class)
 public class HelpTest extends Base {
 
     @Test(description = "CLI Help output compare")

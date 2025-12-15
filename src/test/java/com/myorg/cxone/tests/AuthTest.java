@@ -10,7 +10,6 @@ import utils.Base;
 
 import static com.myorg.cxone.helpers.TestConstants.*;
 
-@Listeners(utils.ExcelReportListener.class)
 public class AuthTest extends Base {
 
     @Test(description = "Test Auth Validation when environment variables are set")

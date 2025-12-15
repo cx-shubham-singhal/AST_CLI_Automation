@@ -13,8 +13,6 @@ import utils.Utils;
 
 import static com.myorg.cxone.helpers.TestConstants.*;
 
-
-@Listeners(utils.ExcelReportListener.class)
 public class ScanTest extends Base {
 
     @Test(description = "Run and verify Checkmarx SAST scan when source is folder, not zip ")

@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Listeners(utils.ExcelReportListener.class)
 public class ProjectTest extends Base {
 
     @Test(description = "Create Test Project")
