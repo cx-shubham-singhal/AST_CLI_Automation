@@ -2,14 +2,13 @@ package com.myorg.cxone.tests;
 
 import PageObjects.ScanInfo;
 import com.aventstack.extentreports.ExtentTest;
+import com.myorg.cxone.helpers.ExcelDataProvider;
 import com.myorg.cxone.helpers.Logger;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import utils.Base;
 import utils.CLIHelper;
-import com.myorg.cxone.helpers.ExcelDataProvider;
 import utils.ScanUtils;
 import utils.Utils;
 
@@ -21,7 +20,7 @@ public class scanTestDataDriven extends Base {
 
     @DataProvider(name = "scanData")
     public Object[][] scanData() {
-        return ExcelDataProvider.getExcelDataAsMap("src/main/resources/ScanTestData.xlsx", "ScanSheet");
+        return ExcelDataProvider.getExcelDataAsMap("src/main/resources/ScanTestData.xlsx", "Sheet2");
     }
 
     @Test(dataProvider = "scanData", description = "Run Checkmarx CLI Scan test from Excel")

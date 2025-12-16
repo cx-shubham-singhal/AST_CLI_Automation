@@ -4,7 +4,6 @@ import PageObjects.ScanInfo;
 import com.aventstack.extentreports.ExtentTest;
 import com.myorg.cxone.helpers.Logger;
 import org.testng.Assert;
-import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import utils.Base;
 import utils.CLIHelper;

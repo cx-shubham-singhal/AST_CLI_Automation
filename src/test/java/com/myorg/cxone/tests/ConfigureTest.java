@@ -1,18 +1,18 @@
 package com.myorg.cxone.tests;
 
 import com.aventstack.extentreports.ExtentTest;
-import utils.CLIHelper;
 import com.myorg.cxone.helpers.Logger;
 import org.testng.Assert;
-import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import utils.Base;
+import utils.CLIHelper;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static com.myorg.cxone.helpers.TestConstants.*;
+import static com.myorg.cxone.helpers.TestConstants.INVALID_STATE_ERROR;
+import static com.myorg.cxone.helpers.TestConstants.SETUP_GUIDE;
 
 public class ConfigureTest extends Base {
 

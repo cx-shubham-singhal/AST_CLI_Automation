@@ -1,12 +1,11 @@
 package com.myorg.cxone.tests;
 
 import com.aventstack.extentreports.ExtentTest;
-import utils.CLIHelper;
 import com.myorg.cxone.helpers.Logger;
 import org.testng.Assert;
-import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import utils.Base;
+import utils.CLIHelper;
 import utils.Utils;
 
 import java.nio.file.Files;
