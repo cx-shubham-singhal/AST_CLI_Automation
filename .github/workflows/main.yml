@@ -31,7 +31,7 @@ jobs:
       - name: Build with Maven (skip tests)
         run: mvn clean install -DskipTests
 
-      - name: Download Checkmarx One CLI 2.3.38
+      - name: Download Checkmarx One CLI 
         run: |
           if [[ "${{ runner.os }}" == "Windows" ]]; then
             echo "Windows runner detected"
