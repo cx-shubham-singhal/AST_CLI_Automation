@@ -29,12 +29,7 @@ public class Base {
     @BeforeMethod(alwaysRun = true)
     public void setupTest(Method method, ITestResult result) {
 
-        int retryCount = result.getAttribute("retryCount") == null
-                ? 0
-                : (int) result.getAttribute("retryCount");
-
-        String testName = method.getName()
-                + (retryCount > 0 ? " (Retry " + retryCount + ")" : "");
+        String testName = method.getName();
 
         ExtentTest test = classLevelTest.get().createNode(testName);
         testLevelTest.set(test);
