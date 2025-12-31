@@ -7,8 +7,12 @@ import com.myorg.cxone.helpers.TestConstants;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.myorg.cxone.helpers.TestConstants.GIT_REPO_URL;
 
@@ -108,5 +112,22 @@ public class ScanUtils {
         Assert.assertNotNull(scanInfo.getProjectId(), "Project ID should not be null");
         Assert.assertEquals(scanInfo.getStatus(), "Running", "Scan status mismatch");
         Assert.assertEquals(scanInfo.getProjectName(), projectName, "Project Name mismatch");
+    }
+
+    public static List<String> extractApplicationIds(String projectShowOutput) {
+        Pattern pattern = Pattern.compile("ApplicationIds\\s*\\[(.*?)]", Pattern.DOTALL);
+        Matcher matcher = pattern.matcher(projectShowOutput);
+
+        if (!matcher.find()) {
+            return Collections.emptyList();
+        }
+
+        String apps = matcher.group(1).trim();
+        if (apps.isEmpty()) return Collections.emptyList();
+
+        return Arrays.stream(apps.split("\\s+"))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .collect(Collectors.toList());
     }
 }

@@ -10,6 +10,8 @@ import utils.CLIHelper;
 import utils.ScanUtils;
 import utils.Utils;
 
+import java.util.List;
+
 import static com.myorg.cxone.helpers.TestConstants.*;
 
 public class ScanTest extends Base {
@@ -247,57 +249,50 @@ public class ScanTest extends Base {
         }
     }
 
-    /*@Test(description = "Run Checkmarx SAST scan with scan type in single quotes")
-    public void createScanWithScanTypeInSingleQuotesTest() {
+    @Test(description = "Verify multiple application names can be attached to same project")
+    public void verifyMultipleApplicationNamesForSameProject() {
         ExtentTest test = getTestLogger();
-        String projectName = "CLI_ScanFromGit_" + System.currentTimeMillis();
+        String projectName = "MultipleAppProj_" + System.currentTimeMillis();
+        String appName1 = "QAApplicationForAutomation";
+        String appName2 = "CliAutomationApplication";
 
-        String command = String.format(
-                "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types 'sast'",
-                projectName, PROJECT_PATH_ZIP
-        );
-
+        String firstScanCmd = String.format(
+                "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"sast\" --application-name \"%s\"",
+                projectName, PROJECT_PATH_ZIP, appName1);
+        String secondScanCmd = String.format(
+                "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"sast\" --application-name \"%s\"",
+                projectName, PROJECT_PATH_ZIP, appName2);
         try {
-            Logger.info("Running CLI command: cx " + command, test);
+            Logger.info("Running first CLI command: cx " + firstScanCmd, test);
+            String firstResult = CLIHelper.runCommand(firstScanCmd);
+            Logger.info("First Scan Output:\n" + firstResult, test);
 
-            String result = CLIHelper.runCommand(command);
-            Logger.info("CLI Output:\n" + result, test);
+            ScanInfo firstScanInfo = ScanUtils.extractScanInfo(firstResult);
+            ScanUtils.validateCommonScanInfo(firstScanInfo, projectName);
+            Logger.pass("First scan created successfully with application: " + appName1, test);
 
-            ScanInfo scanInfo = ScanUtils.extractScanInfo(result);
-            ScanUtils.validateCommonScanInfo(scanInfo, projectName);
+            Logger.info("Running second CLI command: cx " + secondScanCmd, test);
+            String secondResult = CLIHelper.runCommand(secondScanCmd);
+            Logger.info("Second Scan Output:\n" + secondResult, test);
 
-            Logger.pass("Scan creation with scan type in single quotes executed successfully and initial scan info verified.", test);
-            Utils.deleteProjectWithScan(scanInfo.getScanId(),scanInfo.getProjectId(),test);
+            ScanInfo secondScanInfo = ScanUtils.extractScanInfo(secondResult);
+            ScanUtils.validateCommonScanInfo(secondScanInfo, projectName);
+            Logger.pass("Second scan created successfully with application: " + appName2, test);
+
+            String projectShowResult = Utils.showProject(firstScanInfo.getProjectId(), test);
+
+            List<String> applicationIds = ScanUtils.extractApplicationIds(projectShowResult);
+            Assert.assertNotNull(applicationIds, "ApplicationIds must not be null");
+            Assert.assertEquals(applicationIds.size(), 2,
+                    "Project must contain exactly two applications");
+
+            Logger.pass("Project successfully contains two application entries: " + applicationIds, test);
+            Utils.deleteProjectById(firstScanInfo.getProjectId(), test);
+
         } catch (Exception e) {
-            Logger.fail("Scan creation test with scan type in single quotes failed: " + e.getMessage(), test);
-            Assert.fail("CLI scan creation with scan type in single quotes failed", e);
+            Logger.fail("Multiple Application Name Test failed: " + e.getMessage(), test);
+            Assert.fail("Multiple Application Name Test failed", e);
         }
     }
 
-    @Test(description = "Run Checkmarx scan with multiple scan type in single quotes")
-    public void createScanWithScanTypeInSingleQuotesAndMultipleScanTypeTest() {
-        ExtentTest test = getTestLogger();
-        String projectName = "CLI_ScanFromGit_" + System.currentTimeMillis();
-
-        String command = String.format(
-                "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types 'sast,sca'",
-                projectName, PROJECT_PATH_ZIP
-        );
-
-        try {
-            Logger.info("Running CLI command: cx " + command, test);
-
-            String result = CLIHelper.runCommand(command);
-            Logger.info("CLI Output:\n" + result, test);
-
-            ScanInfo scanInfo = ScanUtils.extractScanInfo(result);
-            ScanUtils.validateCommonScanInfo(scanInfo, projectName);
-
-            Logger.pass("Scan creation with multiple scan type in single quotes executed successfully and initial scan info verified.", test);
-            Utils.deleteProjectWithScan(scanInfo.getScanId(),scanInfo.getProjectId(),test);
-        } catch (Exception e) {
-            Logger.fail("Scan creation test with multiple scan type in single quotes failed: " + e.getMessage(), test);
-            Assert.fail("CLI scan creation with multiple scan type in single quotes failed", e);
-        }
-    }*/
 }
