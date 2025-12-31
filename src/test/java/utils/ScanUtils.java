@@ -64,12 +64,19 @@ public class ScanUtils {
             return "";
         }
 
-        additionalFlags = additionalFlags.substring(1).trim();
+        additionalFlags = additionalFlags.trim();
 
+        if (additionalFlags.startsWith("`")) {
+            additionalFlags = additionalFlags.substring(1).trim();
+        }
         if (additionalFlags.contains("%s")) {
             if (additionalFlags.contains("--apikey")) {
-                additionalFlags = String.format(additionalFlags, TestConstants.CX_API_KEY);
-            } else if (additionalFlags.contains("--client-id") && additionalFlags.contains("--client-secret")) {
+                additionalFlags = String.format(
+                        additionalFlags,
+                        TestConstants.CX_API_KEY
+                );
+            } else if (additionalFlags.contains("--client-id")
+                    && additionalFlags.contains("--client-secret")) {
                 additionalFlags = String.format(
                         additionalFlags,
                         TestConstants.CX_CLIENT_ID,
@@ -77,11 +84,10 @@ public class ScanUtils {
                 );
             } else {
                 throw new RuntimeException(
-                        "Unrecognized credential placeholder pattern in AdditionalFlags: " + additionalFlags
-                );
+                        "Unrecognized credential placeholder pattern in AdditionalFlags: "
+                                + additionalFlags);
             }
         }
-
         return additionalFlags;
     }
 
