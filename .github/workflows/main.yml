@@ -35,7 +35,7 @@ jobs:
         run: |
           if [[ "${{ runner.os }}" == "Windows" ]]; then
             echo "Windows runner detected"
-            curl -L -o ast-cli.zip https://github.com/Checkmarx/ast-cli/releases/download/2.3.40/ast-cli_windows_x64.zip
+            curl -L -o ast-cli.zip https://github.com/Checkmarx/ast-cli/releases/download/2.3.42/ast-cli_windows_x64.zip
             powershell -Command "Expand-Archive -Path ast-cli.zip -DestinationPath ."
             powershell -Command "Move-Item -Path .\cx.exe -Destination 'C:\Windows\System32\cx.exe' -Force"
             cx version
