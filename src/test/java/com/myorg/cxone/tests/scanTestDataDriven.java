@@ -20,7 +20,7 @@ public class scanTestDataDriven extends Base {
 
     @DataProvider(name = "scanData")
     public Object[][] scanData() {
-        return ExcelDataProvider.getExcelDataAsMap("src/main/resources/ScanTestData.xlsx", "ScanSheet");
+        return ExcelDataProvider.getExcelDataAsMap("src/main/resources/ScanTestData.xlsx", "Sheet2");
     }
 
     @Test(dataProvider = "scanData", description = "Run Checkmarx CLI Scan test from Excel")
