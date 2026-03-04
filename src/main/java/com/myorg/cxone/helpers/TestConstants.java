@@ -9,8 +9,8 @@ public class TestConstants {
     public static final String SETUP_GUIDE = "Setup guide: https://checkmarx.com/resource/documents/en/34965-68621-checkmarx-one-cli-quick-start-guide.html";
     public static final String INVALID_STATE_ERROR = "Failed to set property: unknown property or bad value";
     public static final String OUTPUT_PATTERN = "Engines";
-    public static final String PROJECT_PATH_ZIP = "src/main/resources/JavaVulnerableLabE-master.zip";
-    public static final String PROJECT_PATH_FOLDER = "src/main/resources/JavaVulnerableLabE-master";
+    public static final String PROJECT_PATH_ZIP = "src/main/resources/Phoenix-RealtimeGoat.zip";
+    public static final String PROJECT_PATH_FOLDER = "src/main/resources/Phoenix-RealtimeGoat";
     public static final String PROJECT_PATH_FOLDER_INVALID = "src/main/resources/JavaVulnerableLabE";
     public static final String GIT_REPO_URL = "https://github.com/vbarhate/JavaVulnerableLabE.git";
     public static final String RELATIVE_DATA_PATH = "src/main/resources/JavaVulnerableLabE-master/src/main/webapp";

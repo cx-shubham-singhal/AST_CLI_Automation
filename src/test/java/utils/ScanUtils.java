@@ -115,19 +115,31 @@ public class ScanUtils {
     }
 
     public static List<String> extractApplicationIds(String projectShowOutput) {
-        Pattern pattern = Pattern.compile("ApplicationIds\\s*\\[(.*?)]", Pattern.DOTALL);
-        Matcher matcher = pattern.matcher(projectShowOutput);
 
+        Pattern pattern = Pattern.compile("ApplicationIds.*?\\[(.*?)\\]", Pattern.DOTALL);
+        Matcher matcher = pattern.matcher(projectShowOutput);
         if (!matcher.find()) {
             return Collections.emptyList();
         }
-
         String apps = matcher.group(1).trim();
-        if (apps.isEmpty()) return Collections.emptyList();
-
+        if (apps.isEmpty()) {
+            return Collections.emptyList();
+        }
         return Arrays.stream(apps.split("\\s+"))
                 .map(String::trim)
                 .filter(s -> !s.isEmpty())
                 .collect(Collectors.toList());
+    }
+
+    public static int extractTotalResults(String output) {
+
+        Pattern pattern = Pattern.compile("Total Results:\\s*(\\d+)");
+        Matcher matcher = pattern.matcher(output);
+
+        if (matcher.find()) {
+            return Integer.parseInt(matcher.group(1));
+        }
+
+        throw new RuntimeException("Unable to extract Total Results from CLI output");
     }
 }
