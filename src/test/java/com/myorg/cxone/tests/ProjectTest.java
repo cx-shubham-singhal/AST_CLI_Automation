@@ -83,7 +83,7 @@ public class ProjectTest extends Base {
     public void testCreateProjectWithValidApplication() {
         ExtentTest test = getTestLogger();
         String projectName = "CLI_AutomationProj_" + System.currentTimeMillis();
-        String appName = "ShubhamApplicationForAutomation";
+        String appName = "QAApplicationForAutomation";
         String command = String.format("project create --project-name \"%s\" --application-name \"%s\"", projectName, appName);
 
         try {

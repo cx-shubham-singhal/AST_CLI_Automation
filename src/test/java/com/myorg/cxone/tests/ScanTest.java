@@ -264,7 +264,7 @@ public class ScanTest extends Base {
                 projectName, PROJECT_PATH_ZIP, appName2);
         try {
             Logger.info("Running first CLI command: cx " + firstScanCmd, test);
-            String firstResult = CLIHelper.runCommand(firstScanCmd);
+            String firstResult = CLIHelper.runCommandUntilPattern(firstScanCmd, OUTPUT_PATTERN, test);
             Logger.info("First Scan Output:\n" + firstResult, test);
 
             ScanInfo firstScanInfo = ScanUtils.extractScanInfo(firstResult);
@@ -272,7 +272,7 @@ public class ScanTest extends Base {
             Logger.pass("First scan created successfully with application: " + appName1, test);
 
             Logger.info("Running second CLI command: cx " + secondScanCmd, test);
-            String secondResult = CLIHelper.runCommand(secondScanCmd);
+            String secondResult = CLIHelper.runCommandUntilPattern(secondScanCmd, OUTPUT_PATTERN, test);
             Logger.info("Second Scan Output:\n" + secondResult, test);
 
             ScanInfo secondScanInfo = ScanUtils.extractScanInfo(secondResult);
@@ -336,5 +336,146 @@ public class ScanTest extends Base {
                 Assert.fail("Unexpected CLI or assertion failure", e);
             }
         }
+
+    @Test(description = "Verify NEW filter returns vulnerabilities only on first scan and zero on subsequent scans")
+    public void verifyNewFilterBehaviorTest() {
+
+        ExtentTest test = getTestLogger();
+        String projectName = "NewFilterProj_" + System.currentTimeMillis();
+
+        String command = String.format(
+                "scan create --project-name \"%s\" --branch master -s \"%s\" --filter \"status=NEW\"",
+                projectName, PROJECT_PATH_ZIP);
+
+        try {
+
+            Logger.info("Running CLI command: cx " + command, test);
+            String firstResult = CLIHelper.runCommand(command);
+            Logger.info("First Scan Output:\n" + firstResult, test);
+
+            int firstTotal = ScanUtils.extractTotalResults(firstResult);
+
+            Assert.assertTrue(firstTotal > 0,
+                    "First scan should return NEW vulnerabilities but returned 0");
+            Logger.pass("First scan detected NEW vulnerabilities: " + firstTotal, test);
+            ScanInfo firstScanInfo = ScanUtils.extractScanInfo(firstResult);
+            ScanUtils.validateCommonScanInfo(firstScanInfo, projectName);
+
+            // -------- SECOND SCAN --------
+            Logger.info("Running CLI command: cx " + command, test);
+            String secondResult = CLIHelper.runCommand(command);
+            Logger.info("Second Scan Output:\n" + secondResult, test);
+            int secondTotal = ScanUtils.extractTotalResults(secondResult);
+            ScanInfo secondScanInfo = ScanUtils.extractScanInfo(secondResult);
+            ScanUtils.validateCommonScanInfo(secondScanInfo, projectName);
+
+            Assert.assertEquals(secondTotal, 0,
+                    "Second scan should return 0 results since vulnerabilities are now recurrent");
+            Logger.pass("Second scan correctly returned 0 results after recurrence filtering", test);
+
+
+            // cleanup
+            ScanInfo scanInfo = ScanUtils.extractScanInfo(firstResult);
+            Utils.deleteProjectById(scanInfo.getProjectId(), test);
+
+        } catch (Exception e) {
+            Logger.fail("NEW filter behavior test failed: " + e.getMessage(), test);
+            Assert.fail("Unexpected CLI failure", e);
+        }
+    }
+    @Test(description = "Verify threshold failure for API Security medium vulnerabilities with NEW filter")
+    public void verifyApiSecurityThresholdFailureTest() {
+
+        ExtentTest test = getTestLogger();
+        String projectName = "ThresholdFilterProj_" + System.currentTimeMillis();
+
+        String command = String.format(
+                "scan create --project-name \"%s\" --branch master -s \"%s\" --filter \"status=NEW\" --threshold \"api-security-medium=1\"",
+                projectName, PROJECT_PATH_ZIP);
+
+        try {
+
+            Logger.info("Running CLI command: cx " + command, test);
+            String result = CLIHelper.runCommand(command);
+            Logger.info("CLI Output:\n" + result, test);
+
+            ScanInfo scanInfo = ScanUtils.extractScanInfo(result);
+            ScanUtils.validateCommonScanInfo(scanInfo, projectName);
+
+            Assert.assertTrue(
+                    result.contains("Scan Finished with status:  Completed"),
+                    "Scan did not complete successfully");
+
+            // Assertion for threshold failure
+            String expectedMessage =
+                    "Threshold check finished with status Failed : api-security-medium: Limit = 1";
+
+            Assert.assertTrue(
+                    result.contains(expectedMessage),
+                    "Expected threshold failure message not found in CLI output");
+
+            Logger.pass("API Security threshold failure correctly detected.", test);
+
+            Utils.deleteProjectById(scanInfo.getProjectId(), test);
+
+        } catch (Exception e) {
+            Logger.fail("Threshold validation test failed: " + e.getMessage(), test);
+            Assert.fail("Unexpected CLI or assertion failure", e);
+        }
+    }
+
+    @Test(description = "Verify threshold passes when NEW vulnerabilities become recurrent")
+    public void verifyThresholdWithNewFilterAfterInitialScan() {
+
+        ExtentTest test = getTestLogger();
+        String projectName = "ThresholdRecurrentProj_" + System.currentTimeMillis();
+
+        String firstCommand = String.format(
+                "scan create --project-name \"%s\" --branch master -s \"%s\" --filter \"status=NEW\"",
+                projectName, PROJECT_PATH_ZIP);
+
+        String secondCommand = String.format(
+                "scan create --project-name \"%s\" --branch master -s \"%s\" --filter \"status=NEW\" --threshold \"api-security-medium=1\"",
+                projectName, PROJECT_PATH_ZIP);
+
+        try {
+
+            Logger.info("Running first CLI command: cx " + firstCommand, test);
+            String firstResult = CLIHelper.runCommand(firstCommand);
+            Logger.info("First Scan Output:\n" + firstResult, test);
+
+            ScanInfo firstScanInfo = ScanUtils.extractScanInfo(firstResult);
+            ScanUtils.validateCommonScanInfo(firstScanInfo, projectName);
+            int firstTotal = ScanUtils.extractTotalResults(firstResult);
+            Assert.assertTrue(firstTotal > 0,
+                    "First scan should detect NEW vulnerabilities.");
+            Logger.pass("First scan detected NEW vulnerabilities: " + firstTotal, test);
+
+            Logger.info("Running second CLI command: cx " + secondCommand, test);
+            String secondResult = CLIHelper.runCommand(secondCommand);
+            Logger.info("Second Scan Output:\n" + secondResult, test);
+            ScanInfo secondScanInfo = ScanUtils.extractScanInfo(secondResult);
+
+            Assert.assertEquals(
+                    secondScanInfo.getProjectId(),
+                    firstScanInfo.getProjectId(),
+                    "Second scan must run on the same project");
+
+            int secondTotal = ScanUtils.extractTotalResults(secondResult);
+            Assert.assertEquals(secondTotal, 0,
+                    "Second scan should return zero results because vulnerabilities became recurrent");
+
+            Assert.assertTrue(
+                    secondResult.contains("Threshold check finished with status Success"),
+                    "Threshold should pass because filtered results are zero");
+
+            Logger.pass("Threshold check passed correctly after vulnerabilities became recurrent.", test);
+            Utils.deleteProjectById(firstScanInfo.getProjectId(), test);
+
+        } catch (Exception e) {
+            Logger.fail("Threshold recurrence test failed: " + e.getMessage(), test);
+            Assert.fail("Unexpected CLI failure", e);
+        }
+    }
 
     }
