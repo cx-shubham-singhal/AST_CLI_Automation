@@ -1,0 +1,104 @@
+name: CXOne CLI Automation Tests
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:   # Allows manual trigger from GitHub UI
+
+jobs:
+  run-tests:
+    name: Run Checkmarx CLI Automation Suite
+    runs-on: windows-latest   # Windows runner — cx.exe is a Windows binary
+
+    env:
+      CX_BASE_URI:      ${{ secrets.CX_BASE_URI }}
+      CX_BASE_AUTH_URI: ${{ secrets.CX_BASE_AUTH_URI }}
+      CX_TENANT:        ${{ secrets.CX_TENANT }}
+      CX_APIKEY:        ${{ secrets.CX_APIKEY }}
+      CX_CLIENT_ID:     ${{ secrets.CX_CLIENT_ID }}
+      CX_CLIENT_SECRET: ${{ secrets.CX_CLIENT_SECRET }}
+
+    steps:
+
+      # ── 1. Checkout source code ──────────────────────────────────────────
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # ── 2. Set up Java 17 ────────────────────────────────────────────────
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      # ── 3. Download & install the Checkmarx ONE CLI (cx.exe) ─────────────
+      - name: Download Checkmarx ONE CLI
+        shell: pwsh
+        run: |
+          $cliDir = "$env:GITHUB_WORKSPACE\cx-cli"
+          New-Item -ItemType Directory -Force -Path $cliDir | Out-Null
+
+          # ✅ Always pulls the latest released cx.exe for Windows (64-bit)
+          $latestUrl = "https://github.com/Checkmarx/ast-cli/releases/latest/download/ast-cli_windows_x64.zip"
+          $zipPath   = "$cliDir\cx-cli.zip"
+
+          Write-Host "⬇️  Downloading CX CLI from: $latestUrl"
+          Invoke-WebRequest -Uri $latestUrl -OutFile $zipPath -UseBasicParsing
+
+          Write-Host "📦 Extracting..."
+          Expand-Archive -Path $zipPath -DestinationPath $cliDir -Force
+
+          # Make the CLI available to all subsequent steps
+          echo "$cliDir" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          echo "CX_CLI_PATH=$cliDir\cx.exe" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+          Write-Host "✅ CX CLI installed at: $cliDir\cx.exe"
+
+      # ── 4. Verify CLI is reachable ────────────────────────────────────────
+      - name: Verify CX CLI Version
+        shell: pwsh
+        run: cx version
+
+      # ── 5. Run the TestNG suite with Maven (parallel=classes, 6 threads) ──
+      - name: Run Automation Suite
+        shell: pwsh
+        run: mvn test --no-transfer-progress -Dsurefire.useFile=false
+        # testng.xml is configured with parallel="classes" thread-count="6"
+        # All 6 test classes run simultaneously — HelpTest, ScanTest,
+        # scanTestDataDriven, ProjectTest, AuthTest, ConfigureTest
+        # -Dsurefire.useFile=false streams all output to the console log
+
+      # ── 6. Upload Extent HTML Report ─────────────────────────────────────
+      - name: Upload Extent HTML Report
+        if: always()   # Upload even if tests fail
+        uses: actions/upload-artifact@v4
+        with:
+          name: Extent-HTML-Report
+          path: test-output/ExtentReport_*.html
+          retention-days: 30
+
+      # ── 7. Upload Excel Report ────────────────────────────────────────────
+      - name: Upload Excel Test Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Excel-Test-Report
+          path: test-output/TestReport.xlsx
+          retention-days: 30
+
+      # ── 8. Upload full test-output folder (fallback) ──────────────────────
+      - name: Upload Full test-output Folder
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Full-Test-Output
+          path: test-output/
+          retention-days: 30
+
