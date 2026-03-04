@@ -10,6 +10,7 @@ public class TestConstants {
     public static final String INVALID_STATE_ERROR = "Failed to set property: unknown property or bad value";
     public static final String OUTPUT_PATTERN = "Engines";
     public static final String PROJECT_PATH_ZIP = "src/main/resources/Phoenix-RealtimeGoat.zip";
+    public static final String PROJECT_PATH_ZIP_JAVAVUL = "src/main/resources/JavaVulnerableLabE-master.zip";
     public static final String PROJECT_PATH_FOLDER = "src/main/resources/Phoenix-RealtimeGoat";
     public static final String PROJECT_PATH_FOLDER_INVALID = "src/main/resources/JavaVulnerableLabE";
     public static final String GIT_REPO_URL = "https://github.com/vbarhate/JavaVulnerableLabE.git";

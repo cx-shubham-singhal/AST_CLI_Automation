@@ -133,7 +133,7 @@ public class ScanTest extends Base {
 
         String command = String.format(
                 "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"sast\" --threshold \"sast-critical=1\"",
-                projectName, PROJECT_PATH_ZIP
+                projectName, PROJECT_PATH_ZIP_JAVAVUL
         );
 
         try {
@@ -164,7 +164,7 @@ public class ScanTest extends Base {
 
         String command = String.format(
                 "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"sast\" --threshold \"sast-high=1\"",
-                projectName, PROJECT_PATH_ZIP
+                projectName, PROJECT_PATH_ZIP_JAVAVUL
         );
 
         try {
@@ -195,7 +195,7 @@ public class ScanTest extends Base {
 
         String command = String.format(
                 "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"sast\" --threshold \"sast-medium=1\"",
-                projectName, PROJECT_PATH_ZIP
+                projectName, PROJECT_PATH_ZIP_JAVAVUL
         );
 
         try {
@@ -227,7 +227,7 @@ public class ScanTest extends Base {
 
         String command = String.format(
                 "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"sast\" --threshold \"sast-critical=1;sast-high=1;sast-low=1\"",
-                projectName, PROJECT_PATH_ZIP
+                projectName, PROJECT_PATH_ZIP_JAVAVUL
         );
 
         try {

@@ -67,7 +67,7 @@ jobs:
         shell: pwsh
         run: |
           echo "🏗️ Running TestNG Suite..."
-          mvn -B clean test "-DsuiteXmlFile=src/test/resources/testng.xml" || true
+          mvn -B clean test
 
           echo ""
           echo "📄 Parsing test results from surefire-reports..."
@@ -106,4 +106,23 @@ jobs:
             echo ""
             echo "🎉 All tests passed successfully!"
           }
+
+      # ── Upload Extent HTML Report ──────────────────────────────────────────
+      # if: always() ensures reports are uploaded even when tests fail
+      - name: Upload Extent HTML Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Extent-HTML-Report
+          path: test-output/ExtentReport_*.html
+          retention-days: 30
+
+      # ── Upload Excel Test Report ───────────────────────────────────────────
+      - name: Upload Excel Test Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Excel-Test-Report
+          path: test-output/TestReport.xlsx
+          retention-days: 30
 
