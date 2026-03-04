@@ -294,5 +294,47 @@ public class ScanTest extends Base {
             Assert.fail("Multiple Application Name Test failed", e);
         }
     }
+        @Test(description = "Verify API Security scan displays full documentation-only disclaimer")
+        public void verifyApiSecurityScanDisclaimerTest() {
 
-}
+            ExtentTest test = getTestLogger();
+            String projectName = "CLI_ApiSecScan_" + System.currentTimeMillis();
+
+            String command = String.format(
+                    "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"api-security\"",
+                    projectName, PROJECT_PATH_ZIP
+            );
+
+            try {
+                Logger.info("Running CLI command: cx " + command, test);
+                String result = CLIHelper.runCommand(command);
+                Logger.info("CLI Output:\n" + result, test);
+
+                ScanInfo scanInfo = ScanUtils.extractScanInfo(result);
+                ScanUtils.validateCommonScanInfo(scanInfo, projectName);
+
+                Assert.assertTrue(
+                        result.contains("Scan Finished with status:  Completed"),
+                        "Scan did not complete successfully."
+                );
+
+                String normalizedOutput = result.replaceAll("\\s+", " ").trim();
+
+                String expectedStatement =
+                        "Total Results includes only API documentation vulnerabilities and does not include API code vulnerabilities.";
+
+                Assert.assertTrue(
+                        normalizedOutput.contains(expectedStatement),
+                        "Expected full API Security disclaimer not found in CLI output."
+                );
+
+                Logger.pass("Full API Security disclaimer verified successfully.", test);
+                Utils.deleteProjectById(scanInfo.getProjectId(), test);
+
+            } catch (Exception e) {
+                Logger.fail("Error verifying API Security disclaimer: " + e.getMessage(), test);
+                Assert.fail("Unexpected CLI or assertion failure", e);
+            }
+        }
+
+    }
