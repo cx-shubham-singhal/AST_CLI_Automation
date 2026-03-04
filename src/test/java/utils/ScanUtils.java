@@ -116,15 +116,15 @@ public class ScanUtils {
 
     public static List<String> extractApplicationIds(String projectShowOutput) {
 
-        Pattern pattern = Pattern.compile("ApplicationIds.*?\\[(.*?)\\]", Pattern.DOTALL);
+        Pattern pattern = Pattern.compile("\\[([a-f0-9\\-\\s]+)]", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(projectShowOutput);
+
         if (!matcher.find()) {
             return Collections.emptyList();
         }
+
         String apps = matcher.group(1).trim();
-        if (apps.isEmpty()) {
-            return Collections.emptyList();
-        }
+
         return Arrays.stream(apps.split("\\s+"))
                 .map(String::trim)
                 .filter(s -> !s.isEmpty())
