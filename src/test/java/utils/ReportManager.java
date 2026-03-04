@@ -10,32 +10,40 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ReportManager {
-    private static ExtentReports extent;
+
+    // volatile ensures the fully-constructed object is visible to all threads
+    private static volatile ExtentReports extent;
 
     public static ExtentReports getInstance() {
         if (extent == null) {
-            String reportDir = "test-output";
-            cleanOldReports(reportDir);  // Delete existing reports
-
-            // Create timestamped report file
-            String timestamp = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
-            String reportPath = reportDir + "/ExtentReport_" + timestamp + ".html";
-
-            ExtentSparkReporter sparkReporter = new ExtentSparkReporter(reportPath);
-            sparkReporter.config().setTheme(Theme.DARK);
-            sparkReporter.config().setDocumentTitle("Checkmarx CLI Test Report");
-            sparkReporter.config().setReportName("CXOne CLI Automation Results");
-
-            extent = new ExtentReports();
-            extent.attachReporter(sparkReporter);
-
-            // Add system/environment info
-            extent.setSystemInfo("Tester", System.getProperty("user.name"));
-            extent.setSystemInfo("Environment", "QA");
-            extent.setSystemInfo("OS", System.getProperty("os.name"));
-            extent.setSystemInfo("Java Version", System.getProperty("java.version"));
+            synchronized (ReportManager.class) {
+                if (extent == null) { // double-checked locking — safe for parallel threads
+                    createReport();
+                }
+            }
         }
         return extent;
+    }
+
+    private static void createReport() {
+        String reportDir = "test-output";
+        cleanOldReports(reportDir);
+
+        String timestamp = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
+        String reportPath = reportDir + "/ExtentReport_" + timestamp + ".html";
+
+        ExtentSparkReporter sparkReporter = new ExtentSparkReporter(reportPath);
+        sparkReporter.config().setTheme(Theme.DARK);
+        sparkReporter.config().setDocumentTitle("Checkmarx CLI Test Report");
+        sparkReporter.config().setReportName("CXOne CLI Automation Results");
+
+        extent = new ExtentReports();
+        extent.attachReporter(sparkReporter);
+
+        extent.setSystemInfo("Tester", System.getProperty("user.name"));
+        extent.setSystemInfo("Environment", "QA");
+        extent.setSystemInfo("OS", System.getProperty("os.name"));
+        extent.setSystemInfo("Java Version", System.getProperty("java.version"));
     }
 
     private static void cleanOldReports(String dirPath) {
@@ -52,7 +60,9 @@ public class ReportManager {
                 }
             }
         } else {
-            dir.mkdirs(); // Create the directory if it doesn't exist
+            if (!dir.mkdirs()) {
+                System.err.println("Warning: could not create report directory: " + dirPath);
+            }
         }
     }
 }
