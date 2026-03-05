@@ -1,0 +1,210 @@
+{
+ "openapi": "3.0.3",
+ "info": {
+   "title": "WebGoat API",
+   "description": "OpenAPI specification for sample WebGoat endpoints.",
+   "version": "1.0.0"
+ },
+ "servers": [
+   {
+     "url": "https://localhost:8080/WebGoat",
+     "description": "Local WebGoat server (HTTPS)"
+   }
+ ],
+ "paths": {
+   "/actuator/health": {
+     "get": {
+       "summary": "Health check",
+       "operationId": "getHealth",
+       "responses": {
+         "200": {
+           "description": "Application is healthy",
+           "content": {
+             "application/json": {
+               "schema": {
+                 "type": "object",
+                 "properties": {
+                   "status": { "type": "string", "example": "UP" }
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   },
+   "/api/users": {
+     "get": {
+       "summary": "List users",
+       "operationId": "listUsers",
+       "parameters": [
+         {
+           "name": "page",
+           "in": "query",
+           "schema": { "type": "integer", "minimum": 1 },
+           "description": "Page number"
+         },
+         {
+           "name": "size",
+           "in": "query",
+           "schema": { "type": "integer", "minimum": 1, "maximum": 100 },
+           "description": "Page size"
+         }
+       ],
+       "responses": {
+         "200": {
+           "description": "List of users",
+           "content": {
+             "application/json": {
+               "schema": {
+                 "type": "array",
+                 "items": { "$ref": "#/components/schemas/User" }
+               }
+             }
+           }
+         },
+         "401": { "$ref": "#/components/responses/Unauthorized" },
+         "403": { "$ref": "#/components/responses/Forbidden" }
+       }
+     },
+     "post": {
+       "summary": "Create user",
+       "operationId": "createUser",
+       "requestBody": {
+         "required": true,
+         "content": {
+           "application/json": {
+             "schema": { "$ref": "#/components/schemas/UserCreate" }
+           }
+         }
+       },
+       "responses": {
+         "201": {
+           "description": "User created",
+           "content": {
+             "application/json": {
+               "schema": { "$ref": "#/components/schemas/User" }
+             }
+           }
+         },
+         "400": { "$ref": "#/components/responses/BadRequest" },
+         "401": { "$ref": "#/components/responses/Unauthorized" },
+         "403": { "$ref": "#/components/responses/Forbidden" }
+       }
+     },
+     "security": [ { "bearerAuth": [] } ]
+   },
+   "/api/users/{userId}": {
+     "get": {
+       "summary": "Get user by ID",
+       "operationId": "getUser",
+       "parameters": [
+         { "name": "userId", "in": "path", "required": true, "schema": { "type": "string" } }
+       ],
+       "responses": {
+         "200": {
+           "description": "User details",
+           "content": {
+             "application/json": {
+               "schema": { "$ref": "#/components/schemas/User" }
+             }
+           }
+         },
+         "401": { "$ref": "#/components/responses/Unauthorized" },
+         "403": { "$ref": "#/components/responses/Forbidden" },
+         "404": { "$ref": "#/components/responses/NotFound" }
+       },
+       "security": [ { "bearerAuth": [] } ]
+     },
+     "delete": {
+       "summary": "Delete user",
+       "operationId": "deleteUser",
+       "parameters": [
+         { "name": "userId", "in": "path", "required": true, "schema": { "type": "string" } }
+       ],
+       "responses": {
+         "204": { "description": "User deleted" },
+         "401": { "$ref": "#/components/responses/Unauthorized" },
+         "403": { "$ref": "#/components/responses/Forbidden" },
+         "404": { "$ref": "#/components/responses/NotFound" }
+       },
+       "security": [ { "bearerAuth": [] } ]
+     }
+   }
+ },
+ "components": {
+   "securitySchemes": {
+     "bearerAuth": {
+       "type": "http",
+       "scheme": "bearer",
+       "bearerFormat": "JWT"
+     }
+   },
+   "responses": {
+     "BadRequest": {
+       "description": "Invalid request",
+       "content": {
+         "application/json": {
+           "schema": { "$ref": "#/components/schemas/Error" }
+         }
+       }
+     },
+     "Unauthorized": {
+       "description": "Authentication required",
+       "content": {
+         "application/json": {
+           "schema": { "$ref": "#/components/schemas/Error" }
+         }
+       }
+     },
+     "Forbidden": {
+       "description": "Insufficient privileges",
+       "content": {
+         "application/json": {
+           "schema": { "$ref": "#/components/schemas/Error" }
+         }
+       }
+     },
+     "NotFound": {
+       "description": "Resource not found",
+       "content": {
+         "application/json": {
+           "schema": { "$ref": "#/components/schemas/Error" }
+         }
+       }
+     }
+   },
+   "schemas": {
+     "User": {
+       "type": "object",
+       "properties": {
+         "id": { "type": "string", "minLength": 1, "maxLength": 64 },
+         "username": { "type": "string", "minLength": 3, "maxLength": 32, "pattern": "^[a-zA-Z0-9_.-]+$" },
+         "email": { "type": "string", "format": "email", "maxLength": 254 },
+         "roles": { "type": "array", "items": { "type": "string" } }
+       },
+       "required": ["id", "username", "email"]
+     },
+     "UserCreate": {
+       "type": "object",
+       "properties": {
+         "username": { "type": "string", "minLength": 3, "maxLength": 32, "pattern": "^[a-zA-Z0-9_.-]+$" },
+         "email": { "type": "string", "format": "email", "maxLength": 254 },
+         "password": { "type": "string", "format": "password", "minLength": 12, "maxLength": 128 }
+       },
+       "required": ["username", "email", "password"]
+     },
+     "Error": {
+       "type": "object",
+       "properties": {
+         "timestamp": { "type": "string", "format": "date-time" },
+         "status": { "type": "integer" },
+         "error": { "type": "string" },
+         "message": { "type": "string" },
+         "path": { "type": "string" }
+       },
+       "required": ["status", "error", "message"]
+     }
+   }
+ }
+}
