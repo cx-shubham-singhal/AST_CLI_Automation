@@ -478,4 +478,60 @@ public class ScanTest extends Base {
         }
     }
 
+    @Test(description = "Verify apisec swagger filter honors case sensitivity by comparing file exclusion vs inclusion")
+    public void verifyApiSecSwaggerFilterCaseSensitivity() {
+
+        ExtentTest test = getTestLogger();
+        String projectName = "ApiSwaggerCaseTest_" + System.currentTimeMillis();
+
+        String excludeFileCommand = String.format(
+                "scan create --project-name \"%s\" --branch master -s \"%s\" --scan-types sast,api-security --apisec-swagger-filter \"!**/CamalCase.Schema.json\"",
+                projectName, PROJECT_PATH_FOLDER);
+
+        String includeFileCommand = String.format(
+                "scan create --project-name \"%s\" --branch master -s \"%s\" --scan-types sast,api-security --apisec-swagger-filter \"!**/camalcase.Schema.json\"",
+                projectName, PROJECT_PATH_FOLDER);
+
+        try {
+
+            Logger.info("Running CLI command (file exclusion filter): cx " + excludeFileCommand, test);
+            String exclusionResult = CLIHelper.runCommand(excludeFileCommand);
+            Logger.info("Scan Output (File Exclusion):\n" + exclusionResult, test);
+
+            ScanInfo firstScanInfo = ScanUtils.extractScanInfo(exclusionResult);
+            ScanUtils.validateCommonScanInfo(firstScanInfo, projectName);
+
+            int totalWithFileExclusion = ScanUtils.extractTotalResults(exclusionResult);
+
+            Logger.info("Total results with file exclusion: " + totalWithFileExclusion, test);
+
+            Logger.info("Running CLI command (file inclusion due to case mismatch): cx " + includeFileCommand, test);
+            String inclusionResult = CLIHelper.runCommand(includeFileCommand);
+            Logger.info("Scan Output (File Inclusion):\n" + inclusionResult, test);
+
+            int totalWithFileInclusion = ScanUtils.extractTotalResults(inclusionResult);
+
+            Logger.info("Total results with file inclusion: " + totalWithFileInclusion, test);
+
+            Assert.assertTrue(
+                    totalWithFileInclusion > totalWithFileExclusion,
+                    "Expected more results when file is included. This confirms swagger filter is case sensitive."
+            );
+            Logger.pass(
+                    "Case sensitivity verified. Results with file inclusion (" +
+                            totalWithFileInclusion +
+                            ") are greater than results with file exclusion (" +
+                            totalWithFileExclusion + ").",
+                    test
+            );
+            Utils.deleteProjectById(firstScanInfo.getProjectId(), test);
+
+        } catch (Exception e) {
+
+            Logger.fail("Swagger filter case sensitivity test failed: " + e.getMessage(), test);
+            Assert.fail("Unexpected CLI failure", e);
+
+        }
+    }
+
     }
