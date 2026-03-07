@@ -10,6 +10,7 @@ import utils.CLIHelper;
 import utils.ScanUtils;
 import utils.Utils;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.myorg.cxone.helpers.TestConstants.*;
@@ -542,11 +543,9 @@ public class ScanTest extends Base {
 
         String command = String.format(
                 "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types 'sast'",
-                projectName, PROJECT_PATH_ZIP
-        );
+                projectName, PROJECT_PATH_ZIP);
 
         try {
-
             Logger.info("Running CLI command: cx " + command, test);
             String result = CLIHelper.runCommand(command);
             Logger.info("CLI Output:\n" + result, test);
@@ -558,14 +557,11 @@ public class ScanTest extends Base {
                     result.contains(expectedMessage),
                     "Expected error message for invalid scan type with single quotes was not found."
             );
-
             Logger.pass("CLI correctly rejected scan type passed in single quotes.", test);
 
         } catch (Exception e) {
-
             Logger.fail("Single quote scan type validation test failed: " + e.getMessage(), test);
             Assert.fail("Single quote scan type validation test failed", e);
-
         }
     }
 
@@ -713,6 +709,172 @@ public class ScanTest extends Base {
 
             Logger.fail("SCA resolver multi-parameter test failed: " + e.getMessage(), test);
             Assert.fail("SCA resolver multi-parameter test failed", e);
+
+        }
+    }
+
+    @Test(description = "Verify Gemfile is included in scan when no file filter is applied")
+    public void verifyGemfileIncludedInScaScan() {
+
+        ExtentTest test = getTestLogger();
+        String projectName = "CLI_ScanIncludeGemfile_" + System.currentTimeMillis();
+
+        String command = String.format(
+                "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"sca\" --debug",
+                projectName, PROJECT_PATH_FOLDER
+        );
+
+        try {
+            Logger.info("Running CLI command: cx " + command, test);
+            String result = CLIHelper.runCommandUntilPattern(command, OUTPUT_PATTERN, test);
+            Logger.info("CLI Output:\n" + result, test);
+            ScanInfo scanInfo = ScanUtils.extractScanInfo(result);
+            ScanUtils.validateCommonScanInfo(scanInfo, projectName);
+
+            String status = ScanUtils.getFileScanStatus(result, "Gemfile");
+            Assert.assertEquals(
+                    status,
+                    "Included",
+                    "Gemfile should be included in scan when no filter is applied."
+            );
+            Logger.pass("Gemfile inclusion verified successfully.", test);
+            Utils.deleteProjectById(scanInfo.getProjectId(), test);
+
+        } catch (Exception e) {
+
+            Logger.fail("Gemfile inclusion test failed: " + e.getMessage(), test);
+            Assert.fail("Gemfile inclusion test failed", e);
+
+        }
+    }
+
+    @Test(description = "Verify Gemfile is excluded from scan when file filter is applied")
+    public void verifyGemfileExcludedFromScan() {
+
+        ExtentTest test = getTestLogger();
+        String projectName = "CLI_ScanExcludeGemfile_" + System.currentTimeMillis();
+
+        String command = String.format(
+                "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"sca\" --file-filter \"!Gemfile,!Gemfile.lock\" --debug",
+                projectName, PROJECT_PATH_FOLDER
+        );
+
+        try {
+            Logger.info("Running CLI command: cx " + command, test);
+            String result = CLIHelper.runCommandUntilPattern(command, OUTPUT_PATTERN, test);
+            Logger.info("CLI Output:\n" + result, test);
+            ScanInfo scanInfo = ScanUtils.extractScanInfo(result);
+            ScanUtils.validateCommonScanInfo(scanInfo, projectName);
+
+            String status = ScanUtils.getFileScanStatus(result, "Gemfile");
+            Assert.assertEquals(
+                    status,
+                    "Excluded",
+                    "Gemfile should be excluded from scan when file filter is applied."
+            );
+            Logger.pass("Gemfile exclusion verified successfully.", test);
+            Utils.deleteProjectById(scanInfo.getProjectId(), test);
+
+        } catch (Exception e) {
+
+            Logger.fail("Gemfile exclusion test failed: " + e.getMessage(), test);
+            Assert.fail("Gemfile exclusion test failed", e);
+
+        }
+    }
+
+    @Test(description = "Verify .xsjs and .xsjslib files are included in scan debug output")
+    public void verifyXsjsAndXsjslibFilesIncludedInSastScan() {
+
+        ExtentTest test = getTestLogger();
+        String projectName = "CLI_ScanXSJSFiles_" + System.currentTimeMillis();
+
+        String command = String.format(
+                "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"sca\" --debug",
+                projectName, PROJECT_PATH_FOLDER
+        );
+
+        try {
+            Logger.info("Running CLI command: cx " + command, test);
+            String result = CLIHelper.runCommandUntilPattern(command, OUTPUT_PATTERN, test);
+            Logger.info("CLI Output:\n" + result, test);
+
+            ScanInfo scanInfo = ScanUtils.extractScanInfo(result);
+            ScanUtils.validateCommonScanInfo(scanInfo, projectName);
+
+            List<String> filesToCheck = Arrays.asList(
+                    "vulnerable-sap.xsjs",
+                    "vulnerable-sap.xsjslib"
+            );
+
+            for (String file : filesToCheck) {
+                String status = ScanUtils.getFileScanStatus(result, file);
+                Assert.assertNotEquals(
+                        status,
+                        "NOT_FOUND",
+                        file + " was not found in debug output."
+                );
+                Assert.assertEquals(
+                        status,
+                        "Included",
+                        file + " should be included in scan."
+                );
+                Logger.pass(file + " inclusion verified successfully.", test);
+            }
+
+            Utils.deleteProjectById(scanInfo.getProjectId(), test);
+
+        } catch (Exception e) {
+
+            Logger.fail("XSJS file inclusion test failed: " + e.getMessage(), test);
+            Assert.fail("XSJS file inclusion test failed", e);
+
+        }
+    }
+
+    @Test(description = "Verify .xsjs and .xsjslib files are excluded from scan when file filter is applied")
+    public void verifyXsjsFilesExcludedFromScan() {
+
+        ExtentTest test = getTestLogger();
+        String projectName = "CLI_ScanExcludeXSJS_" + System.currentTimeMillis();
+
+        String command = String.format(
+                "scan create --branch master --project-name \"%s\" -s %s --scan-types \"sast\" --file-filter \"!*.xsjs,!*.xsjslib\" --debug",
+                projectName, PROJECT_PATH_FOLDER
+        );
+
+        try {
+            Logger.info("Running CLI command: cx " + command, test);
+            String result = CLIHelper.runCommandUntilPattern(command, OUTPUT_PATTERN, test);
+            Logger.info("CLI Output:\n" + result, test);
+            ScanInfo scanInfo = ScanUtils.extractScanInfo(result);
+            ScanUtils.validateCommonScanInfo(scanInfo, projectName);
+
+            List<String> filesToCheck = Arrays.asList(
+                    "vulnerable-sap.xsjs",
+                    "vulnerable-sap.xsjslib"
+            );
+
+            for (String file : filesToCheck) {
+                String status = ScanUtils.getFileScanStatus(result, file);
+                Assert.assertNotEquals(
+                        status,
+                        "NOT_FOUND",
+                        file + " was not found in debug output."
+                );
+                Assert.assertEquals(
+                        status,
+                        "Excluded",
+                        file + " should be excluded from scan."
+                );
+                Logger.pass(file + " exclusion verified successfully.", test);
+            }
+            Utils.deleteProjectById(scanInfo.getProjectId(), test);
+
+        } catch (Exception e) {
+
+            Logger.fail("XSJS exclusion test failed: " + e.getMessage(), test);
+            Assert.fail("XSJS exclusion test failed", e);
 
         }
     }

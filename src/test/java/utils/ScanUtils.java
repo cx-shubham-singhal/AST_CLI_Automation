@@ -2,11 +2,14 @@ package utils;
 
 import PageObjects.ScanInfo;
 import com.aventstack.extentreports.ExtentTest;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myorg.cxone.helpers.Logger;
 import com.myorg.cxone.helpers.TestConstants;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -17,6 +20,8 @@ import java.util.stream.Collectors;
 import static com.myorg.cxone.helpers.TestConstants.GIT_REPO_URL;
 
 public class ScanUtils {
+
+    private static final Pattern VERSION_PATTERN = Pattern.compile("\\d+\\.\\d+\\.\\d+");
 
     public static boolean isScanListValid(String result) {
         return result != null && result.contains("ID");
@@ -142,4 +147,53 @@ public class ScanUtils {
 
         throw new RuntimeException("Unable to extract Total Results from CLI output");
     }
+
+    public static String extractGitlabReportVersion(String jsonFilePath) throws Exception {
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode rootNode = mapper.readTree(new File(jsonFilePath));
+
+        if (!rootNode.has("version")) {
+            throw new RuntimeException("Version field not found in GitLab report JSON.");
+        }
+
+        return rootNode.get("version").asText();
+    }
+
+    /**
+     * Validate version follows x.x.x format
+     */
+    public static boolean isValidGitlabVersionFormat(String version) {
+
+        return VERSION_PATTERN.matcher(version).matches();
+    }
+
+    /**
+     * Delete generated report file
+     */
+    public static void deleteReportFile(String filePath) {
+
+        File file = new File(filePath);
+
+        if (file.exists()) {
+            boolean deleted = file.delete();
+
+            if (!deleted) {
+                System.out.println("Warning: Unable to delete file: " + filePath);
+            }
+        }
+    }
+
+    public static String getFileScanStatus(String cliOutput, String fileName) {
+
+        Pattern pattern = Pattern.compile("(Included|Excluded):\\s+.*" + Pattern.quote(fileName));
+        Matcher matcher = pattern.matcher(cliOutput);
+
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+
+        return "NOT_FOUND";
+    }
+
 }
