@@ -17,7 +17,7 @@ jobs:
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'   # or 'zulu', 'corretto', etc.
+          distribution: 'temurin'
           java-version: '17'
 
       - name: Cache Maven dependencies
@@ -48,11 +48,26 @@ jobs:
           fi
         shell: bash
 
+      - name: Download SCA Resolver
+        shell: pwsh
+        run: |
+          Write-Host "Downloading SCA Resolver..."
+
+          $resolverUrl = "https://sca-downloads.s3.amazonaws.com/cli/latest/ScaResolver-win64.zip"
+          $resolverZip = "ScaResolver-win64.zip"
+
+          Invoke-WebRequest -Uri $resolverUrl -OutFile $resolverZip
+
+          Expand-Archive -Path $resolverZip -DestinationPath sca-resolver
+
+          Write-Host "SCA Resolver downloaded:"
+          Get-ChildItem sca-resolver -Recurse
+
       - name: Configure Checkmarx CLI with API Key
         run: |
-          cx configure set --prop-name cx_base_uri --prop-value https://eu.ast.checkmarx.net/ 
-          cx configure set --prop-name cx_base_auth_uri --prop-value https://eu.iam.checkmarx.net/ 
-          cx configure set --prop-name cx_tenant --prop-value cx_seg 
+          cx configure set --prop-name cx_base_uri --prop-value https://eu.ast.checkmarx.net/
+          cx configure set --prop-name cx_base_auth_uri --prop-value https://eu.iam.checkmarx.net/
+          cx configure set --prop-name cx_tenant --prop-value cx_seg
           cx configure set --prop-name cx_apikey --prop-value ${{ secrets.CX_API_KEY }}
 
       - name: Run CheckmarxOne TestNG Suite
@@ -64,6 +79,10 @@ jobs:
           CX_CLIENT_ID: ${{ secrets.CX_CLIENT_ID }}
           CX_INVALID_APIKEY: ${{ secrets.CX_INVALID_APIKEY }}
           CX_CLIENT_SECRET: ${{ secrets.CX_CLIENT_SECRET }}
+
+          # Resolver path for tests
+          SCA_RESOLVER_PATH: ${{ github.workspace }}/sca-resolver/ScaResolver.exe
+
         shell: pwsh
         run: |
           echo "🏗️ Running TestNG Suite..."
@@ -74,6 +93,7 @@ jobs:
           echo ""
 
           $reportDir = "target/surefire-reports"
+
           if (!(Test-Path "$reportDir/testng-results.xml")) {
             echo "⚠️ testng-results.xml not found! Tests might not have executed properly."
             Get-ChildItem $reportDir -Recurse

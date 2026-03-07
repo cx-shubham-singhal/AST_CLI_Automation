@@ -18,6 +18,6 @@ public class TestConstants {
     public static final String CX_API_KEY = System.getenv("CX_APIKEY");
     public static final String CX_CLIENT_ID = System.getenv("CX_CLIENT_ID");
     public static final String CX_CLIENT_SECRET = System.getenv("CX_CLIENT_SECRET");
-
-
+    public static final String SCA_RESOLVER_PATH = System.getenv("SCA_RESOLVER_PATH");
+    public static final String SCA_RESOLVER_INVALID_PATH ="src/main/resources/InvalidPath/ScaResolver.exe";
 }
