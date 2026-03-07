@@ -15,6 +15,7 @@ import utils.Utils;
 import java.util.Map;
 
 import static com.myorg.cxone.helpers.TestConstants.*;
+import static utils.ScanUtils.*;
 
 public class scanTestDataDriven extends Base {
 
@@ -309,6 +310,48 @@ public class scanTestDataDriven extends Base {
 
         if (expectedEngine != null && !expectedEngine.isEmpty()) {
             Assert.assertEquals(scanInfo.getEngines(), expectedEngine, "Scan engine mismatch");
+        }
+    }
+
+    @Test(description = "Verify GitLab SAST report version format is x.x.x")
+    public void verifyGitlabSastReportVersionFormat() {
+
+        ExtentTest test = getTestLogger();
+        String projectName = "GitlabSastReport_" + System.currentTimeMillis();
+
+        String scanCommand = String.format(
+                "scan create --branch master --project-name \"%s\" --scan-types sast -s %s",
+                projectName, PROJECT_PATH_FOLDER
+        );
+        String reportPath = "test-output/cx_result.gl-sast-report.json";
+        try {
+            Logger.info("Running SAST scan: cx " + scanCommand, test);
+            String scanOutput = CLIHelper.runCommandUntilPattern(scanCommand, OUTPUT_PATTERN, test);
+            Logger.info("Scan Output:\n" + scanOutput, test);
+            ScanInfo scanInfo = ScanUtils.extractScanInfo(scanOutput);
+            String reportCommand = String.format(
+                    "results show --scan-id %s --report-format gl-sast --output-path test-output",
+                    scanInfo.getScanId());
+
+            Logger.info("Generating GitLab SAST report: cx " + reportCommand, test);
+            String reportOutput = CLIHelper.runCommand(reportCommand);
+            Logger.info("Report Command Output:\n" + reportOutput, test);
+            String version = extractGitlabReportVersion(reportPath);
+            Logger.info("Extracted version from report: " + version, test);
+
+            Assert.assertTrue(
+                    isValidGitlabVersionFormat(version),
+                    "GitLab report version must be in x.x.x format but found: " + version
+            );
+
+            Logger.pass("GitLab SAST report version format validated successfully: " + version, test);
+            deleteReportFile(reportPath);
+            Utils.deleteProjectById(scanInfo.getProjectId(), test);
+
+        } catch (Exception e) {
+
+            Logger.fail("GitLab SAST report validation failed: " + e.getMessage(), test);
+            Assert.fail("GitLab SAST report validation failed", e);
         }
     }
 }

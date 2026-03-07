@@ -1,0 +1,50 @@
+# Gemfile with known vulnerabilities for testing SCA scanning
+source 'https://rubygems.org'
+
+# Rails with known vulnerabilities (CVE-2020-8164, CVE-2020-8165, etc.)
+gem 'rails', '5.2.3'
+
+# Nokogiri with XML vulnerabilities (CVE-2020-26247, CVE-2019-5477)
+gem 'nokogiri', '1.10.4'
+
+# Rack with session hijacking vulnerabilities (CVE-2020-8184, CVE-2019-16782)
+gem 'rack', '2.0.7'
+
+# ActionView with XSS vulnerabilities (CVE-2020-5267)
+gem 'actionview', '5.2.3'
+
+# ActiveSupport with vulnerabilities (CVE-2020-8165)
+gem 'activesupport', '5.2.3'
+
+# JSON with parsing vulnerabilities (CVE-2020-10663)
+gem 'json', '2.2.0'
+
+# Puma with HTTP smuggling vulnerabilities (CVE-2020-5249, CVE-2020-11076)
+gem 'puma', '3.12.4'
+
+# Sprockets with information disclosure (CVE-2018-3760)
+gem 'sprockets', '3.7.1'
+
+# Loofah with XSS vulnerabilities (CVE-2019-15587)
+gem 'loofah', '2.2.3'
+
+# Devise with authentication bypass (CVE-2019-5421)
+gem 'devise', '4.6.0'
+
+# FasterXML jackson-databind vulnerabilities
+gem 'oj', '3.6.11'
+
+# RubyZip with path traversal (CVE-2019-16892)
+gem 'rubyzip', '1.2.2'
+
+# Rack-cors with CORS bypass issues
+gem 'rack-cors', '1.0.2'
+
+# Webpacker with dependencies vulnerabilities
+gem 'webpacker', '4.0.2'
+
+# Development dependencies with vulnerabilities
+group :development, :test do
+  gem 'spring', '2.0.2'
+  gem 'byebug', '11.0.0'
+end
