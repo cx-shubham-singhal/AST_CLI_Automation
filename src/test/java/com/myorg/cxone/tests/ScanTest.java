@@ -294,48 +294,48 @@ public class ScanTest extends Base {
             Assert.fail("Multiple Application Name Test failed", e);
         }
     }
-        @Test(description = "Verify API Security scan displays full documentation-only disclaimer")
-        public void verifyApiSecurityScanDisclaimerTest() {
+    @Test(description = "Verify API Security scan displays full documentation-only disclaimer")
+    public void verifyApiSecurityScanDisclaimerTest() {
 
-            ExtentTest test = getTestLogger();
-            String projectName = "CLI_ApiSecScan_" + System.currentTimeMillis();
+        ExtentTest test = getTestLogger();
+        String projectName = "CLI_ApiSecScan_" + System.currentTimeMillis();
 
-            String command = String.format(
-                    "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"api-security\"",
-                    projectName, PROJECT_PATH_ZIP
+        String command = String.format(
+                "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"api-security\"",
+                projectName, PROJECT_PATH_ZIP
+        );
+
+        try {
+            Logger.info("Running CLI command: cx " + command, test);
+            String result = CLIHelper.runCommand(command);
+            Logger.info("CLI Output:\n" + result, test);
+
+            ScanInfo scanInfo = ScanUtils.extractScanInfo(result);
+            ScanUtils.validateCommonScanInfo(scanInfo, projectName);
+
+            Assert.assertTrue(
+                    result.contains("Scan Finished with status:  Completed"),
+                    "Scan did not complete successfully."
             );
 
-            try {
-                Logger.info("Running CLI command: cx " + command, test);
-                String result = CLIHelper.runCommand(command);
-                Logger.info("CLI Output:\n" + result, test);
+            String normalizedOutput = result.replaceAll("\\s+", " ").trim();
 
-                ScanInfo scanInfo = ScanUtils.extractScanInfo(result);
-                ScanUtils.validateCommonScanInfo(scanInfo, projectName);
+            String expectedStatement =
+                    "Total Results includes only API documentation vulnerabilities and does not include API code vulnerabilities.";
 
-                Assert.assertTrue(
-                        result.contains("Scan Finished with status:  Completed"),
-                        "Scan did not complete successfully."
-                );
+            Assert.assertTrue(
+                    normalizedOutput.contains(expectedStatement),
+                    "Expected full API Security disclaimer not found in CLI output."
+            );
 
-                String normalizedOutput = result.replaceAll("\\s+", " ").trim();
+            Logger.pass("Full API Security disclaimer verified successfully.", test);
+            Utils.deleteProjectById(scanInfo.getProjectId(), test);
 
-                String expectedStatement =
-                        "Total Results includes only API documentation vulnerabilities and does not include API code vulnerabilities.";
-
-                Assert.assertTrue(
-                        normalizedOutput.contains(expectedStatement),
-                        "Expected full API Security disclaimer not found in CLI output."
-                );
-
-                Logger.pass("Full API Security disclaimer verified successfully.", test);
-                Utils.deleteProjectById(scanInfo.getProjectId(), test);
-
-            } catch (Exception e) {
-                Logger.fail("Error verifying API Security disclaimer: " + e.getMessage(), test);
-                Assert.fail("Unexpected CLI or assertion failure", e);
-            }
+        } catch (Exception e) {
+            Logger.fail("Error verifying API Security disclaimer: " + e.getMessage(), test);
+            Assert.fail("Unexpected CLI or assertion failure", e);
         }
+    }
 
     @Test(description = "Verify NEW filter returns vulnerabilities only on first scan and zero on subsequent scans")
     public void verifyNewFilterBehaviorTest() {
@@ -534,4 +534,186 @@ public class ScanTest extends Base {
         }
     }
 
+    @Test(description = "Verify CLI throws error when scan type is passed with single quotes")
+    public void verifySASTScanInSingleQuotes() {
+
+        ExtentTest test = getTestLogger();
+        String projectName = "CLI_ScanProj_" + System.currentTimeMillis();
+
+        String command = String.format(
+                "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types 'sast'",
+                projectName, PROJECT_PATH_ZIP
+        );
+
+        try {
+
+            Logger.info("Running CLI command: cx " + command, test);
+            String result = CLIHelper.runCommand(command);
+            Logger.info("CLI Output:\n" + result, test);
+
+            String expectedMessage =
+                    "It looks like the \"'sast'\" scan type does not exist or you are trying to run a scan without the \"'sast'\" package license.";
+
+            Assert.assertTrue(
+                    result.contains(expectedMessage),
+                    "Expected error message for invalid scan type with single quotes was not found."
+            );
+
+            Logger.pass("CLI correctly rejected scan type passed in single quotes.", test);
+
+        } catch (Exception e) {
+
+            Logger.fail("Single quote scan type validation test failed: " + e.getMessage(), test);
+            Assert.fail("Single quote scan type validation test failed", e);
+
+        }
     }
+
+    @Test(description = "Verify SCA scan runs successfully with resolver")
+    public void verifyScaScanWithScaResolver() {
+
+        ExtentTest test = getTestLogger();
+        String projectName = "CLI_SCAResolver_" + System.currentTimeMillis();
+
+        String command = String.format(
+                "scan create --branch master --project-name \"%s\" --scan-types sca -s %s --sca-resolver %s",
+                projectName,
+                PROJECT_PATH_FOLDER,
+                SCA_RESOLVER_PATH
+        );
+
+        try {
+            Logger.info("Running CLI command: cx " + command, test);
+            String result = CLIHelper.runCommandUntilPattern(command, OUTPUT_PATTERN, test);
+            Logger.info("CLI Output:\n" + result, test);
+
+            Assert.assertTrue(
+                    result.contains("Using SCA resolver"),
+                    "Expected SCA resolver execution message not found."
+            );
+            ScanInfo scanInfo = ScanUtils.extractScanInfo(result);
+            ScanUtils.validateCommonScanInfo(scanInfo, projectName);
+            Utils.deleteProjectById(scanInfo.getProjectId(), test);
+
+        } catch (Exception e) {
+
+            Logger.fail("SCA resolver test failed: " + e.getMessage(), test);
+            Assert.fail("SCA resolver test failed", e);
+        }
+    }
+
+    @Test(description = "Verify CLI throws error when invalid SCA resolver path is provided")
+    public void verifyInvalidScaResolverPath() {
+
+        ExtentTest test = getTestLogger();
+        String projectName = "CLI_InvalidResolver_" + System.currentTimeMillis();
+
+        String command = String.format(
+                "scan create --branch master --project-name \"%s\" --scan-types sca -s %s --sca-resolver %s",
+                projectName, PROJECT_PATH_FOLDER,
+                SCA_RESOLVER_INVALID_PATH
+        );
+        try {
+            Logger.info("Running CLI command: cx " + command, test);
+            String result = CLIHelper.runCommand(command);
+            Logger.info("CLI Output:\n" + result, test);
+
+            Assert.assertTrue(
+                    result.contains("ScaResolver error: fork/exec")
+                            && result.contains("The system cannot find the path specified"),
+                    "Expected SCA resolver path error message not found."
+            );
+
+            Logger.pass("CLI correctly reported error for invalid SCA resolver path.", test);
+
+        } catch (Exception e) {
+
+            Logger.fail("Invalid SCA resolver path test failed: " + e.getMessage(), test);
+            Assert.fail("Invalid SCA resolver path test failed", e);
+
+        }
+    }
+
+    @Test(description = "Verify SCA scan runs successfully with resolver parameters")
+    public void verifyScaScanWithResolverParams() {
+
+        ExtentTest test = getTestLogger();
+        String projectName = "CLI_SCAResolverParams_" + System.currentTimeMillis();
+        String command = String.format(
+                "scan create --branch master --project-name \"%s\" --scan-types sca -s %s --sca-resolver %s --sca-resolver-params \"--gradle-parameters='-pUSERNAME=abc -pPASSWORD=cba'\"",
+                projectName,
+                PROJECT_PATH_FOLDER,
+                SCA_RESOLVER_PATH
+        );
+        try {
+            Logger.info("Running CLI command: cx " + command, test);
+            String result = CLIHelper.runCommandUntilPattern(command, OUTPUT_PATTERN, test);
+            Logger.info("CLI Output:\n" + result, test);
+
+            Assert.assertTrue(
+                    result.contains("Using SCA resolver"),
+                    "Expected SCA resolver execution message not found."
+            );
+            Assert.assertTrue(
+                    result.contains("--gradle-parameters=-pUSERNAME=abc -pPASSWORD=cba"),
+                    "Expected resolver parameters were not passed correctly."
+            );
+
+            ScanInfo scanInfo = ScanUtils.extractScanInfo(result);
+            ScanUtils.validateCommonScanInfo(scanInfo, projectName);
+
+            Logger.pass("SCA scan executed successfully with resolver parameters.", test);
+            Utils.deleteProjectById(scanInfo.getProjectId(), test);
+
+        } catch (Exception e) {
+            Logger.fail("SCA resolver params test failed: " + e.getMessage(), test);
+            Assert.fail("SCA resolver params test failed", e);
+
+        }
+    }
+
+    @Test(description = "Verify SCA scan runs successfully with multiple resolver parameters")
+    public void verifyScaScanWithMultipleResolverParams() {
+
+        ExtentTest test = getTestLogger();
+        String projectName = "CLI_SCAResolverMultiParams_" + System.currentTimeMillis();
+
+        String command = String.format(
+                "scan create --branch master --project-name \"%s\" --scan-types sca -s %s --sca-resolver %s --sca-resolver-params \"--gradle-parameters='-pUSERNAME=abc -pPASSWORD=cba' --log-level Debug\"",
+                projectName,
+                PROJECT_PATH_FOLDER,
+                SCA_RESOLVER_PATH
+        );
+
+        try {
+            Logger.info("Running CLI command: cx " + command, test);
+            String result = CLIHelper.runCommandUntilPattern(command, OUTPUT_PATTERN, test);
+            Logger.info("CLI Output:\n" + result, test);
+
+            Assert.assertTrue(
+                    result.contains("Using SCA resolver"),
+                    "Expected SCA resolver execution message not found."
+            );
+            Assert.assertTrue(
+                    result.contains("--gradle-parameters=-pUSERNAME=abc -pPASSWORD=cba"),
+                    "Gradle parameters were not passed to resolver."
+            );
+            Assert.assertTrue(
+                    result.contains("--log-level Debug"),
+                    "Resolver log-level parameter was not passed."
+            );
+
+            ScanInfo scanInfo = ScanUtils.extractScanInfo(result);
+            ScanUtils.validateCommonScanInfo(scanInfo, projectName);
+
+            Logger.pass("SCA scan executed successfully with multiple resolver parameters.", test);
+            Utils.deleteProjectById(scanInfo.getProjectId(), test);
+
+        } catch (Exception e) {
+
+            Logger.fail("SCA resolver multi-parameter test failed: " + e.getMessage(), test);
+            Assert.fail("SCA resolver multi-parameter test failed", e);
+
+        }
+    }
+}

@@ -249,7 +249,7 @@ public class scanTestDataDriven extends Base {
             ScanUtils.validateCommonScanInfo(scanInfo, projectName);
 
             Logger.pass("Scan creation from Git repository executed successfully and initial scan info verified.", test);
-             Utils.deleteProjectById(scanInfo.getProjectId(),test);
+            Utils.deleteProjectById(scanInfo.getProjectId(),test);
         } catch (Exception e) {
             Logger.fail("Scan creation test from Git repository failed: " + e.getMessage(), test);
             Assert.fail("CLI scan creation from Git repository failed", e);
