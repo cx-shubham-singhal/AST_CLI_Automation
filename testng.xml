@@ -20,6 +20,10 @@
             <class name="com.myorg.cxone.tests.ProjectTest"/>
             <class name="com.myorg.cxone.tests.AuthTest"/>
             <class name="com.myorg.cxone.tests.ConfigureTest"/>
+            <class name="com.myorg.cxone.tests.realtimescan.AscaScanTest"/>
+            <class name="com.myorg.cxone.tests.realtimescan.OssRealtimeScanTest"/>
+            <class name="com.myorg.cxone.tests.realtimescan.SecretsRealtimeScanTest"/>
+            <class name="com.myorg.cxone.tests.realtimescan.ContainersRealtimeScanTest"/>
         </classes>
     </test>
 
