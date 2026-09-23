@@ -207,7 +207,7 @@ public class HelpTest extends Base {
             Utils.validateHelpOutput(
                     result,
                     "^Validate authentication and create OAuth2 credentials.*",  // first line regex
-                    List.of("register", "validate"), // commands under COMMANDS section
+                    List.of("login", "logout", "register", "validate"), // commands under COMMANDS section
                     test
             );
 
