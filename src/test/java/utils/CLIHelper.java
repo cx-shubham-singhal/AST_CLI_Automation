@@ -32,7 +32,7 @@ public class CLIHelper {
         if (result != null) {
             result.setAttribute("cliCommand","cx " + command);
         }
-        String[] cmd = {"cmd.exe", "/c", cliPath + " " + command};
+        String[] cmd = {"cmd.exe", "/c", "\"" + cliPath + " " + command + "\""};
 
         ProcessBuilder pb = new ProcessBuilder(cmd);
         pb.redirectErrorStream(true);
@@ -64,7 +64,7 @@ public class CLIHelper {
             result.setAttribute("cliCommand","cx " + command);
         }
 
-        String[] cmd = {"cmd.exe", "/c", cliPath + " " + command};
+        String[] cmd = {"cmd.exe", "/c", "\"" + cliPath + " " + command + "\""};
 
         ProcessBuilder pb = new ProcessBuilder(cmd);
         pb.redirectErrorStream(true);
@@ -100,7 +100,7 @@ public class CLIHelper {
             result.setAttribute("cliCommand","cx " + command);
         }
 
-        String[] cmd = {"cmd.exe", "/c", cliPath + " " + command};
+        String[] cmd = {"cmd.exe", "/c", "\"" + cliPath + " " + command + "\""};
 
         ProcessBuilder pb = new ProcessBuilder(cmd);
         pb.redirectErrorStream(true);

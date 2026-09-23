@@ -4,18 +4,20 @@ USAGE
   cx <command> <subcommand> [flags]
 
 COMMANDS
-  auth:       Validate authentication and create OAuth2 credentials
-  completion: Generate the autocompletion script for the specified shell
-  configure:  Configure authentication and global properties
-  help:       Help about any command
-  hooks:      Manage Git hooks
-  project:    Manage projects
-  results:    Retrieve results
-  scan:       Manage scans
-  telemetry:  Telemetry user events
-  triage:     Manage results
-  utils:      Utility functions
-  version:    Prints the version number
+  auth:                Validate authentication and create OAuth2 credentials
+  completion:          Generate the autocompletion script for the specified shell
+  configure:           Configure authentication and global properties
+  dast-environments:   Manage DAST environments
+  help:                Help about any command
+  hooks:               Manage Git hooks and AI coding agent hooks
+  mcp:                 Start MCP server for AI assistant integration
+  project:             Manage projects
+  results:             Retrieve results
+  scan:                Manage scans
+  telemetry:           Telemetry user events
+  triage:              Manage results
+  utils:               Utility functions
+  version:             Prints the version number
 
 FLAGS
       --agent string                      Scan origin name (default "ASTCLI")
@@ -31,6 +33,7 @@ FLAGS
       --insecure                          Ignore TLS certificate validations
       --log-file string                   Saves logs to the specified file path only
       --log-file-console string           Saves logs to the specified file path as well as to the console
+      --optional-flags string             Flag for providing command specific flag from IDE or CI/CD plugins.
       --proxy string                      Proxy server to send communication through
       --proxy-auth-type string            Proxy authentication type (supported types: basic, ntlm, kerberos or kerberos-native)
       --proxy-kerberos-ccache string      Path to Kerberos credential cache (optional, default uses KRB5CCNAME env or OS default)

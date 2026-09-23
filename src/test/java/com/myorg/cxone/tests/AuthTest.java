@@ -52,13 +52,13 @@ public class AuthTest extends Base {
 
             Assert.assertNotNull(result, DEFAULT_SUCCESS_VALIDATION_MESSAGE);
 
-            // Assertion 2: Output contains success message
+            // An explicitly empty --apikey flag blocks fallback to other credential sources
             Assert.assertTrue(
-                    result.contains(SUCCESS_AUTH_VALIDATE),
-                    "Expected output:\n" + SUCCESS_AUTH_VALIDATE +
+                    result.contains(FAILED_AUTHENTICATION),
+                    "Expected output:\n" + FAILED_AUTHENTICATION +
                             "\n\nActual output:\n" + result
             );
-            Logger.pass("Successfully authenticated to Checkmarx One server", test);
+            Logger.pass("Authentication failed as expected with empty API key", test);
         } catch (Exception e) {
             Logger.fail("Authentication failed: " + e.getMessage(), test);
             Assert.fail("CLI Authentication failed", e);
