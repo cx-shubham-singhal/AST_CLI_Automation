@@ -42,7 +42,7 @@ public class OssRealtimeScanTest extends Base {
                 vulnerabilityCount += pkg.path("Vulnerabilities").size();
             }
 
-            Assert.assertTrue(vulnerabilityCount > 0,
+            Assert.assertTrue(vulnerabilityCount >= 1,
                     "Expected OSS realtime scan to detect at least one vulnerability.\nCLI Output:\n" + root);
 
             RealtimeScanUtils.logVulnerabilityCount(vulnerabilityCount, test);

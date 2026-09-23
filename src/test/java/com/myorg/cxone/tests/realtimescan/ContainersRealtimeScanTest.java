@@ -29,7 +29,7 @@ public class ContainersRealtimeScanTest extends Base {
                 vulnerabilityCount += image.path("Vulnerabilities").size();
             }
 
-            Assert.assertTrue(vulnerabilityCount > 0,
+            Assert.assertTrue(vulnerabilityCount >= 1,
                     "Expected Containers realtime scan to detect at least one vulnerability.\nCLI Output:\n" + root);
 
             RealtimeScanUtils.logVulnerabilityCount(vulnerabilityCount, test);
