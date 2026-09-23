@@ -20,7 +20,7 @@ public class ScanTest extends Base {
     @Test(description = "Run and verify Checkmarx SAST scan when source is folder, not zip ")
     public void createScanWithSourceAsValidFolderTest() {
         ExtentTest test = getTestLogger();
-        String projectName = "CLI_ScanProj_" + System.currentTimeMillis();
+        String projectName = "CLI_ScanProj_" + Utils.uniqueSuffix();
         String command = String.format(
                 "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"sast\"",
                 projectName, PROJECT_PATH_FOLDER
@@ -45,7 +45,7 @@ public class ScanTest extends Base {
     @Test(description = "Verify scan creation fails when source folder is invalid or incorrectly formatted")
     public void createScanWithInvalidSourceFolderTest() {
         ExtentTest test = getTestLogger();
-        String projectName = "CLI_InvalidSrcProj_" + System.currentTimeMillis();
+        String projectName = "CLI_InvalidSrcProj_" + Utils.uniqueSuffix();
 
         String command = String.format(
                 "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"sast\"",
@@ -99,7 +99,7 @@ public class ScanTest extends Base {
     @Test(description = "Verify CLI throws proper error when creating a scan without providing a branch")
     public void createScanWithoutBranchTest() {
         ExtentTest test = getTestLogger();
-        String projectName = "PrimaryBranch_" + System.currentTimeMillis();
+        String projectName = "PrimaryBranch_" + Utils.uniqueSuffix();
 
         String command = String.format(
                 "scan create --project-name \"%s\" -s %s --scan-types \"sast\"",
@@ -130,7 +130,7 @@ public class ScanTest extends Base {
     @Test(description = "Verify scan threshold check fails when critical issues exceed the limit")
     public void verifySASTScanCriticalThresholdTest() {
         ExtentTest test = getTestLogger();
-        String projectName = "CLI_ScanFromGit_" + System.currentTimeMillis();
+        String projectName = "CLI_ScanFromGit_" + Utils.uniqueSuffix();
 
         String command = String.format(
                 "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"sast\" --threshold \"sast-critical=1\"",
@@ -161,7 +161,7 @@ public class ScanTest extends Base {
     @Test(description = "Verify scan threshold check fails when high issues exceed the limit")
     public void verifySASTScanHighThresholdTest() {
         ExtentTest test = getTestLogger();
-        String projectName = "CLI_ScanFromGit_" + System.currentTimeMillis();
+        String projectName = "CLI_ScanFromGit_" + Utils.uniqueSuffix();
 
         String command = String.format(
                 "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"sast\" --threshold \"sast-high=1\"",
@@ -192,7 +192,7 @@ public class ScanTest extends Base {
     @Test(description = "Verify scan threshold check fails when medium issues exceed the limit")
     public void verifySASTScanMediumThresholdTest() {
         ExtentTest test = getTestLogger();
-        String projectName = "CLI_ScanFromGit_" + System.currentTimeMillis();
+        String projectName = "CLI_ScanFromGit_" + Utils.uniqueSuffix();
 
         String command = String.format(
                 "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"sast\" --threshold \"sast-medium=1\"",
@@ -224,7 +224,7 @@ public class ScanTest extends Base {
     @Test(description = "Verify scan threshold check fails when issues exceed the limit")
     public void verifySASTScanThresholdTest() {
         ExtentTest test = getTestLogger();
-        String projectName = "CLI_ScanFromGit_" + System.currentTimeMillis();
+        String projectName = "CLI_ScanFromGit_" + Utils.uniqueSuffix();
 
         String command = String.format(
                 "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"sast\" --threshold \"sast-critical=1;sast-high=1;sast-low=1\"",
@@ -253,7 +253,7 @@ public class ScanTest extends Base {
     @Test(description = "Verify multiple application names can be attached to same project")
     public void verifyMultipleApplicationNamesForSameProject() {
         ExtentTest test = getTestLogger();
-        String projectName = "MultipleAppProj_" + System.currentTimeMillis();
+        String projectName = "MultipleAppProj_" + Utils.uniqueSuffix();
         String appName1 = "QAApplicationForAutomation";
         String appName2 = "CliAutomationApplication";
 
@@ -299,7 +299,7 @@ public class ScanTest extends Base {
     public void verifyApiSecurityScanDisclaimerTest() {
 
         ExtentTest test = getTestLogger();
-        String projectName = "CLI_ApiSecScan_" + System.currentTimeMillis();
+        String projectName = "CLI_ApiSecScan_" + Utils.uniqueSuffix();
 
         String command = String.format(
                 "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"api-security\"",
@@ -342,7 +342,7 @@ public class ScanTest extends Base {
     public void verifyNewFilterBehaviorTest() {
 
         ExtentTest test = getTestLogger();
-        String projectName = "NewFilterProj_" + System.currentTimeMillis();
+        String projectName = "NewFilterProj_" + Utils.uniqueSuffix();
 
         String command = String.format(
                 "scan create --project-name \"%s\" --branch master -s \"%s\" --filter \"status=NEW\"",
@@ -388,7 +388,7 @@ public class ScanTest extends Base {
     public void verifyApiSecurityThresholdFailureTest() {
 
         ExtentTest test = getTestLogger();
-        String projectName = "ThresholdFilterProj_" + System.currentTimeMillis();
+        String projectName = "ThresholdFilterProj_" + Utils.uniqueSuffix();
 
         String command = String.format(
                 "scan create --project-name \"%s\" --branch master -s \"%s\" --filter \"status=NEW\" --threshold \"api-security-medium=1\"",
@@ -429,7 +429,7 @@ public class ScanTest extends Base {
     public void verifyThresholdWithNewFilterAfterInitialScan() {
 
         ExtentTest test = getTestLogger();
-        String projectName = "ThresholdRecurrentProj_" + System.currentTimeMillis();
+        String projectName = "ThresholdRecurrentProj_" + Utils.uniqueSuffix();
 
         String firstCommand = String.format(
                 "scan create --project-name \"%s\" --branch master -s \"%s\" --filter \"status=NEW\"",
@@ -483,7 +483,7 @@ public class ScanTest extends Base {
     public void verifyApiSecSwaggerFilterCaseSensitivity() {
 
         ExtentTest test = getTestLogger();
-        String projectName = "ApiSwaggerCaseTest_" + System.currentTimeMillis();
+        String projectName = "ApiSwaggerCaseTest_" + Utils.uniqueSuffix();
 
         String excludeFileCommand = String.format(
                 "scan create --project-name \"%s\" --branch master -s \"%s\" --scan-types sast,api-security --apisec-swagger-filter \"!**/CamalCase.Schema.json\"",
@@ -539,7 +539,7 @@ public class ScanTest extends Base {
     public void verifySASTScanInSingleQuotes() {
 
         ExtentTest test = getTestLogger();
-        String projectName = "CLI_ScanProj_" + System.currentTimeMillis();
+        String projectName = "CLI_ScanProj_" + Utils.uniqueSuffix();
 
         String command = String.format(
                 "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types 'sast'",
@@ -569,7 +569,7 @@ public class ScanTest extends Base {
     public void verifyScaScanWithScaResolver() {
 
         ExtentTest test = getTestLogger();
-        String projectName = "CLI_SCAResolver_" + System.currentTimeMillis();
+        String projectName = "CLI_SCAResolver_" + Utils.uniqueSuffix();
 
         String command = String.format(
                 "scan create --branch master --project-name \"%s\" --scan-types sca -s %s --sca-resolver %s",
@@ -602,7 +602,7 @@ public class ScanTest extends Base {
     public void verifyInvalidScaResolverPath() {
 
         ExtentTest test = getTestLogger();
-        String projectName = "CLI_InvalidResolver_" + System.currentTimeMillis();
+        String projectName = "CLI_InvalidResolver_" + Utils.uniqueSuffix();
 
         String command = String.format(
                 "scan create --branch master --project-name \"%s\" --scan-types sca -s %s --sca-resolver %s",
@@ -634,7 +634,7 @@ public class ScanTest extends Base {
     public void verifyScaScanWithResolverParams() {
 
         ExtentTest test = getTestLogger();
-        String projectName = "CLI_SCAResolverParams_" + System.currentTimeMillis();
+        String projectName = "CLI_SCAResolverParams_" + Utils.uniqueSuffix();
         String command = String.format(
                 "scan create --branch master --project-name \"%s\" --scan-types sca -s %s --sca-resolver %s --sca-resolver-params \"--gradle-parameters='-pUSERNAME=abc -pPASSWORD=cba'\"",
                 projectName,
@@ -672,7 +672,7 @@ public class ScanTest extends Base {
     public void verifyScaScanWithMultipleResolverParams() {
 
         ExtentTest test = getTestLogger();
-        String projectName = "CLI_SCAResolverMultiParams_" + System.currentTimeMillis();
+        String projectName = "CLI_SCAResolverMultiParams_" + Utils.uniqueSuffix();
 
         String command = String.format(
                 "scan create --branch master --project-name \"%s\" --scan-types sca -s %s --sca-resolver %s --sca-resolver-params \"--gradle-parameters='-pUSERNAME=abc -pPASSWORD=cba' --log-level Debug\"",
@@ -717,7 +717,7 @@ public class ScanTest extends Base {
     public void verifyGemfileIncludedInScaScan() {
 
         ExtentTest test = getTestLogger();
-        String projectName = "CLI_ScanIncludeGemfile_" + System.currentTimeMillis();
+        String projectName = "CLI_ScanIncludeGemfile_" + Utils.uniqueSuffix();
 
         String command = String.format(
                 "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"sca\" --debug",
@@ -752,7 +752,7 @@ public class ScanTest extends Base {
     public void verifyGemfileExcludedFromScan() {
 
         ExtentTest test = getTestLogger();
-        String projectName = "CLI_ScanExcludeGemfile_" + System.currentTimeMillis();
+        String projectName = "CLI_ScanExcludeGemfile_" + Utils.uniqueSuffix();
 
         String command = String.format(
                 "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"sca\" --file-filter \"!Gemfile,!Gemfile.lock\" --debug",
@@ -787,7 +787,7 @@ public class ScanTest extends Base {
     public void verifyXsjsAndXsjslibFilesIncludedInSastScan() {
 
         ExtentTest test = getTestLogger();
-        String projectName = "CLI_ScanXSJSFiles_" + System.currentTimeMillis();
+        String projectName = "CLI_ScanXSJSFiles_" + Utils.uniqueSuffix();
 
         String command = String.format(
                 "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"sca\" --debug",
@@ -836,7 +836,7 @@ public class ScanTest extends Base {
     public void verifyXsjsFilesExcludedFromScan() {
 
         ExtentTest test = getTestLogger();
-        String projectName = "CLI_ScanExcludeXSJS_" + System.currentTimeMillis();
+        String projectName = "CLI_ScanExcludeXSJS_" + Utils.uniqueSuffix();
 
         String command = String.format(
                 "scan create --branch master --project-name \"%s\" -s %s --scan-types \"sast\" --file-filter \"!*.xsjs,!*.xsjslib\" --debug",

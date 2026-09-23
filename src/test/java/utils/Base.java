@@ -7,10 +7,15 @@ import org.testng.ITestResult;
 import org.testng.annotations.*;
 
 import java.lang.reflect.Method;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Base {
     protected static ExtentReports extent;
-    protected static ThreadLocal<ExtentTest> classLevelTest = new ThreadLocal<>();
+    // Shared, not thread-local: under parallel="methods" the @BeforeClass thread
+    // and the threads running that class's @Test methods can differ, so the class
+    // node must be visible across threads rather than pinned to whichever thread
+    // happened to run @BeforeClass.
+    private static final ConcurrentHashMap<String, ExtentTest> classNodes = new ConcurrentHashMap<>();
     protected static ThreadLocal<ExtentTest> testLevelTest = new ThreadLocal<>();
 
     @BeforeSuite
@@ -22,7 +27,7 @@ public class Base {
     @BeforeClass(alwaysRun = true)
     public void setupClass() {
         String className = this.getClass().getSimpleName();
-        classLevelTest.set(extent.createTest(className));
+        classNodes.computeIfAbsent(className, extent::createTest);
         System.out.println("\n=== Starting Test Class: " + className + " ===");
     }
 
@@ -30,8 +35,10 @@ public class Base {
     public void setupTest(Method method, ITestResult result) {
 
         String testName = method.getName();
+        String className = this.getClass().getSimpleName();
 
-        ExtentTest test = classLevelTest.get().createNode(testName);
+        ExtentTest classNode = classNodes.get(className);
+        ExtentTest test = classNode.createNode(testName);
         testLevelTest.set(test);
 
         System.out.println(">>> Starting Test: " + testName);

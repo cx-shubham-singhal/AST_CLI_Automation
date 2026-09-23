@@ -4,12 +4,21 @@ import com.myorg.cxone.helpers.Logger;
 import org.testng.Assert;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 public class Utils extends Base{
 
     private Utils() {}
 
+    private static final AtomicLong UNIQUE_COUNTER = new AtomicLong();
+
+    // System.currentTimeMillis() alone can collide when multiple threads generate
+    // names in the same millisecond under parallel test execution; the counter
+    // guarantees uniqueness regardless of timing.
+    public static String uniqueSuffix() {
+        return System.currentTimeMillis() + "_" + UNIQUE_COUNTER.incrementAndGet();
+    }
 
     public static String normalize(String input) {
         return Arrays.stream(input.split("\\r?\\n"))

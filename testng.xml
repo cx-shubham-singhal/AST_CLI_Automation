@@ -3,27 +3,54 @@
 <suite name="CheckmarxOneSuite"
        verbose="1"
        parallel="false"
-       thread-count="1"
-       preserve-order="true">
+       thread-count="1">
 
     <listeners>
         <listener class-name="utils.ExcelReportListener"/>
     </listeners>
 
-    <test name="CheckmarxOneTests"
+    <!-- Runs first and alone: mutates the persistent cx CLI config file on disk,
+         which every other test's CLI invocation reads. Must not overlap with
+         the parallel block below. -->
+    <test name="ConfigureTests"
           preserve-order="true"
           parallel="false">
         <classes>
+            <class name="com.myorg.cxone.tests.ConfigureTest"/>
+        </classes>
+    </test>
+
+    <!-- Quick classes: class-level parallelism is enough since none of them is
+         individually a bottleneck. Each class runs on its own thread, so a
+         class's @BeforeClass/@Test methods stay together on one thread. -->
+    <test name="FastParallelTests"
+          preserve-order="true"
+          parallel="classes"
+          thread-count="4">
+        <classes>
             <class name="com.myorg.cxone.tests.HelpTest"/>
-            <class name="com.myorg.cxone.tests.scanTestDataDriven"/>
-            <class name="com.myorg.cxone.tests.ScanTest"/>
             <class name="com.myorg.cxone.tests.ProjectTest"/>
             <class name="com.myorg.cxone.tests.AuthTest"/>
-            <class name="com.myorg.cxone.tests.ConfigureTest"/>
             <class name="com.myorg.cxone.tests.realtimescan.AscaScanTest"/>
             <class name="com.myorg.cxone.tests.realtimescan.OssRealtimeScanTest"/>
             <class name="com.myorg.cxone.tests.realtimescan.SecretsRealtimeScanTest"/>
             <class name="com.myorg.cxone.tests.realtimescan.ContainersRealtimeScanTest"/>
+        </classes>
+    </test>
+
+    <!-- The two bottleneck classes: ScanTest and scanTestDataDriven each have
+         many real create-scan-and-verify methods that run serially within a
+         class under class-level parallelism. parallel="methods" pools every
+         method (and every Excel data row, since scanData is now a parallel
+         DataProvider) from both classes across the same thread pool so they
+         actually run concurrently. Requires utils.Base's ExtentReports class
+         node to be shared (not ThreadLocal) - see Base.java. -->
+    <test name="HeavyParallelTests"
+          parallel="methods"
+          thread-count="8">
+        <classes>
+            <class name="com.myorg.cxone.tests.ScanTest"/>
+            <class name="com.myorg.cxone.tests.scanTestDataDriven"/>
         </classes>
     </test>
 

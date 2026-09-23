@@ -19,7 +19,7 @@ import static utils.ScanUtils.*;
 
 public class scanTestDataDriven extends Base {
 
-    @DataProvider(name = "scanData")
+    @DataProvider(name = "scanData", parallel = true)
     public Object[][] scanData() {
         return ExcelDataProvider.getExcelDataAsMap("src/main/resources/ScanTestData.xlsx", "ScanSheet");
     }
@@ -40,7 +40,7 @@ public class scanTestDataDriven extends Base {
         String logPrefix = "runASTCLICommandsFromExcel - " + scenarioDescription;
         Logger.info("--------Starting test case:------ " + logPrefix, test);
 
-        String projectName = "CLI_ScanProj_" + System.currentTimeMillis();
+        String projectName = "CLI_ScanProj_" + Utils.uniqueSuffix();
         String command = String.format(
                 "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"%s\" %s",
                 projectName,
@@ -78,7 +78,7 @@ public class scanTestDataDriven extends Base {
     @Test(description = "Verify All scan ")
     public void verifySASTScanWithAllScanTypes() {
         ExtentTest test = getTestLogger();
-        String projectName = "CLI_ScanProj_" + System.currentTimeMillis();
+        String projectName = "CLI_ScanProj_" + Utils.uniqueSuffix();
 
         String command = String.format(
                 "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"\"",
@@ -152,7 +152,7 @@ public class scanTestDataDriven extends Base {
     @Test(description = "Run and verify Checkmarx SAST scan with relative data path")
     public void createSASTScanWithRelativePathTest() {
         ExtentTest test = getTestLogger();
-        String projectName = "CLI_ScanProj_" + System.currentTimeMillis();
+        String projectName = "CLI_ScanProj_" + Utils.uniqueSuffix();
         String command = String.format(
                 "scan create --project-name \"%s\" --file-source %s --branch \"master\" --scan-types \"sast\"",
                 projectName, RELATIVE_DATA_PATH
@@ -203,7 +203,7 @@ public class scanTestDataDriven extends Base {
     @Test(description = "Run Checkmarx SAST scan with invalid API key and verify error")
     public void createScanWithInvalidApiKeyTest() {
         ExtentTest test = getTestLogger();
-        String projectName = "CLI_ScanProj_" + System.currentTimeMillis();
+        String projectName = "CLI_ScanProj_" + Utils.uniqueSuffix();
         String invalidApiKey = System.getenv("CX_INVALID_APIKEY");
 
         Assert.assertNotNull(invalidApiKey, "CX_INVALID_APIKEY environment variable (CX_INVALID_APIKEY) is not set!");
@@ -233,7 +233,7 @@ public class scanTestDataDriven extends Base {
     @Test(description = "Run Checkmarx SAST scan directly from Git repository and verify initial scan info")
     public void createScanFromGitRepoTest() {
         ExtentTest test = getTestLogger();
-        String projectName = "CLI_ScanFromGit_" + System.currentTimeMillis();
+        String projectName = "CLI_ScanFromGit_" + Utils.uniqueSuffix();
 
         String command = String.format(
                 "scan create --project-name \"%s\" -s %s --branch \"master\" --scan-types \"sast\"",
@@ -317,7 +317,7 @@ public class scanTestDataDriven extends Base {
     public void verifyGitlabSastReportVersionFormat() {
 
         ExtentTest test = getTestLogger();
-        String projectName = "GitlabSastReport_" + System.currentTimeMillis();
+        String projectName = "GitlabSastReport_" + Utils.uniqueSuffix();
 
         String scanCommand = String.format(
                 "scan create --branch master --project-name \"%s\" --scan-types sast -s %s",
