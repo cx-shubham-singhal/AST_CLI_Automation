@@ -1,0 +1,14 @@
+# TC_31: uv export format with backslash line continuations and --hash options
+# Lines joined, hashes stripped, versions extracted
+requests==2.27.1 \
+    --hash=sha256:f22fa1e554c9ddfd16e6e41ac79759e17be9e492b3587efa038054674760e72d \
+    --hash=sha256:72bc29b39764e18e7fa9dfc6c84c4bcb32d1dc8e25f4e5f5a40e3aeed265c6ea
+Flask==2.0.1 \
+    --hash=sha256:a6209ca15eb63fc9385f38e452704113d679511d9574d09b2cf9183ae7d20dc9 \
+    --hash=sha256:c66c2c7db8984cf8b87a33db95f71ff1679e08f487d23c2a8a7ee11cf6d0d77c
+Django==3.2.4 \
+    --hash=sha256:c5b8b3336de8e9e11e8f96dd4ff46523a4f10dde3f4bb665ce8c4de892c6f9c2
+PyYAML==5.3.1 \
+    --hash=sha256:d8d80f9c5a8f1a52a62ad1c7c3ec68d09c5af5cb5f6c5b9d8e7a0bdef6c4e24d
+urllib3==1.26.4 \
+    --hash=sha256:2f4da4594db7e1e110a944bb1b551fdf4e6c136ad42e059780ebe3cf4e71c1a5

@@ -1,0 +1,9 @@
+# TC_27: requirement-test.txt — detected by requirement-*.txt glob
+selenium==3.141.0
+playwright==1.14.0
+httpretty==1.1.4
+responses==0.13.4
+locust==1.6.0
+PyYAML==5.3.1
+urllib3==1.26.4
+Jinja2==2.10.1

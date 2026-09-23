@@ -1,0 +1,7 @@
+{
+  "name": "acme/tc30-app",
+  "require": {
+    "symfony/http-kernel": "4.4.0",
+    "phpunit/phpunit": "4.8.19"
+  }
+}

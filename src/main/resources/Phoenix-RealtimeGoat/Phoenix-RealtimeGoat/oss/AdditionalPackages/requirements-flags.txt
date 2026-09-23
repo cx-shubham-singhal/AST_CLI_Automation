@@ -1,0 +1,9 @@
+# TC_32: pip CLI flags must be filtered, valid packages extracted
+-i https://pypi.org/simple
+-r requirements.txt
+-c constraints.txt
+--find-links https://download.pytorch.org/whl/torch_stable.html
+-e ./local-package
+Flask==2.0.1
+requests==2.27.1
+Django==3.2.4

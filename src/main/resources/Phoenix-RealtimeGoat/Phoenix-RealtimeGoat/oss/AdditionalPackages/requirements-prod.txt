@@ -1,0 +1,8 @@
+# TC_25: requirements-prod.txt — detected by requirements-*.txt glob
+gunicorn==20.1.0
+psycopg2-binary==2.9.1
+redis==3.5.3
+celery==4.4.7                # CVE-2021-23727
+Flower==1.0.0
+supervisor==4.2.2
+uwsgi==2.0.19
