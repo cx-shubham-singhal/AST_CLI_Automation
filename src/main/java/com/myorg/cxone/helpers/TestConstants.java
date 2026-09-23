@@ -20,4 +20,12 @@ public class TestConstants {
     public static final String CX_CLIENT_SECRET = System.getenv("CX_CLIENT_SECRET");
     public static final String SCA_RESOLVER_PATH = System.getenv("SCA_RESOLVER_PATH");
     public static final String SCA_RESOLVER_INVALID_PATH ="src/main/resources/InvalidPath/ScaResolver.exe";
+    public static final String ASCA_SQL_INJECTION_FILE_PATH = "src/main/resources/Phoenix-RealtimeGoat/Phoenix-RealtimeGoat/asca/sql_injection.py";
+    public static final String OSS_REALTIME_NPM_MANIFEST_FILE_PATH = "src/main/resources/Phoenix-RealtimeGoat/Phoenix-RealtimeGoat/oss/npm/package.json";
+    public static final String OSS_REALTIME_GO_MANIFEST_FILE_PATH = "src/main/resources/Phoenix-RealtimeGoat/Phoenix-RealtimeGoat/oss/go/go.mod";
+    public static final String OSS_REALTIME_MAVEN_MANIFEST_FILE_PATH = "src/main/resources/Phoenix-RealtimeGoat/Phoenix-RealtimeGoat/oss/maven/pom.xml";
+    public static final String OSS_REALTIME_NUGET_MANIFEST_FILE_PATH = "src/main/resources/Phoenix-RealtimeGoat/Phoenix-RealtimeGoat/oss/nuget/packages.config";
+    public static final String OSS_REALTIME_PYTHON_MANIFEST_FILE_PATH = "src/main/resources/Phoenix-RealtimeGoat/Phoenix-RealtimeGoat/oss/python/requirements.txt";
+    public static final String SECRETS_REALTIME_FILE_PATH = "src/main/resources/Phoenix-RealtimeGoat/Phoenix-RealtimeGoat/secrets/secrets.py";
+    public static final String CONTAINERS_REALTIME_FILE_PATH = "src/main/resources/Phoenix-RealtimeGoat/Phoenix-RealtimeGoat/containers/helm/values.yaml";
 }
