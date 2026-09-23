@@ -1,0 +1,32 @@
+[versions]
+springBoot         = "2.5.0"
+log4j              = "2.14.1"
+jackson            = "2.12.3"
+commonsText        = "1.9"
+guava              = "29.0-jre"
+h2                 = "1.4.200"
+netty              = "4.1.59.Final"
+shiro              = "1.7.0"
+xstream            = "1.4.15"
+snakeYaml          = "1.29"
+struts             = "2.5.26"
+springExpression   = "5.3.13"
+fastjson           = "1.2.62"
+
+[libraries]
+spring-boot-web    = { group = "org.springframework.boot", name = "spring-boot-starter-web",     version.ref = "springBoot" }
+log4j-core         = { group = "org.apache.logging.log4j", name = "log4j-core",                  version.ref = "log4j" }
+jackson-databind   = { group = "com.fasterxml.jackson.core", name = "jackson-databind",          version.ref = "jackson" }
+commons-text       = { group = "org.apache.commons", name = "commons-text",                      version.ref = "commonsText" }
+guava              = { group = "com.google.guava", name = "guava",                                version.ref = "guava" }
+h2                 = { group = "com.h2database", name = "h2",                                     version.ref = "h2" }
+netty-all          = { group = "io.netty", name = "netty-all",                                    version.ref = "netty" }
+shiro-core         = { group = "org.apache.shiro", name = "shiro-core",                          version.ref = "shiro" }
+xstream            = { group = "com.thoughtworks.xstream", name = "xstream",                     version.ref = "xstream" }
+snakeyaml          = { group = "org.yaml", name = "snakeyaml",                                   version.ref = "snakeYaml" }
+struts-core        = { group = "org.apache.struts", name = "struts2-core",                       version.ref = "struts" }
+spring-expression  = { group = "org.springframework", name = "spring-expression",                version.ref = "springExpression" }
+fastjson           = { group = "com.alibaba", name = "fastjson",                                  version.ref = "fastjson" }
+
+[plugins]
+spring-boot        = { id = "org.springframework.boot", version.ref = "springBoot" }

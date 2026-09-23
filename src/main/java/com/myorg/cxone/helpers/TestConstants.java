@@ -28,4 +28,36 @@ public class TestConstants {
     public static final String OSS_REALTIME_PYTHON_MANIFEST_FILE_PATH = "src/main/resources/Phoenix-RealtimeGoat/Phoenix-RealtimeGoat/oss/python/requirements.txt";
     public static final String SECRETS_REALTIME_FILE_PATH = "src/main/resources/Phoenix-RealtimeGoat/Phoenix-RealtimeGoat/secrets/secrets.py";
     public static final String CONTAINERS_REALTIME_FILE_PATH = "src/main/resources/Phoenix-RealtimeGoat/Phoenix-RealtimeGoat/containers/helm/values.yaml";
+
+    private static final String OSS_REALTIME_ADDITIONAL_PACKAGES_DIR = "src/main/resources/Phoenix-RealtimeGoat/Phoenix-RealtimeGoat/oss/AdditionalPackages/";
+    public static final String OSS_REALTIME_BOWER_MANIFEST_FILE_PATH = OSS_REALTIME_ADDITIONAL_PACKAGES_DIR + "bower.json";
+    public static final String OSS_REALTIME_GRADLE_MANIFEST_FILE_PATH = OSS_REALTIME_ADDITIONAL_PACKAGES_DIR + "build.gradle";
+    public static final String OSS_REALTIME_GRADLE_KTS_MANIFEST_FILE_PATH = OSS_REALTIME_ADDITIONAL_PACKAGES_DIR + "build.gradle.kts";
+    public static final String OSS_REALTIME_SBT_MANIFEST_FILE_PATH = OSS_REALTIME_ADDITIONAL_PACKAGES_DIR + "build.sbt";
+    public static final String OSS_REALTIME_SBT_DEPENDENCIES_MANIFEST_FILE_PATH = OSS_REALTIME_ADDITIONAL_PACKAGES_DIR + "dependencies.sbt";
+    public static final String OSS_REALTIME_GEMFILE_MANIFEST_FILE_PATH = OSS_REALTIME_ADDITIONAL_PACKAGES_DIR + "Gemfile";
+    public static final String OSS_REALTIME_GO_ADDITIONAL_MANIFEST_FILE_PATH = OSS_REALTIME_ADDITIONAL_PACKAGES_DIR + "go.mod";
+    public static final String OSS_REALTIME_GRADLE_LIBS_VERSIONS_MANIFEST_FILE_PATH = OSS_REALTIME_ADDITIONAL_PACKAGES_DIR + "libs.versions.toml";
+    public static final String OSS_REALTIME_NPM_ADDITIONAL_MANIFEST_FILE_PATH = OSS_REALTIME_ADDITIONAL_PACKAGES_DIR + "package.json";
+    public static final String OSS_REALTIME_MAVEN_ADDITIONAL_MANIFEST_FILE_PATH = OSS_REALTIME_ADDITIONAL_PACKAGES_DIR + "pom.xml";
+    public static final String OSS_REALTIME_PYPROJECT_MANIFEST_FILE_PATH = OSS_REALTIME_ADDITIONAL_PACKAGES_DIR + "pyproject.toml";
+    public static final String OSS_REALTIME_REQUIREMENT_MANIFEST_FILE_PATH = OSS_REALTIME_ADDITIONAL_PACKAGES_DIR + "requirement.txt";
+    public static final String OSS_REALTIME_REQUIREMENTS_DEV_MANIFEST_FILE_PATH = OSS_REALTIME_ADDITIONAL_PACKAGES_DIR + "requirements-dev.txt";
+    public static final String OSS_REALTIME_REQUIREMENTS_EQ_MANIFEST_FILE_PATH = OSS_REALTIME_ADDITIONAL_PACKAGES_DIR + "requirements-eq.txt";
+    public static final String OSS_REALTIME_REQUIREMENTS_FLAGS_MANIFEST_FILE_PATH = OSS_REALTIME_ADDITIONAL_PACKAGES_DIR + "requirements-flags.txt";
+    public static final String OSS_REALTIME_REQUIREMENTS_MARKERS_MANIFEST_FILE_PATH = OSS_REALTIME_ADDITIONAL_PACKAGES_DIR + "requirements-markers.txt";
+    public static final String OSS_REALTIME_REQUIREMENTS_PROD_MANIFEST_FILE_PATH = OSS_REALTIME_ADDITIONAL_PACKAGES_DIR + "requirements-prod.txt";
+    public static final String OSS_REALTIME_REQUIREMENTS_UV_MANIFEST_FILE_PATH = OSS_REALTIME_ADDITIONAL_PACKAGES_DIR + "requirements-uv.txt";
+    public static final String OSS_REALTIME_REQUIREMENTS_ADDITIONAL_MANIFEST_FILE_PATH = OSS_REALTIME_ADDITIONAL_PACKAGES_DIR + "requirements.txt";
+    public static final String OSS_REALTIME_SETUP_CFG_MANIFEST_FILE_PATH = OSS_REALTIME_ADDITIONAL_PACKAGES_DIR + "setup.cfg";
+    public static final String OSS_REALTIME_SETUP_PY_MANIFEST_FILE_PATH = OSS_REALTIME_ADDITIONAL_PACKAGES_DIR + "setup.py";
+    public static final String OSS_REALTIME_NUGET_CSPROJ_MANIFEST_FILE_PATH = OSS_REALTIME_ADDITIONAL_PACKAGES_DIR + "app.csproj";
+    public static final String OSS_REALTIME_COMPOSER_MANIFEST_FILE_PATH = OSS_REALTIME_ADDITIONAL_PACKAGES_DIR + "composer.json";
+    public static final String OSS_REALTIME_SBT_PLUGINS_MANIFEST_FILE_PATH = OSS_REALTIME_ADDITIONAL_PACKAGES_DIR + "plugins.sbt";
+    public static final String OSS_REALTIME_REQUIREMENT_TEST_MANIFEST_FILE_PATH = OSS_REALTIME_ADDITIONAL_PACKAGES_DIR + "requirement-test.txt";
+    public static final String OSS_REALTIME_SCALAJS_MANIFEST_FILE_PATH = OSS_REALTIME_ADDITIONAL_PACKAGES_DIR + "scalajs.sbt";
+    public static final String OSS_REALTIME_SBT_COMMENTS_ONLY_MANIFEST_FILE_PATH = OSS_REALTIME_ADDITIONAL_PACKAGES_DIR + "comments-only-build.sbt";
+    public static final String OSS_REALTIME_SBT_EMPTY_MANIFEST_FILE_PATH = OSS_REALTIME_ADDITIONAL_PACKAGES_DIR + "empty-build.sbt";
+    public static final String OSS_REALTIME_REQUIREMENTS_URLS_MANIFEST_FILE_PATH = OSS_REALTIME_ADDITIONAL_PACKAGES_DIR + "requirements-urls.txt";
+    public static final String OSS_REALTIME_REQUIREMENTS_VCS_MANIFEST_FILE_PATH = OSS_REALTIME_ADDITIONAL_PACKAGES_DIR + "requirements-vcs.txt";
 }

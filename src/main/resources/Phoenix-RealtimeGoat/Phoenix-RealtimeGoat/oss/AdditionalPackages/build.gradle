@@ -1,0 +1,121 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.5.0'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'com.github.ben-manes.versions' version '0.39.0'
+}
+
+group = 'com.example'
+version = '1.0.0'
+sourceCompatibility = '11'
+
+// TC_05: ext{} block — parser must resolve these variables
+ext {
+    log4jVersion        = '2.14.1'       // CVE-2021-44228 Log4Shell (CRITICAL)
+    springSecVersion    = '5.3.13'       // CVE-2022-22978
+    lombokVersion       = '1.18.16'
+    jacksonVersion      = '2.12.3'       // CVE-2020-36518
+    commonsTextVersion  = '1.9'          // CVE-2022-42889 (CRITICAL)
+    commonsLangVersion  = '3.9'
+    commonsCollVersion  = '3.2.1'        // CVE-2015-6420 (CRITICAL)
+    guavaVersion        = '29.0-jre'     // CVE-2020-8908
+    h2Version           = '1.4.200'      // CVE-2021-42392 (CRITICAL)
+    apacheHttpVersion   = '4.5.10'
+    nettyVersion        = '4.1.59.Final' // CVE-2021-21290
+    shiroVersion        = '1.7.0'        // CVE-2020-17523
+    xstreamVersion      = '1.4.15'       // CVE-2021-29505 (CRITICAL)
+    snakeYamlVersion    = '1.29'         // CVE-2022-1471 (CRITICAL)
+    mybatisVersion      = '3.5.6'
+    postgresVersion     = '42.2.18'
+    liquibaseVersion    = '4.3.5'
+    strutsVersion       = '2.5.26'       // CVE-2021-31805
+    fastjsonVersion     = '1.2.62'       // CVE-2019-17558
+    bouncyVersion       = '1.64'         // CVE-2020-15522
+    jwtVersion          = '0.9.1'        // CVE-2022-21449
+    springExprVersion   = '5.3.13'       // CVE-2022-22950
+    commonsCompressVer  = '1.20'         // CVE-2021-35516
+    hibernateVersion    = '5.4.32.Final' // CVE-2019-14900
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Spring Boot (vulnerable umbrella)
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+
+    // TC_04 / TC_05: variables from ext{} / gradle.properties
+    implementation "org.apache.logging.log4j:log4j-core:${log4jVersion}"
+    implementation "org.apache.logging.log4j:log4j-api:${log4jVersion}"
+    implementation "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
+    implementation "org.apache.commons:commons-text:${commonsTextVersion}"
+    implementation "org.apache.commons:commons-lang3:${commonsLangVersion}"
+    implementation "commons-collections:commons-collections:${commonsCollVersion}"
+    implementation "com.google.guava:guava:${guavaVersion}"
+    implementation "com.h2database:h2:${h2Version}"
+    implementation "org.apache.httpcomponents:httpclient:${apacheHttpVersion}"
+    implementation "io.netty:netty-all:${nettyVersion}"
+    implementation "org.apache.shiro:shiro-core:${shiroVersion}"
+    implementation "org.apache.shiro:shiro-web:${shiroVersion}"
+    implementation "com.thoughtworks.xstream:xstream:${xstreamVersion}"
+    implementation "org.yaml:snakeyaml:${snakeYamlVersion}"
+    implementation "org.mybatis:mybatis:${mybatisVersion}"
+    implementation "org.postgresql:postgresql:${postgresVersion}"
+    implementation "org.liquibase:liquibase-core:${liquibaseVersion}"
+    implementation "org.springframework.security:spring-security-core:${springSecVersion}"
+    implementation "org.hibernate:hibernate-core:${hibernateVersion}"
+    implementation "org.apache.commons:commons-compress:${commonsCompressVer}"
+    implementation "org.springframework:spring-expression:${springExprVersion}"
+    implementation "io.jsonwebtoken:jjwt:${jwtVersion}"
+    implementation "org.bouncycastle:bcprov-jdk15on:${bouncyVersion}"
+    implementation "com.alibaba:fastjson:${fastjsonVersion}"
+    implementation "net.minidev:json-smart:2.3"
+    implementation "com.nimbusds:nimbus-jose-jwt:8.20"
+    implementation "xerces:xercesImpl:2.12.0"
+    implementation "org.apache.velocity:velocity:1.7"               // CVE-2020-13936
+
+    // TC_07: non-Maven references — must be SKIPPED by parser
+    implementation project(':shared-utils')
+    implementation files('libs/legacy-internal.jar')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // TC_08: dynamic version — must resolve to 'latest'
+    implementation 'com.example.internal:config-loader:+'
+
+    // TC_10: multi-line dependency declaration
+    implementation(
+        'org.apache.struts:struts2-core:2.5.26'
+    )
+    implementation(
+        'org.apache.struts:struts2-rest-plugin:2.5.26'
+    )
+    implementation(
+        'com.thoughtworks.xstream:xstream:1.4.15'
+    )
+
+    // Test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'junit:junit:4.13.1'                        // CVE-2020-15250
+    testImplementation 'org.mockito:mockito-core:3.9.0'
+}
+
+springBoot {
+    mainClass = 'com.example.GradleApplication'
+}
+
+bootJar {
+    archiveFileName = 'gradle-app.jar'
+}
+
+test {
+    useJUnitPlatform()
+}

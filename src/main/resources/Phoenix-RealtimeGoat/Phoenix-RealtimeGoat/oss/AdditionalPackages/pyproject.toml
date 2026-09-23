@@ -1,0 +1,70 @@
+# TC_47: pyproject.toml detection — PackageManager = 'pypi' (Poetry)
+# TC_49: [tool.poetry.dependencies] parsed
+# TC_50: [tool.poetry.dev-dependencies] parsed
+# TC_51: [tool.poetry.group.*.dependencies] (Poetry 1.2+) parsed
+# TC_52: caret ^ and tilde ~ version constraints handled
+# TC_53: wildcard * version => 'latest'
+# TC_54: vulnerable deps highlighted on correct IDE line
+
+[tool.poetry]
+name = "vuln-python-app-poetry"
+version = "1.0.0"
+description = "Vulnerable Python App managed by Poetry"
+authors = ["Test Team <test@example.com>"]
+readme = "README.md"
+packages = [{include = "api"}, {include = "services"}]
+
+[tool.poetry.dependencies]
+# TC_49: standard deps — all parsed and scanned
+python         = "^3.9"
+Flask          = "2.0.1"          # CVE-2023-30861 — TC_54 highlight here
+Django         = "3.2.4"          # CVE-2021-33203
+requests       = "^2.27.1"        # TC_52: caret constraint
+SQLAlchemy     = "~1.4.22"        # TC_52: tilde constraint
+PyYAML         = "5.3.1"          # CVE-2020-14343
+cryptography   = "3.3.1"          # CVE-2023-49083
+paramiko       = ">=2.7.0,<3.0"
+Pillow         = "8.3.1"          # CVE-2021-34552
+urllib3        = "^1.26.4"
+Jinja2         = "3.0.1"          # CVE-2024-22195
+lxml           = "4.6.3"          # CVE-2021-28957
+celery         = "4.4.7"          # CVE-2021-23727
+aiohttp        = "3.7.4"          # CVE-2021-21330
+redis          = "*"              # TC_53: wildcard => 'latest'
+psycopg2-binary = "^2.9.1"
+gunicorn       = "^20.1.0"
+boto3          = "*"              # TC_53: wildcard => 'latest'
+pydantic       = "1.8.2"
+fastapi        = "0.68.0"
+uvicorn        = "0.14.0"
+
+# TC_50: dev-dependencies — scanned
+[tool.poetry.dev-dependencies]
+pytest         = "^7.0.0"
+black          = "*"
+flake8         = "^4.0.0"
+mypy           = "^0.910"
+bandit         = "^1.7.0"
+pytest-cov     = "^3.0.0"
+isort          = "^5.9.0"
+
+# TC_51: Poetry 1.2+ group syntax — parsed and scanned
+[tool.poetry.group.test.dependencies]
+pytest         = "^7.0.0"
+pytest-asyncio = "^0.18.0"
+httpx          = "^0.23.0"
+faker          = "^13.0.0"
+
+[tool.poetry.group.docs.dependencies]
+mkdocs         = "^1.3.0"
+mkdocs-material = "^8.0.0"
+
+[build-system]
+requires      = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+
+[tool.isort]
+profile = "black"

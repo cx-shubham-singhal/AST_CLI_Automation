@@ -1,0 +1,12 @@
+# TC_24: requirements-dev.txt — detected by requirements-*.txt glob
+pytest==6.2.5
+pytest-cov==2.12.1
+black==21.7b0
+flake8==3.9.2
+mypy==0.910
+bandit==1.7.0
+safety==1.10.3
+mock==4.0.3
+factory-boy==3.2.0
+Faker==8.12.1
+coverage==5.5

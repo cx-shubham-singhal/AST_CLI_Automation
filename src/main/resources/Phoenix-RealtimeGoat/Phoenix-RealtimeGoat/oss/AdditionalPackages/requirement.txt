@@ -1,0 +1,6 @@
+# TC_26: singular requirement.txt (without 's') — must be detected
+Django==3.2.0                # CVE-2021-33203
+djangorestframework==3.12.4
+django-cors-headers==3.7.0
+django-filter==2.4.0
+drf-yasg==1.20.0

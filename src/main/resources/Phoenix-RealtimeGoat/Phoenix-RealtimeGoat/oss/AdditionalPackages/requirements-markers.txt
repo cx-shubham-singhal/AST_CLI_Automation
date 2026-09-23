@@ -1,0 +1,6 @@
+# TC_36: environment markers separated by ; — stripped, package/version extracted
+requests>=2.20.0;python_version>='3.6'
+Django>=3.0.0;sys_platform!='win32'
+Flask==2.0.1;python_version>='3.8' and sys_platform=='linux'
+paramiko==2.7.2;extra=='ssh'
+colorama==0.4.4;sys_platform=='win32'
