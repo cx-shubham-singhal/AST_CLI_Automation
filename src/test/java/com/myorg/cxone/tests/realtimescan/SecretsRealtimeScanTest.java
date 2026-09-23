@@ -24,6 +24,8 @@ public class SecretsRealtimeScanTest extends Base {
                     "Expected Secrets realtime scan to detect at least one secret.\nCLI Output:\n" + root);
 
             int secretsCount = root.size();
+            Assert.assertTrue(secretsCount >= 1,
+                    "Expected Secrets realtime scan to detect at least one secret.\nCLI Output:\n" + root);
             RealtimeScanUtils.logVulnerabilityCount(secretsCount, test);
             Logger.pass("Secrets realtime scan completed successfully and detected " + secretsCount + " secret(s)", test);
         } catch (Exception e) {

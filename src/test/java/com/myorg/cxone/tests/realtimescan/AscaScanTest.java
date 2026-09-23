@@ -30,6 +30,8 @@ public class AscaScanTest extends Base {
                     "Expected ASCA scan to detect at least one vulnerability.\nCLI Output:\n" + root);
 
             int vulnerabilityCount = scanDetails.size();
+            Assert.assertTrue(vulnerabilityCount >= 1,
+                    "Expected ASCA scan to detect at least one vulnerability.\nCLI Output:\n" + root);
             RealtimeScanUtils.logVulnerabilityCount(vulnerabilityCount, test);
             Logger.pass("ASCA scan completed successfully and detected " + vulnerabilityCount + " vulnerability(ies)", test);
         } catch (Exception e) {
