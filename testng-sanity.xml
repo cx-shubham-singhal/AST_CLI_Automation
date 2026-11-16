@@ -12,6 +12,7 @@
     </listeners>
 
     <test name="Sanity" preserve-order="true" parallel="false">
+        <parameter name="cases.group" value="sanity"/>
         <groups>
             <run>
                 <include name="sanity"/>
@@ -21,6 +22,8 @@
             <class name="com.myorg.cxone.tests.ConfigureTest"/>
             <class name="com.myorg.cxone.tests.AuthTest"/>
             <class name="com.myorg.cxone.tests.HelpTest"/>
+            <class name="com.myorg.cxone.tests.CliCommandTest"/>
+            <class name="com.myorg.cxone.tests.SuiteQualityTest"/>
             <class name="com.myorg.cxone.tests.scanTestDataDriven"/>
         </classes>
     </test>

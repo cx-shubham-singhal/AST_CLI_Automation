@@ -1,0 +1,37 @@
+id	area	description	command	exit	contains	notContains	since	until	group
+# scan create / show / delete / cancel / list validation. None of these starts a scan; a few fail only after the project
+# was created, so CliCasesTest removes every CLI_Neg_* project afterwards.
+# Cases that DO start a real scan before failing (bad --threshold value, --report-format bogus, --git-commit-history true,
+# --scan-types scs without a repo, --container-images foo:bar:1) are not here: they belong in the slow batch.
+SCN-01	scan	empty project name	scan create --project-name "" -s {Z} --branch main	nonzero	Project name is required				sanity
+SCN-02	scan	threshold limit of 0	scan create --project-name {P} -s {Z} --branch main --scan-types sast --threshold "sast-high=0"	nonzero	Invalid value for threshold limit sast-high. Threshold should be greater or equal to 1.
+SCN-05	scan	--sca-exploitable-path invalid value	scan create --project-name {P} -s {Z} --branch main --scan-types sca --sca-exploitable-path maybe	nonzero	Invalid value for --sca-exploitable-path flag. The value must be true or false.
+SCN-06	scan	--sca-exploitable-path without SAST	scan create --project-name {P} -s {Z} --branch main --scan-types sca --sca-exploitable-path true	nonzero	Please to use --sca-exploitable-path flag in SCA, you must enable SAST scan type.
+SCN-07a	scan	--sca-last-sast-scan-time negative	scan create --project-name {P} -s {Z} --branch main --scan-types sca --sca-last-sast-scan-time -5	nonzero	Invalid value for --sca-last-sast-scan-time flag. The value must be a positive integer.
+SCN-07b	scan	--sca-last-sast-scan-time not a number	scan create --project-name {P} -s {Z} --branch main --scan-types sca --sca-last-sast-scan-time abc	nonzero	Invalid value for --sca-last-sast-scan-time flag. The value must be a positive integer.
+SCN-08	scan	--project-private-package invalid value	scan create --project-name {P} -s {Z} --branch main --scan-types sast --project-private-package yes	nonzero	Invalid value for --project-private-package flag. The value must be true or false.
+SCN-09	scan	--iac-security-preset-id is not a UUID	scan create --project-name {P} -s {Z} --branch main --scan-types iac-security --iac-security-preset-id abc	nonzero	invalid value for --iac-security-preset-id flag, must be a valid UUID
+SCN-15	scan	negative --scan-timeout	scan create --project-name {P} -s {Z} --branch main --scan-types sast --scan-timeout -1	nonzero	--scan-timeout should be equal or higher than 0
+SCN-16	scan	invalid scan type mixed with a valid one	scan create --project-name {P} -s {Z} --branch main --scan-types sast,invalid_scan_type	nonzero	It looks like the "invalid_scan_type" scan type does not exist
+SCN-22	scan	--git-commit-history invalid value	scan create --project-name {P} -s {Z} --branch main --scan-types scs --git-commit-history maybe	nonzero	Invalid value for --git-commit-history. Valid values are: 'true' or 'false'
+SCN-17	scan	--sbom-only with a non-SCA scan type	scan create --project-name {P} -s {Z} --branch main --scan-types sast --sbom-only	nonzero	The --sbom-only flag can only be used when the scan type is sca
+SCN-19a	scan	--sbom-only with a file that is not JSON/XML	scan create --project-name {P} -s {BAD} --branch main --scan-types sca --sbom-only	nonzero	not a JSON/XML file, provide valid JSON/XMl file
+SCN-19b	scan	--sbom-only with a file that does not exist	scan create --project-name {P} -s {TMP}\nofile.json --branch main --scan-types sca --sbom-only	nonzero	failed to read file
+SCN-21	scan	--no-scan without --sbom-first	scan create --project-name {P} -s {RG}/oss/maven --branch main --scan-types sca --sca-resolver "{SCA}" --no-scan	nonzero	--no-scan flag was passed without --sbom-first
+SCN-13	scan	--ssh-key with a zip source	scan create --project-name {P} -s {Z} --branch main --scan-types sast --ssh-key key.pem	nonzero	provided source does not need a key
+SCN-14	scan	--ssh-key without a value	scan create --project-name {P} -s git@github.com:o/r.git --branch main --scan-types sast --ssh-key	nonzero	flag needs an argument: --ssh-key
+SCN-34b	scan	source with an unsupported extension	scan create --project-name {P} -s {TMP}\bad.rar --branch main --scan-types sast	nonzero	Sources input has bad format
+SCN-24	scan	container image with the unsupported dir: prefix	scan create --project-name {P} -s {Z} --branch main --scan-types containers --container-images dir:/x	nonzero	The 'dir:' prefix is not supported
+SCN-26	scan	container image without a tag	scan create --project-name {P} -s {Z} --branch main --scan-types containers --container-images nginx	nonzero	- User input: 'nginx' error: image does not have a tag
+SCN-27a	scan	container image with an empty name	scan create --project-name {P} -s {Z} --branch main --scan-types containers --container-images ":latest"	nonzero	Image name and tag cannot be empty. Found: image='', tag='latest'
+SCN-27b	scan	container image with an empty tag	scan create --project-name {P} -s {Z} --branch main --scan-types containers --container-images "nginx:"	nonzero	Image name and tag cannot be empty. Found: image='nginx', tag=''
+SCN-28	scan	container image empty after a prefix	scan create --project-name {P} -s {Z} --branch main --scan-types containers --container-images docker:	nonzero	After prefix 'docker:', the image reference cannot be empty
+SCN-29	scan	container registry URL without an image	scan create --project-name {P} -s {Z} --branch main --scan-types containers --container-images registry:myreg.io	nonzero	Registry format must specify a single image, not just a registry URL
+SCN-30a	scan	container tar file that does not exist	scan create --project-name {P} -s {Z} --branch main --scan-types containers --container-images missing.tar	nonzero	file 'missing.tar' does not exist
+SCN-30c	scan	compressed container archive	scan create --project-name {P} -s {Z} --branch main --scan-types containers --container-images foo.tar.gz	nonzero	is compressed, use non-compressed format (tar)
+SCN-31	scan	several invalid container images are all reported	scan create --project-name {P} -s {Z} --branch main --scan-types containers --container-images "a,b:,docker:"	nonzero	- User input: 'a' error: image does not have a tag;;- User input: 'b:' error:;;- User input: 'docker:' error:
+SCN-35b	scan	scan show with an unknown id	scan show --scan-id bogus	nonzero	Failed showing a scan: scan not found
+SCN-35c	scan	scan delete without an id	scan delete	nonzero	Failed deleting a scan: Please provide at least one scan ID
+SCN-35d	scan	scan cancel without an id	scan cancel	nonzero	Failed canceling a scan: Please provide at least one scan ID
+SCN-35f	scan	scan workflow without an id	scan workflow	nonzero	Please provide a scan ID
+SCN-36a	scan	scan list with an invalid filter value	scan list --filter "limit=abc"	nonzero	Failed listing: CODE: 111, Failed to get all scans

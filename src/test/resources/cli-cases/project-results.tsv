@@ -1,0 +1,19 @@
+id	area	description	command	exit	contains	notContains	since	until	group
+# project / results / triage validation and list formats. Everything here fails before touching tenant data or only reads it.
+PRJ-04	project	create with a group that does not exist	project create --project-name {P} --groups NoSuchGroup_xyz	nonzero	Failed finding groups: [NoSuchGroup_xyz]
+PRJ-18a	project	project show without --project-id	project show	nonzero	Failed getting a project: Please provide a project ID				sanity
+PRJ-18b	project	project delete without --project-id	project delete	nonzero	Failed deleting a project: Please provide a project ID
+PRJ-15a	project	project branches without --project-id	project branches	nonzero	Failed getting branches for project: Please provide a project ID
+PRJ-15b	project	project branches for an unknown project returns an empty list	project branches --project-id {ZERO}	0	[]
+PRJ-12a	project	project list with a non-numeric limit	project list --filter "limit=abc"	nonzero	failed parsing query pagination params: invalid limit
+PRJ-12b	project	project list with a negative limit	project list --filter "limit=-1"	nonzero	failed parsing query pagination params: invalid limit
+PRJ-11	project	project list filter that is not KEY=VALUE	project list --filter "limit=1;foo=bar"	nonzero	Filters should be in a KEY=VALUE format
+ROOT-09b	project	project list --format list	project list --filter "limit=1" --format list	0	Project ID;;ApplicationIds
+ROOT-09c	project	project list --format table	project list --filter "limit=1" --format table	0	Project ID;;----------
+ROOT-09d	project	project list with an invalid format	project list --filter "limit=1" --format bogus	nonzero	Invalid format bogus
+RES-16	results	results show without --scan-id	results show	nonzero	Failed listing results: Please provide a scan ID
+RES-15a	results	results show for an unknown scan	results show --scan-id fake --report-format summaryConsole	nonzero	Failed showing a scan: scan not found
+TRI-01	triage	triage get-states returns the tenant states	triage get-states	0	[{"id":
+TRI-05a	triage	triage update with an unknown state	triage update --project-id {ZERO} --similarity-id 1 --state bogus --severity high --scan-type sast	nonzero	Failed updating the predicate: Failed to get custom state ID for state: bogus
+TRI-05b	triage	triage update with an invalid scan type	triage update --project-id {ZERO} --similarity-id 1 --state confirmed --severity high --scan-type foo	nonzero	Failed updating the predicate: Invalid scan type foo
+TRI-06	triage	triage show for an unknown similarity id	triage show --project-id {ZERO} --similarity-id 0 --scan-type sast	nonzero	Failed showing the predicate.

@@ -6,11 +6,14 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import utils.Base;
 import utils.CLIHelper;
+import utils.CliCaseRunner;
+import utils.HelpTree;
 import utils.Utils;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Objects;
 
 public class HelpTest extends Base {
 
@@ -281,6 +284,32 @@ public class HelpTest extends Base {
         }
 
         Logger.pass("Invalid command error validated successfully.", test);
+    }
+
+    /**
+     * Smoke check for the whole command tree: the commands are discovered from the CLI itself (COMMANDS lists plus
+     * src/test/resources/hidden-commands.txt), so a new command is covered automatically and a broken or removed one is noticed.
+     * The wording of the help text is deliberately not compared: it changes with every CLI release without meaning anything.
+     */
+    @Test(description = "Every command answers --help successfully and shows a USAGE section")
+    public void everyCommandHasHelp() {
+        ExtentTest test = getTestLogger();
+        List<String> commands = HelpTree.allCommands();
+        Logger.info("Checking --help of " + commands.size() + " commands", test);
+
+        List<String> problems = commands.parallelStream().map(path -> {
+            String output = HelpTree.help(path);
+            if (CliCaseRunner.exitCode(output) != 0) {
+                return "cx " + path + " --help exited with a non-zero code";
+            }
+            if (!output.contains("USAGE")) {
+                return "cx " + path + " --help has no USAGE section";
+            }
+            return null;
+        }).filter(Objects::nonNull).sorted().toList();
+
+        Assert.assertTrue(problems.isEmpty(), "Help problems:\n - " + String.join("\n - ", problems));
+        Logger.pass("All " + commands.size() + " commands show their help", test);
     }
 
 }
