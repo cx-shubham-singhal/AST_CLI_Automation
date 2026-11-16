@@ -13,6 +13,9 @@ public class TestConstants {
     public static final String PROJECT_PATH_ZIP_JAVAVUL = "src/main/resources/JavaVulnerableLabE-master.zip";
     public static final String PROJECT_PATH_FOLDER = "src/main/resources/Phoenix-RealtimeGoat";
     public static final String PROJECT_PATH_FOLDER_INVALID = "src/main/resources/JavaVulnerableLabE";
+    // Small single-manifest folder for SCA resolver tests: scanning the whole Phoenix-RealtimeGoat tree makes
+    // ScaResolver pip-install every requirements*.txt (~14 min). These tests only verify resolver invocation/params.
+    public static final String PROJECT_PATH_SCA_RESOLVER = "src/main/resources/Phoenix-RealtimeGoat/Phoenix-RealtimeGoat/oss/maven";
     public static final String GIT_REPO_URL = "https://github.com/vbarhate/JavaVulnerableLabE.git";
     public static final String RELATIVE_DATA_PATH = "src/main/resources/JavaVulnerableLabE-master/src/main/webapp";
     public static final String CX_API_KEY = System.getenv("CX_APIKEY");

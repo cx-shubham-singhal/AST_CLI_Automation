@@ -75,7 +75,7 @@ public class scanTestDataDriven extends Base {
         }
     }
 
-    @Test(description = "Verify All scan ")
+    @Test(groups = {"sanity"}, description = "Verify All scan ")
     public void verifySASTScanWithAllScanTypes() {
         ExtentTest test = getTestLogger();
         String projectName = "CLI_ScanProj_" + Utils.uniqueSuffix();

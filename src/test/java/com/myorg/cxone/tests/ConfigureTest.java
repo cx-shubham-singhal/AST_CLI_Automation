@@ -156,7 +156,7 @@ public class ConfigureTest extends Base {
         }
     }
 
-    @Test(description = "Test configure set cx_base_uri")
+    @Test(groups = {"sanity"}, description = "Test configure set cx_base_uri")
     public void testConfigureSetBaseUriProperty() {
         ExtentTest test = getTestLogger();
 
@@ -331,7 +331,7 @@ public class ConfigureTest extends Base {
         }
     }
 
-    @Test(description = "Test `cx configure show` displays effective configuration")
+    @Test(groups = {"sanity"}, description = "Test `cx configure show` displays effective configuration")
     public void testConfigureShowDisplaysEffectiveConfiguration() {
         ExtentTest test = getTestLogger();
 
