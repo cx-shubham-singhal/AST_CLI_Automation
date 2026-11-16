@@ -18,7 +18,7 @@ public class Base {
     private static final ConcurrentHashMap<String, ExtentTest> classNodes = new ConcurrentHashMap<>();
     protected static ThreadLocal<ExtentTest> testLevelTest = new ThreadLocal<>();
 
-    @BeforeSuite
+    @BeforeSuite(alwaysRun = true)
     public void setupSuite() {
         EnvValidator.validate();
         extent = ReportManager.getInstance();

@@ -574,7 +574,7 @@ public class ScanTest extends Base {
         String command = String.format(
                 "scan create --branch master --project-name \"%s\" --scan-types sca -s %s --sca-resolver %s",
                 projectName,
-                PROJECT_PATH_FOLDER,
+                PROJECT_PATH_SCA_RESOLVER,
                 SCA_RESOLVER_PATH
         );
 
@@ -638,7 +638,7 @@ public class ScanTest extends Base {
         String command = String.format(
                 "scan create --branch master --project-name \"%s\" --scan-types sca -s %s --sca-resolver %s --sca-resolver-params \"--gradle-parameters='-pUSERNAME=abc -pPASSWORD=cba'\"",
                 projectName,
-                PROJECT_PATH_FOLDER,
+                PROJECT_PATH_SCA_RESOLVER,
                 SCA_RESOLVER_PATH
         );
         try {
@@ -677,7 +677,7 @@ public class ScanTest extends Base {
         String command = String.format(
                 "scan create --branch master --project-name \"%s\" --scan-types sca -s %s --sca-resolver %s --sca-resolver-params \"--gradle-parameters='-pUSERNAME=abc -pPASSWORD=cba' --log-level Debug\"",
                 projectName,
-                PROJECT_PATH_FOLDER,
+                PROJECT_PATH_SCA_RESOLVER,
                 SCA_RESOLVER_PATH
         );
 

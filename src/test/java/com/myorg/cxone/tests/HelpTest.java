@@ -14,7 +14,7 @@ import java.util.List;
 
 public class HelpTest extends Base {
 
-    @Test(description = "CLI Help output compare")
+    @Test(groups = {"sanity"}, description = "CLI Help output compare")
     public void cliHelpTest() throws Exception {
         ExtentTest test = getTestLogger();
         // Path to your expected snapshot file
