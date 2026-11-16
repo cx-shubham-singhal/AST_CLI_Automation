@@ -1,0 +1,9 @@
+id	area	description	command	exit	contains	notContains	since	until	group
+# auth validate / register and global flags. Cases that pass valid credentials use the credentials configured for the run.
+AUTH-12a	auth	client id without a secret	auth validate --client-id X --apikey ""	nonzero	401
+AUTH-12b	auth	client secret without a client id	auth validate --client-secret Y --apikey ""	nonzero	401
+AUTH-13a	auth	register with an empty username	auth register --username "" --password p --roles r	nonzero	failed creating client: Please provide username flag
+AUTH-13b	auth	register with an empty password	auth register --username u --password "" --roles r	nonzero	failed creating client: Please provide password flag
+AUTH-13c	auth	register without --roles	auth register --username u --password p	nonzero	required flag(s) "roles" not set
+ROOT-01	root	--debug prints version and configuration, --agent is sent in the User-Agent	auth validate --agent MyAgentZ --debug	0	CLI Version:;;CLI Configuration:;;User-Agent: MyAgentZ/;;Successfully authenticated to Checkmarx One server!
+ROOT-03	root	unreachable server is reported after --retry	auth validate --apikey "" --client-id X --client-secret Y --base-uri http://127.0.0.1:1 --base-auth-uri http://127.0.0.1:1 --tenant t --retry 1 --retry-delay 1	nonzero	Could not reach provided Checkmarx server

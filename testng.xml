@@ -35,6 +35,10 @@
             <class name="com.myorg.cxone.tests.realtimescan.OssRealtimeScanTest"/>
             <class name="com.myorg.cxone.tests.realtimescan.SecretsRealtimeScanTest"/>
             <class name="com.myorg.cxone.tests.realtimescan.ContainersRealtimeScanTest"/>
+            <!-- Data-driven CLI cases (src/test/resources/cli-cases/*.tsv), multi-step CLI flows, suite quality checks -->
+            <class name="com.myorg.cxone.tests.CliCommandTest"/>
+            <class name="com.myorg.cxone.tests.CliWorkflowTest"/>
+            <class name="com.myorg.cxone.tests.SuiteQualityTest"/>
         </classes>
     </test>
 

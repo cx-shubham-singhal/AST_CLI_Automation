@@ -1,0 +1,25 @@
+id	area	description	command	exit	contains	notContains	since	until	group
+# Negative paths of the realtime scanners and ignore-vulnerability. Need only the fixtures already in the repository.
+# Path validation is shared CLI code, so "invalid path" is checked once per scanner and "directory" once.
+RT-07	iac-realtime	invalid container engine	scan iac-realtime -s {RG}/iac/missing_user_instruction/positive.dockerfile --engine invalidEngine	nonzero	container engine 'invalidEngine' not found
+RT-08	iac-realtime	unsupported file type	scan iac-realtime -s {RG}/secrets/secrets.py	nonzero	realtime engine error: Provided file is not supported by iac-realtime
+RT-09	iac-realtime	no file given	scan iac-realtime	nonzero	realtime engine error: file path is required
+RT-10	iac-realtime	file that does not exist	scan iac-realtime -s nope.dockerfile	nonzero	realtime engine error: invalid file path
+RT-15	oss-realtime	go.sum is not supported	scan oss-realtime -s {RG}/oss/AdditionalPackages/go.sum	nonzero	OSS Realtime scanner doesn't currently support scanning 'go.sum' file.
+RT-16a	oss-realtime	package-lock.json is not supported	scan oss-realtime -s {RG}/oss/AdditionalPackages/package-lock.json	nonzero	OSS Realtime scanner doesn't currently support scanning 'package-lock.json' file.
+RT-16b	oss-realtime	Gemfile.lock is not supported	scan oss-realtime -s {RG}/manifests/Gemfile.lock	nonzero	OSS Realtime scanner doesn't currently support scanning 'Gemfile.lock' file.
+RT-23a	oss-realtime	file that does not exist	scan oss-realtime -s nope	nonzero	realtime engine error: invalid file path
+RT-23b	oss-realtime	a directory instead of a file	scan oss-realtime -s {RG}/oss	nonzero	realtime engine error: invalid file path
+RT-23c	oss-realtime	no file given	scan oss-realtime	nonzero	realtime engine error: file path is required
+RT-26a	secrets-realtime	no file given	scan secrets-realtime	nonzero	realtime engine error: file path is required for realtime scan
+RT-26b	secrets-realtime	file that does not exist	scan secrets-realtime -s nope	nonzero	realtime engine error: failed to read file
+RT-32a	containers-realtime	no file given	scan containers-realtime	nonzero	realtime engine error: file path is required
+RT-32b	containers-realtime	file that does not exist	scan containers-realtime -s nope	nonzero	realtime engine error: invalid file path
+RT-34	asca	no file only starts the engine	scan asca	0	File path not provided, asca engine is running successfully.
+RT-35	asca	file that does not exist	scan asca -s nope.py	0	File nope.py not found
+RT-38a	asca	empty --asca-location	scan asca -s {RG}/asca/sql_injection.py --asca-location ""	nonzero	asca-location flag is provided but empty
+RT-38b	asca	--asca-location that does not exist	scan asca -s {RG}/asca/sql_injection.py --asca-location C:\no\such\dir	nonzero	Failed to validate ASCA custom location: C:\no\such\dir path does not exist
+RT-44	kics-realtime	no --file given	scan kics-realtime	nonzero	required flag(s) "file" not set
+RT-45	sca-realtime	project folder that does not exist	scan sca-realtime --project-dir C:\no\such\folder	nonzero	Provided path does not exist: C:\no\such\folder
+RT-42a	ignore-vulnerability	invalid --scan-type	ignore-vulnerability --scan-type foo --data {} --ignored-file-path {CFG}	nonzero	invalid --scan-type "foo"; expected one of: oss, sca, secrets, containers, iac, asca
+RT-42b	ignore-vulnerability	empty --data	ignore-vulnerability --scan-type oss --data "" --ignored-file-path {CFG}	nonzero	--data is required

@@ -1,0 +1,12 @@
+id	area	description	command	exit	contains	notContains	since	until	group
+# General commands that need no tenant data. Help text of every command is covered by HelpSnapshotTest (help-snapshots/).
+UTL-01	utils	cx version prints a semantic version	version	0	re:\b\d+\.\d+\.\d+\b				sanity
+HLP-02a	root	unknown command	foo	nonzero	unknown command "foo" for "cx"				sanity
+UTL-03a	utils	completion for bash	utils completion -s bash	0	bash completion for cx
+UTL-03b	utils	completion for powershell	utils completion -s powershell	0	powershell completion for cx
+UTL-03d	utils	completion for zsh	utils completion -s zsh	0	zsh completion for cx
+UTL-03e	utils	completion for fish	utils completion -s fish	0	fish completion for cx
+UTL-03c	utils	completion for an unknown shell	utils completion -s nonsense	nonzero	invalid argument "nonsense" for shell. Allowed values: [bash zsh fish powershell]
+UTL-05	utils	utils tenant json lists tenant settings	utils tenant --format json	0	"key":;;"value":
+UTL-06	utils	utils tenant with an invalid format	utils tenant --format xml	nonzero	Invalid format xml
+UTL-04	utils	utils mask with a missing result file	utils mask --result-file {TMP}\nofile.json	nonzero	Error opening file

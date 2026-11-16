@@ -1,0 +1,4 @@
+id	area	description	command	exit	contains	notContains	since	until	group
+# configure with an explicit --config-file-path (never touches the machine's real CLI configuration).
+# Cases that inspect the written file are in ConfigFileTest.
+CFG-03	configure	config file that does not exist	configure show --config-file-path {TMP}\no-such-config.yaml	nonzero	The specified file does not exist
